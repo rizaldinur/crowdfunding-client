@@ -1,8 +1,11 @@
-import { ThemeProvider, Container } from "@mui/material";
-import { useMemo, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { Outlet } from "react-router";
 import themes from "../../themes";
 import ThemeContainer from "../../components/ThemeContainer";
+
+export const ThemeContext = createContext(
+  localStorage.getItem("theme") || "light"
+);
 
 function RootLayout() {
   const [currentTheme, setCurrentTheme] = useState(
@@ -19,7 +22,9 @@ function RootLayout() {
 
   return (
     <ThemeContainer activeTheme={activeTheme}>
-      <Outlet context={[currentTheme, handleThemeChange]} />
+      <ThemeContext.Provider value={{ currentTheme, handleThemeChange }}>
+        <Outlet context={[currentTheme, handleThemeChange]} />
+      </ThemeContext.Provider>
     </ThemeContainer>
   );
 }
