@@ -9,7 +9,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <HomeLayout />,
+        element: <MainLayout />,
         children: [
           {
             index: true,
@@ -22,19 +22,68 @@ const router = createBrowserRouter([
           {
             path: "project/details/:projectId",
             element: <ProjectDetailsLayout />,
+            children: [
+              { index: true, element: <Navigate to="campaign" /> },
+              { index: "campaign", element: <CampaignPage /> },
+              { path: "updates", element: <CampaignUpdatesPage /> },
+              { path: "comments", element: <CommentsPage /> },
+              { path: "faqs", element: <FaqsPage /> },
+            ],
           },
           {
-            element: <ProtectedRoute />,
+            path: "profile/:profileId",
+            element: <ProfileLayout user={currentUser} />,
             children: [
-              { path: "profile/:profileId" },
-              { path: "settings" },
-              { path: "start-project" },
+              { index: true, element: <AboutProfile /> },
+              { path: "backed", element: <BackedProjects /> },
+              { path: "saved", element: <SavedProjects /> },
+              { path: "projects", element: <CreatedProjects /> },
+            ],
+          },
+          {
+            element: <ProtectedRoute user={currentUser} />,
+            children: [
+              {
+                path: "settings",
+                element: <SettingsLayout />,
+                children: [
+                  { index: true, element: <Navigate to="account" /> },
+                  { path: "account", element: <AccountSettings /> },
+                  { path: "profile", element: <ProfileSettings /> },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: "profile/:profileId/projects/:projectId",
+        element: <ProtectedRoute user={currentUser} />,
+        children: [
+          { path: "build-overview", element: <BuildOverview /> },
+          {
+            path: "edit",
+            element: <BuildProjectLayout />,
+            children: [
+              { index: true, element: <Navigate to="basic" /> },
+              { path: "basic", element: <BasicPage /> },
+              { path: "story", element: <StoryPage /> },
+              { path: "payment", element: <PaymentPage /> },
+              { path: "preview", element: <PreviewPage /> },
             ],
           },
         ],
       },
       { path: "/login", element: <Login /> },
       { path: "/signup", element: <SignUp /> },
+      {
+        path: "/start-project",
+        element: (
+          <ProtectedRoute user={currentUser}>
+            <StartProject />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ]);
