@@ -22,7 +22,7 @@ function Login() {
       <Grid2 container justifyContent="center">
         <Grid2
           padding={5}
-          size={{ xs: 10, sm: 7, md: 5, lg: 4, xl: 3, xxl: 2 }}
+          size={{ xs: 10, sm: 7, md: 5, lg: 4, xl: 2.5, xxl: 2 }}
           bgcolor={currentTheme === "light" ? "background" : "background.paper"}
           sx={{ border: "solid 1px", borderColor: "divider" }}
           borderRadius={2}
