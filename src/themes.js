@@ -14,6 +14,16 @@ const darkTheme = createTheme({
       paper: "#11171D",
     },
   },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+      xxl: 1920,
+    },
+  },
 });
 
 const lightTheme = createTheme({
@@ -28,6 +38,16 @@ const lightTheme = createTheme({
     background: {
       default: "#f5f5f5",
       paper: "#eeeeee",
+    },
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+      xxl: 1920,
     },
   },
 });
