@@ -7,7 +7,7 @@ export const ThemeContext = createContext(
   localStorage.getItem("theme") || "light"
 );
 
-function RootLayout() {
+function RootLayout({ children }) {
   const [currentTheme, setCurrentTheme] = useState(
     localStorage.getItem("theme") || "light"
   );
@@ -23,7 +23,11 @@ function RootLayout() {
   return (
     <ThemeContainer activeTheme={activeTheme}>
       <ThemeContext.Provider value={{ currentTheme, handleThemeChange }}>
-        <Outlet context={[currentTheme, handleThemeChange]} />
+        {children ? (
+          children
+        ) : (
+          <Outlet context={[currentTheme, handleThemeChange]} />
+        )}
       </ThemeContext.Provider>
     </ThemeContainer>
   );
