@@ -8,21 +8,30 @@ import {
 import { isRouteErrorResponse, Link, useRouteError } from "react-router";
 import themes from "../themes";
 import ThemeContainer from "../components/ThemeContainer";
+import RootLayout from "./layouts/RootLayout";
 
 function ErrorBoundary() {
   const error = useRouteError();
 
   let errorContent;
   if (isRouteErrorResponse(error)) {
+    let errorMessage =
+      error.status === 404
+        ? "Oops, page not found"
+        : error.status === 401
+        ? "Please login first"
+        : error.status === 403
+        ? "You are not authorized"
+        : "Something went wrong";
     errorContent = (
       <>
         <Typography variant="h4" color="textSecondary">
           {error.status}
         </Typography>
         <Typography variant="h2" color="textPrimary" marginBottom={4}>
-          Try again later
+          {errorMessage}
         </Typography>
-        <Button component={Link} to="/first" type="button" variant="contained">
+        <Button component={Link} to="/" type="button" variant="contained">
           HOME
         </Button>
       </>
@@ -65,22 +74,19 @@ function ErrorBoundary() {
     );
   }
 
-  const activeTheme = localStorage.getItem("theme") || "light";
   return (
-    <ThemeContainer activeTheme={themes[activeTheme]}>
-      <Box display="flex" justifyContent="center">
-        <Box
-          sx={{ bgcolor: "background.paper" }}
-          maxWidth={400}
-          marginTop={2}
-          borderRadius={3}
-          padding={10}
-          textAlign="center"
-        >
-          {errorContent}
-        </Box>
+    <Box display="flex" justifyContent="center">
+      <Box
+        sx={{ bgcolor: "background.paper" }}
+        maxWidth={400}
+        marginTop={2}
+        borderRadius={3}
+        padding={10}
+        textAlign="center"
+      >
+        {errorContent}
       </Box>
-    </ThemeContainer>
+    </Box>
   );
 }
 export default ErrorBoundary;
