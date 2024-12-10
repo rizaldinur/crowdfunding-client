@@ -2,6 +2,9 @@ import { Navigate, createBrowserRouter } from "react-router";
 import RootLayout from "./routes/layouts/RootLayout.jsx";
 import ErrorBoundary from "./routes/ErrorBoundary.jsx";
 import Login from "./routes/Login.jsx";
+import Signup from "./routes/Signup.jsx";
+import Index from "./routes/Index.jsx";
+import MainLayout from "./routes/layouts/MainLayout.jsx";
 
 const router = createBrowserRouter([
   {
@@ -12,55 +15,55 @@ const router = createBrowserRouter([
       </RootLayout>
     ),
     children: [
-      // {
-      //   path: "/",
-      //   element: <MainLayout />,
-      //   children: [
-      //     {
-      //       index: true,
-      //       element: <Index />,
-      //     },
-      //     {
-      //       path: "discover",
-      //       element: <DiscoverProjects />,
-      //     },
-      //     {
-      //       path: "project/details/:projectId",
-      //       element: <ProjectDetailsLayout />,
-      //       children: [
-      //         { index: true, element: <Navigate to="campaign" /> },
-      //         { index: "campaign", element: <CampaignPage /> },
-      //         { path: "updates", element: <CampaignUpdatesPage /> },
-      //         { path: "comments", element: <CommentsPage /> },
-      //         { path: "faqs", element: <FaqsPage /> },
-      //       ],
-      //     },
-      //     {
-      //       path: "profile/:profileId",
-      //       element: <ProfileLayout user={currentUser} />,
-      //       children: [
-      //         { index: true, element: <AboutProfile /> },
-      //         { path: "backed", element: <BackedProjects /> },
-      //         { path: "saved", element: <SavedProjects /> },
-      //         { path: "projects", element: <CreatedProjects /> },
-      //       ],
-      //     },
-      //     {
-      //       element: <ProtectedRoute user={currentUser} />,
-      //       children: [
-      //         {
-      //           path: "settings",
-      //           element: <SettingsLayout />,
-      //           children: [
-      //             { index: true, element: <Navigate to="account" /> },
-      //             { path: "account", element: <AccountSettings /> },
-      //             { path: "profile", element: <ProfileSettings /> },
-      //           ],
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // },
+      {
+        path: "/",
+        element: <MainLayout />,
+        children: [
+          {
+            index: true,
+            element: <Index />,
+          },
+          // {
+          //   path: "discover",
+          //   element: <DiscoverProjects />,
+          // },
+          // {
+          //   path: "project/details/:projectId",
+          //   element: <ProjectDetailsLayout />,
+          //   children: [
+          //     { index: true, element: <Navigate to="campaign" /> },
+          //     { index: "campaign", element: <CampaignPage /> },
+          //     { path: "updates", element: <CampaignUpdatesPage /> },
+          //     { path: "comments", element: <CommentsPage /> },
+          //     { path: "faqs", element: <FaqsPage /> },
+          //   ],
+          // },
+          // {
+          //   path: "profile/:profileId",
+          //   element: <ProfileLayout user={currentUser} />,
+          //   children: [
+          //     { index: true, element: <AboutProfile /> },
+          //     { path: "backed", element: <BackedProjects /> },
+          //     { path: "saved", element: <SavedProjects /> },
+          //     { path: "projects", element: <CreatedProjects /> },
+          //   ],
+          // },
+          // {
+          //   element: <ProtectedRoute user={currentUser} />,
+          //   children: [
+          //     {
+          //       path: "settings",
+          //       element: <SettingsLayout />,
+          //       children: [
+          //         { index: true, element: <Navigate to="account" /> },
+          //         { path: "account", element: <AccountSettings /> },
+          //         { path: "profile", element: <ProfileSettings /> },
+          //       ],
+          //     },
+          //   ],
+          // },
+        ],
+      },
       // {
       //   path: "/profile/:profileId/projects/:projectId",
       //   element: <ProtectedRoute user={currentUser} />,
@@ -80,7 +83,7 @@ const router = createBrowserRouter([
       //   ],
       // },
       { path: "/login", element: <Login /> },
-      // { path: "/signup", element: <SignUp /> },
+      { path: "/signup", element: <Signup /> },
       // {
       //   path: "/start-project",
       //   element: (
