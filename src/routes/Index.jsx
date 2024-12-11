@@ -1,12 +1,14 @@
-import { Stack, Typography } from "@mui/material";
+import { Container, Stack, Typography } from "@mui/material";
 
 function Index() {
   return (
-    <Stack direction="row" height="100%">
-      <Stack alignItems="center">
-        <Typography>You are in INDEX PAGE</Typography>
+    <Container maxWidth="lg">
+      <Stack alignItems={{ sm: "center" }}>
+        {/** align center until hit breakpoint sm(600px) */}
+        <Typography variant="h2">You are in INDEX PAGE</Typography>
+        <Typography variant="h3">Hello world</Typography>
       </Stack>
-    </Stack>
+    </Container>
   );
 }
 
