@@ -5,7 +5,7 @@ function ThemeContainer({ activeTheme, children }) {
     <ThemeProvider theme={activeTheme}>
       <Container
         disableGutters
-        maxWidth="false"
+        maxWidth={false}
         sx={{ minHeight: "100vh", bgcolor: "background.default" }}
       >
         {children}

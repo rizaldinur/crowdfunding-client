@@ -5,6 +5,7 @@ import Login from "./routes/Login.jsx";
 import Signup from "./routes/Signup.jsx";
 import Index from "./routes/Index.jsx";
 import MainLayout from "./routes/layouts/MainLayout.jsx";
+import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
 
 const router = createBrowserRouter([
   {
@@ -84,14 +85,15 @@ const router = createBrowserRouter([
       // },
       { path: "/login", element: <Login /> },
       { path: "/signup", element: <Signup /> },
-      // {
-      //   path: "/start-project",
-      //   element: (
-      //     <ProtectedRoute user={currentUser}>
-      //       <StartProject />
-      //     </ProtectedRoute>
-      //   ),
-      // },
+      {
+        path: "/start-project",
+        element: (
+          <ProtectedRoutes user={null}>
+            {/* <StartProject /> */}
+            <h2>Inside protected route</h2>
+          </ProtectedRoutes>
+        ),
+      },
     ],
   },
 ]);
