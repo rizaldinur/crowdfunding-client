@@ -6,6 +6,7 @@ import Signup from "./routes/Signup.jsx";
 import Index from "./routes/Index.jsx";
 import MainLayout from "./routes/layouts/MainLayout.jsx";
 import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
+import Test from "./routes/Test.jsx";
 
 const router = createBrowserRouter([
   {
@@ -94,6 +95,7 @@ const router = createBrowserRouter([
           </ProtectedRoutes>
         ),
       },
+      { path: "/test", element: <Test /> },
     ],
   },
 ]);
