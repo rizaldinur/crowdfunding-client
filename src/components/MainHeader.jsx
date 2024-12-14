@@ -1,4 +1,3 @@
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,14 +11,30 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { Drawer } from "@mui/material";
+import {
+  Divider,
+  Drawer,
+  FormControl,
+  Link,
+  ListItemIcon,
+  ListItemText,
+  MenuList,
+  OutlinedInput,
+} from "@mui/material";
+import { Route, Link as RouterLink, useNavigate } from "react-router";
+import { DarkMode, LightMode, Search, Settings } from "@mui/icons-material";
+import { ThemeContext } from "../routes/layouts/RootLayout";
+import { useContext, useState } from "react";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function MainHeader() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const user = true;
+  const navigate = useNavigate();
+  const { currentTheme, handleThemeChange } = useContext(ThemeContext);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -37,29 +52,111 @@ function MainHeader() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar
+      elevation={1}
+      position="static"
+      sx={{ bgcolor: "background.default" }}
+    >
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
+        <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleOpenNavMenu}
+            color="inherit"
+            sx={{ display: { xs: "initial", md: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Link underline="none" color="inherit" component={RouterLink} to="#">
+            <Typography variant="h5" fontWeight={700} color="primary">
+              RUANG MODAL
+            </Typography>
+          </Link>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              navigate("login");
             }}
           >
-            LOGO
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <FormControl
+              id="search__form-control"
+              sx={{ display: { xs: "none", md: "block" } }}
+            >
+              <OutlinedInput
+                id="search"
+                aria-describedby="my-helper-text"
+                name="search"
+                placeholder="Search"
+                color="inherit"
+                size="small"
+                startAdornment={
+                  <IconButton type="submit" color="inherit">
+                    <Search />
+                  </IconButton>
+                }
+                sx={{ paddingLeft: 0, borderRadius: 2, width: 400 }}
+              />
+            </FormControl>
+          </form>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
+            <IconButton
+              color="inherit"
+              type="button"
+              onClick={() => {
+                handleThemeChange();
+              }}
+            >
+              {currentTheme === "light" ? <DarkMode /> : <LightMode />}
+            </IconButton>
+            <Button variant="outlined" color="inherit">
+              MULAI PROYEK
+            </Button>
+            <Button color="inherit">JELAJAHI</Button>
+            {!user && <Button color="inherit">LOGIN</Button>}
+            {user && (
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+            )}
+            <Menu
+              id="menu-appbar"
+              elevation={2}
+              anchorEl={anchorElUser}
+              keepMounted
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuList>
+                {settings.map((setting) => (
+                  <>
+                    {setting === "Logout" && (
+                      <Divider key={`divider-${setting}`} />
+                    )}
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <ListItemIcon>
+                        <Settings fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>{setting}</ListItemText>
+                    </MenuItem>
+                  </>
+                ))}
+              </MenuList>
+            </Menu>
+          </Box>
+          {/* <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -93,7 +190,6 @@ function MainHeader() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -112,17 +208,7 @@ function MainHeader() {
           >
             LOGO
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -153,7 +239,7 @@ function MainHeader() {
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
+          </Box> */}
         </Toolbar>
       </Container>
     </AppBar>
