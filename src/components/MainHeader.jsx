@@ -26,7 +26,7 @@ import { DarkMode, LightMode, Search, Settings } from "@mui/icons-material";
 import { ThemeContext } from "../routes/layouts/RootLayout";
 import { useContext, useState } from "react";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Mulai Proyek", "Jelajahi", "Login"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function MainHeader() {
@@ -111,11 +111,16 @@ function MainHeader() {
             >
               {currentTheme === "light" ? <DarkMode /> : <LightMode />}
             </IconButton>
-            <Button variant="outlined" color="inherit">
-              MULAI PROYEK
-            </Button>
-            <Button color="inherit">JELAJAHI</Button>
-            {!user && <Button color="inherit">LOGIN</Button>}
+            {pages.map((page) => (
+              <Button
+                key={page}
+                variant={page === "Mulai Proyek" ? "outlined" : "text"}
+                color="inherit"
+                sx={{ display: page === "Login" && user ? "none" : "initial" }}
+              >
+                {page}
+              </Button>
+            ))}
             {user && (
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -141,17 +146,26 @@ function MainHeader() {
             >
               <MenuList>
                 {settings.map((setting) => (
-                  <>
+                  <Box key={setting}>
                     {setting === "Logout" && (
                       <Divider key={`divider-${setting}`} />
                     )}
                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
                       <ListItemIcon>
-                        <Settings fontSize="small" />
+                        <Settings
+                          color={setting === "Logout" ? "error" : "inherit"}
+                          fontSize="small"
+                        />
                       </ListItemIcon>
-                      <ListItemText>{setting}</ListItemText>
+                      <ListItemText>
+                        <Typography
+                          color={setting === "Logout" ? "error" : "inherit"}
+                        >
+                          {setting}
+                        </Typography>
+                      </ListItemText>
                     </MenuItem>
-                  </>
+                  </Box>
                 ))}
               </MenuList>
             </Menu>
