@@ -81,7 +81,7 @@ function Test() {
           msOverflowStyle: "none",
           scrollbarWidth: "none",
           whiteSpace: "nowrap",
-          padding: 2,
+          // padding: 2,
           bgcolor: "grey.500",
           scrollSnapType: "x mandatory",
           scrollBehavior: "smooth",
@@ -113,11 +113,11 @@ function Test() {
               <Box sx={{ height: 100, zIndex: 1 }}>Box {val}</Box>
               {val === 1 && isHover && (
                 <Box
-                  bgcolor="red"
+                  bgcolor="green"
                   sx={{
                     position: "absolute",
                     minWidth: boxScrollWidth,
-                    zIndex: "1",
+                    zIndex: "9999",
                   }}
                 >
                   <Typography> Hello</Typography>
@@ -129,7 +129,111 @@ function Test() {
           );
         })}
       </Box>
-      <Box sx={{ height: 200, bgcolor: "yellow" }}></Box>
+      <Box
+        sx={{
+          height: 200,
+          bgcolor: "yellow",
+          mb: 1,
+          mt: 1,
+          padding: 3,
+          display: "flex",
+          gap: 1,
+        }}
+      >
+        <Box
+          sx={{
+            display: "inline-block",
+            height: 1,
+            aspectRatio: "1/1",
+            bgcolor: "red",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+              gap: 2,
+              transition: "0.5s",
+              width: 1,
+              height: 1,
+              bgcolor: "firebrick",
+              transition: "all 0.2s",
+              ":hover": {
+                borderRadius: 2,
+                height: "fit-content",
+                transform: "translate(-16px,-16px)",
+                padding: 2,
+              },
+            }}
+          >
+            <Box
+              sx={{
+                // opacity: 0,
+                width: 1,
+                aspectRatio: "1/1",
+                bgcolor: "maroon",
+              }}
+            >
+              Card #1
+            </Box>
+            <Box
+              sx={{
+                width: 1,
+                aspectRatio: "1/1",
+                bgcolor: "maroon",
+                // visibility: "hidden",
+              }}
+            >
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
+              iusto libero, cum nemo quidem voluptate nisi accusantium odit quos
+              perspiciatis, neque cupiditate ipsa eligendi laboriosam modi dicta
+              facere praesentium ut.
+            </Box>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+            gap: 2,
+            width: 200,
+            bgcolor: "red",
+            transition: "all 0.2s",
+            // boxSizing: "border-box",
+            ":hover": {
+              border: "1px solid black",
+              padding: 2,
+              borderRadius: 2,
+              height: "fit-content",
+              transform: "translate(-16px, -16px)",
+            },
+          }}
+        >
+          <Box
+            sx={{
+              width: 1,
+              aspectRatio: "1/1",
+            }}
+          >
+            Card #2
+          </Box>
+          <Box
+            sx={{
+              width: 1,
+              aspectRatio: "1/1",
+              bgcolor: "maroon",
+            }}
+          >
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
+            iusto libero, cum nemo quidem voluptate nisi accusantium odit quos
+            perspiciatis, neque cupiditate ipsa eligendi laboriosam modi dicta
+            facere praesentium ut.
+          </Box>
+        </Box>
+      </Box>
+      <Box sx={{ height: 200, bgcolor: "orange" }}></Box>
     </Container>
   );
 }
