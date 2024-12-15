@@ -1,4 +1,3 @@
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,24 +11,36 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { Drawer } from "@mui/material";
+import {
+  Divider,
+  Drawer,
+  FormControl,
+  Link,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  MenuList,
+  OutlinedInput,
+} from "@mui/material";
+import { Route, Link as RouterLink, useNavigate } from "react-router";
+import { DarkMode, LightMode, Search, Settings } from "@mui/icons-material";
+import { ThemeContext } from "../routes/layouts/RootLayout";
+import { useContext, useState } from "react";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Mulai Proyek", "Jelajahi", "Login"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function MainHeader() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const user = false;
+  const navigate = useNavigate();
+  const { currentTheme, handleThemeChange } = useContext(ThemeContext);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [openNav, setOpenNav] = useState(false);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
@@ -37,107 +48,167 @@ function MainHeader() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar
+      elevation={1}
+      position="static"
+      sx={{ bgcolor: "background.default" }}
+    >
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
+        <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
+          <Drawer open={openNav} onClose={() => setOpenNav(false)}>
+            <Box sx={{ width: 250 }}>
+              <List>
+                <ListItem>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      navigate("login");
+                    }}
+                  >
+                    <FormControl id="search__form-control">
+                      <OutlinedInput
+                        fullWidth
+                        id="search"
+                        aria-describedby="my-helper-text"
+                        name="search"
+                        placeholder="Search"
+                        color="inherit"
+                        size="small"
+                        startAdornment={
+                          <IconButton type="submit" color="inherit">
+                            <Search />
+                          </IconButton>
+                        }
+                        sx={{
+                          paddingLeft: 0,
+                          borderRadius: 2,
+                        }}
+                      />
+                    </FormControl>
+                  </form>
+                </ListItem>
+                {pages.map((page) => (
+                  <ListItem
+                    key={page}
+                    sx={{
+                      display: page === "Login" && user && "none",
+                    }}
+                  >
+                    <ListItemButton>
+                      <ListItemIcon>
+                        <Settings />
+                      </ListItemIcon>
+                      <ListItemText primary={page} />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+              {user && <Divider />}
+              {user && (
+                <List>
+                  {settings.map((setting) => (
+                    <ListItem key={setting}>
+                      <ListItemButton>
+                        <ListItemIcon>
+                          <Settings />
+                        </ListItemIcon>
+                        <ListItemText primary={setting} />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              )}
+            </Box>
+          </Drawer>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={() => setOpenNav(true)}
+            color="inherit"
+            sx={{ display: { xs: "inherit", md: "none" } }}
           >
-            LOGO
-          </Typography>
+            <MenuIcon />
+          </IconButton>
+          <Link underline="none" color="inherit" component={RouterLink} to="#">
+            <Typography variant="h5" fontWeight={700} color="primary">
+              RUANG MODAL
+            </Typography>
+          </Link>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              navigate("login");
             }}
           >
-            LOGO
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <FormControl
+              id="search__form-control"
+              sx={{
+                display: { xs: "none", md: "inherit" },
+                width: { xs: 300, lg: 400 },
+              }}
+            >
+              <OutlinedInput
+                fullWidth
+                id="search"
+                aria-describedby="my-helper-text"
+                name="search"
+                placeholder="Search"
+                color="inherit"
+                size="small"
+                startAdornment={
+                  <IconButton type="submit" color="inherit">
+                    <Search />
+                  </IconButton>
+                }
+                sx={{
+                  paddingLeft: 0,
+                  borderRadius: 2,
+                }}
+              />
+            </FormControl>
+          </form>
+
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
+            <IconButton
+              color="inherit"
+              type="button"
+              onClick={() => {
+                handleThemeChange();
+              }}
+            >
+              {currentTheme === "light" ? <DarkMode /> : <LightMode />}
+            </IconButton>
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                component={RouterLink}
+                to="login"
+                variant={page === "Mulai Proyek" ? "outlined" : "text"}
+                color="inherit"
+                sx={{ display: page === "Login" && user && "none" }}
               >
                 {page}
               </Button>
             ))}
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
+            {user && (
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+            )}
             <Menu
-              sx={{ mt: "45px" }}
               id="menu-appbar"
+              elevation={2}
               anchorEl={anchorElUser}
+              keepMounted
               anchorOrigin={{
-                vertical: "top",
+                vertical: "bottom",
                 horizontal: "right",
               }}
-              keepMounted
               transformOrigin={{
                 vertical: "top",
                 horizontal: "right",
@@ -145,13 +216,30 @@ function MainHeader() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
+              <MenuList>
+                {settings.map((setting) => (
+                  <Box key={setting}>
+                    {setting === "Logout" && (
+                      <Divider key={`divider-${setting}`} />
+                    )}
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <ListItemIcon>
+                        <Settings
+                          color={setting === "Logout" ? "error" : "inherit"}
+                          fontSize="small"
+                        />
+                      </ListItemIcon>
+                      <ListItemText>
+                        <Typography
+                          color={setting === "Logout" ? "error" : "inherit"}
+                        >
+                          {setting}
+                        </Typography>
+                      </ListItemText>
+                    </MenuItem>
+                  </Box>
+                ))}
+              </MenuList>
             </Menu>
           </Box>
         </Toolbar>
