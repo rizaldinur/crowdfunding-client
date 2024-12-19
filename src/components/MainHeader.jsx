@@ -33,7 +33,7 @@ const pages = ["Mulai Proyek", "Jelajahi", "Login"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function MainHeader() {
-  const user = false;
+  const user = null;
   const navigate = useNavigate();
   const { currentTheme, handleThemeChange } = useContext(ThemeContext);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -54,11 +54,18 @@ function MainHeader() {
       sx={{ bgcolor: "background.default" }}
     >
       <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
-          <Drawer open={openNav} onClose={() => setOpenNav(false)}>
+        <Toolbar
+          disableGutters
+          sx={{ justifyContent: "space-between", gap: 2 }}
+        >
+          <Drawer
+            open={openNav}
+            onClose={() => setOpenNav(false)}
+            anchor="right"
+          >
             <Box sx={{ width: 250 }}>
               <List>
-                <ListItem>
+                <ListItem sx={{ display: { xs: "inherit", sm: "none" } }}>
                   <form
                     onSubmit={(e) => {
                       e.preventDefault();
@@ -87,21 +94,18 @@ function MainHeader() {
                     </FormControl>
                   </form>
                 </ListItem>
-                {pages.map((page) => (
-                  <ListItem
-                    key={page}
-                    sx={{
-                      display: page === "Login" && user && "none",
-                    }}
-                  >
-                    <ListItemButton>
-                      <ListItemIcon>
-                        <Settings />
-                      </ListItemIcon>
-                      <ListItemText primary={page} />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
+                {pages
+                  .filter((page) => !(page === "Login" && user)) // Exclude "Login" if a user exists
+                  .map((page) => (
+                    <ListItem key={page}>
+                      <ListItemButton>
+                        <ListItemIcon>
+                          <Settings />
+                        </ListItemIcon>
+                        <ListItemText primary={page} />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
               </List>
               {user && <Divider />}
               {user && (
@@ -120,56 +124,53 @@ function MainHeader() {
               )}
             </Box>
           </Drawer>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            onClick={() => setOpenNav(true)}
-            color="inherit"
-            sx={{ display: { xs: "inherit", md: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
+
           <Link underline="none" color="inherit" component={RouterLink} to="#">
             <Typography variant="h5" fontWeight={700} color="primary">
               RUANG MODAL
             </Typography>
           </Link>
 
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              navigate("login");
+          <Box
+            sx={{
+              flexGrow: 1,
+              maxWidth: { xs: 1, md: 500 },
             }}
           >
-            <FormControl
-              id="search__form-control"
-              sx={{
-                display: { xs: "none", md: "inherit" },
-                width: { xs: 300, lg: 400 },
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                navigate("login");
               }}
             >
-              <OutlinedInput
-                fullWidth
-                id="search"
-                aria-describedby="my-helper-text"
-                name="search"
-                placeholder="Search"
-                color="inherit"
-                size="small"
-                startAdornment={
-                  <IconButton type="submit" color="inherit">
-                    <Search />
-                  </IconButton>
-                }
+              <FormControl
+                id="search__form-control"
                 sx={{
-                  paddingLeft: 0,
-                  borderRadius: 2,
+                  display: { xs: "none", sm: "inherit" },
+                  // width: 1,
                 }}
-              />
-            </FormControl>
-          </form>
+              >
+                <OutlinedInput
+                  fullWidth
+                  id="search"
+                  aria-describedby="my-helper-text"
+                  name="search"
+                  placeholder="Search"
+                  color="inherit"
+                  size="small"
+                  startAdornment={
+                    <IconButton type="submit" color="inherit">
+                      <Search />
+                    </IconButton>
+                  }
+                  sx={{
+                    paddingLeft: 0,
+                    borderRadius: 2,
+                  }}
+                />
+              </FormControl>
+            </form>
+          </Box>
 
           <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
             <IconButton
@@ -181,18 +182,19 @@ function MainHeader() {
             >
               {currentTheme === "light" ? <DarkMode /> : <LightMode />}
             </IconButton>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                component={RouterLink}
-                to="login"
-                variant={page === "Mulai Proyek" ? "outlined" : "text"}
-                color="inherit"
-                sx={{ display: page === "Login" && user && "none" }}
-              >
-                {page}
-              </Button>
-            ))}
+            {pages
+              .filter((page) => !(page === "Login" && user))
+              .map((page) => (
+                <Button
+                  key={page}
+                  component={RouterLink}
+                  to="login"
+                  variant={page === "Mulai Proyek" ? "outlined" : "text"}
+                  color="inherit"
+                >
+                  {page}
+                </Button>
+              ))}
             {user && (
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -242,6 +244,17 @@ function MainHeader() {
               </MenuList>
             </Menu>
           </Box>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={() => setOpenNav(true)}
+            color="inherit"
+            sx={{ display: { xs: "inherit", md: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
         </Toolbar>
       </Container>
     </AppBar>
