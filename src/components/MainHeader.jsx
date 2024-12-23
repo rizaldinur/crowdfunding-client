@@ -49,9 +49,13 @@ function MainHeader() {
 
   return (
     <AppBar
-      elevation={1}
+      elevation={0}
       position="static"
-      sx={{ bgcolor: "background.default" }}
+      sx={{
+        bgcolor: "background.default",
+        borderBottom: "solid 1px",
+        borderBottomColor: "divider",
+      }}
     >
       <Container maxWidth="xl">
         <Toolbar
