@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import {
+  Collapse,
   Divider,
   Drawer,
   FormControl,
@@ -38,6 +39,7 @@ function MainHeader() {
   const { currentTheme, handleThemeChange } = useContext(ThemeContext);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [openNav, setOpenNav] = useState(false);
+  const [openSearchBar, setOpenSearchBar] = useState(false);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -58,208 +60,236 @@ function MainHeader() {
       }}
     >
       <Container maxWidth="xl">
-        <Toolbar
-          disableGutters
-          sx={{ justifyContent: "space-between", gap: 2 }}
-        >
-          <Drawer
-            open={openNav}
-            onClose={() => setOpenNav(false)}
-            anchor="right"
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <Toolbar
+            disableGutters
+            sx={{ justifyContent: "space-between", gap: { xs: "none", sm: 2 } }}
           >
-            <Box sx={{ width: 250 }}>
-              <List>
-                <ListItem sx={{ display: { xs: "inherit", sm: "none" } }}>
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      navigate("login");
-                    }}
-                  >
-                    <FormControl id="search__form-control">
-                      <OutlinedInput
-                        fullWidth
-                        id="search"
-                        aria-describedby="my-helper-text"
-                        name="search"
-                        placeholder="Search"
-                        color="inherit"
-                        size="small"
-                        startAdornment={
-                          <IconButton type="submit" color="inherit">
-                            <Search />
-                          </IconButton>
-                        }
-                        sx={{
-                          paddingLeft: 0,
-                          borderRadius: 2,
-                        }}
-                      />
-                    </FormControl>
-                  </form>
-                </ListItem>
-                {pages
-                  .filter((page) => !(page === "Login" && user)) // Exclude "Login" if a user exists
-                  .map((page) => (
-                    <ListItem key={page}>
-                      <ListItemButton>
-                        <ListItemIcon>
-                          <Settings />
-                        </ListItemIcon>
-                        <ListItemText primary={page} />
-                      </ListItemButton>
-                    </ListItem>
-                  ))}
-              </List>
-              {user && <Divider />}
-              {user && (
+            <Drawer
+              open={openNav}
+              onClose={() => setOpenNav(false)}
+              anchor="right"
+            >
+              <Box sx={{ width: 250 }}>
                 <List>
-                  {settings.map((setting) => (
-                    <ListItem key={setting}>
-                      <ListItemButton>
-                        <ListItemIcon>
-                          <Settings />
-                        </ListItemIcon>
-                        <ListItemText primary={setting} />
-                      </ListItemButton>
-                    </ListItem>
-                  ))}
+                  {pages
+                    .filter((page) => !(page === "Login" && user)) // Exclude "Login" if a user exists
+                    .map((page) => (
+                      <ListItem key={page}>
+                        <ListItemButton>
+                          <ListItemIcon>
+                            <Settings />
+                          </ListItemIcon>
+                          <ListItemText primary={page} />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
                 </List>
-              )}
-            </Box>
-          </Drawer>
+                {user && <Divider />}
+                {user && (
+                  <List>
+                    {settings.map((setting) => (
+                      <ListItem key={setting}>
+                        <ListItemButton>
+                          <ListItemIcon>
+                            <Settings />
+                          </ListItemIcon>
+                          <ListItemText primary={setting} />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+                  </List>
+                )}
+              </Box>
+            </Drawer>
 
-          <Link underline="none" color="inherit" component={RouterLink} to="#">
-            <Typography variant="h5" fontWeight={700} color="primary">
-              RUANG MODAL
-            </Typography>
-          </Link>
+            <Link
+              underline="none"
+              color="inherit"
+              component={RouterLink}
+              to="#"
+            >
+              <Typography variant="h5" fontWeight={700} color="primary">
+                RUANG MODAL
+              </Typography>
+            </Link>
 
-          <Box
-            sx={{
-              flexGrow: 1,
-              maxWidth: { xs: 1, md: 500 },
-            }}
-          >
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                navigate("login");
+            <Box
+              sx={{
+                flexGrow: 1,
+                maxWidth: { xs: 1, md: 500 },
               }}
             >
-              <FormControl
-                id="search__form-control"
-                sx={{
-                  display: { xs: "none", sm: "inherit" },
-                  // width: 1,
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  navigate("login");
                 }}
               >
-                <OutlinedInput
-                  fullWidth
-                  id="search"
-                  aria-describedby="my-helper-text"
-                  name="search"
-                  placeholder="Search"
-                  color="inherit"
-                  size="small"
-                  startAdornment={
-                    <IconButton type="submit" color="inherit">
-                      <Search />
-                    </IconButton>
-                  }
+                <FormControl
+                  id="search__form-control"
                   sx={{
-                    paddingLeft: 0,
-                    borderRadius: 2,
+                    display: { xs: "none", sm: "inherit" },
+                    // width: 1,
                   }}
-                />
-              </FormControl>
-            </form>
-          </Box>
-
-          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
-            <IconButton
-              color="inherit"
-              type="button"
-              onClick={() => {
-                handleThemeChange();
-              }}
-            >
-              {currentTheme === "light" ? <DarkMode /> : <LightMode />}
-            </IconButton>
-            {pages
-              .filter((page) => !(page === "Login" && user))
-              .map((page) => (
-                <Button
-                  key={page}
-                  component={RouterLink}
-                  to="login"
-                  variant={page === "Mulai Proyek" ? "outlined" : "text"}
-                  color="inherit"
                 >
-                  {page}
-                </Button>
-              ))}
-            {user && (
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
-            )}
-            <Menu
-              id="menu-appbar"
-              elevation={2}
-              anchorEl={anchorElUser}
-              keepMounted
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuList>
-                {settings.map((setting) => (
-                  <Box key={setting}>
-                    {setting === "Logout" && (
-                      <Divider key={`divider-${setting}`} />
-                    )}
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <ListItemIcon>
-                        <Settings
-                          color={setting === "Logout" ? "error" : "inherit"}
-                          fontSize="small"
-                        />
-                      </ListItemIcon>
-                      <ListItemText>
-                        <Typography
-                          color={setting === "Logout" ? "error" : "inherit"}
-                        >
-                          {setting}
-                        </Typography>
-                      </ListItemText>
-                    </MenuItem>
-                  </Box>
+                  <OutlinedInput
+                    fullWidth
+                    id="search"
+                    aria-describedby="my-helper-text"
+                    name="search"
+                    placeholder="Search"
+                    color="inherit"
+                    size="small"
+                    startAdornment={
+                      <IconButton type="submit" color="inherit">
+                        <Search />
+                      </IconButton>
+                    }
+                    sx={{
+                      paddingLeft: 0,
+                      borderRadius: 2,
+                    }}
+                  />
+                </FormControl>
+              </form>
+            </Box>
+
+            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
+              <IconButton
+                color="inherit"
+                type="button"
+                onClick={() => {
+                  handleThemeChange();
+                }}
+              >
+                {currentTheme === "light" ? <DarkMode /> : <LightMode />}
+              </IconButton>
+              {pages
+                .filter((page) => !(page === "Login" && user))
+                .map((page) => (
+                  <Button
+                    key={page}
+                    component={RouterLink}
+                    to="login"
+                    variant={page === "Mulai Proyek" ? "outlined" : "text"}
+                    color="inherit"
+                  >
+                    {page}
+                  </Button>
                 ))}
-              </MenuList>
-            </Menu>
-          </Box>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            onClick={() => setOpenNav(true)}
-            color="inherit"
-            sx={{ display: { xs: "inherit", md: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
+              {user && (
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="/static/images/avatar/2.jpg"
+                    />
+                  </IconButton>
+                </Tooltip>
+              )}
+              <Menu
+                id="menu-appbar"
+                elevation={2}
+                anchorEl={anchorElUser}
+                keepMounted
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuList>
+                  {settings.map((setting) => (
+                    <Box key={setting}>
+                      {setting === "Logout" && (
+                        <Divider key={`divider-${setting}`} />
+                      )}
+                      <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                        <ListItemIcon>
+                          <Settings
+                            color={setting === "Logout" ? "error" : "inherit"}
+                            fontSize="small"
+                          />
+                        </ListItemIcon>
+                        <ListItemText>
+                          <Typography
+                            color={setting === "Logout" ? "error" : "inherit"}
+                          >
+                            {setting}
+                          </Typography>
+                        </ListItemText>
+                      </MenuItem>
+                    </Box>
+                  ))}
+                </MenuList>
+              </Menu>
+            </Box>
+            <IconButton
+              size="large"
+              aria-label="show search bar"
+              aria-controls="search-bar"
+              aria-haspopup="true"
+              onClick={() => setOpenSearchBar((prevState) => !prevState)}
+              color="inherit"
+              sx={{ display: { xs: "inherit", sm: "none" } }}
+            >
+              <Search />
+            </IconButton>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={() => setOpenNav(true)}
+              color="inherit"
+              sx={{ display: { xs: "inherit", md: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+          <Collapse in={openSearchBar}>
+            <Box sx={{ mb: 2 }}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  navigate("login");
+                }}
+              >
+                <FormControl
+                  id="search__form-control"
+                  sx={{
+                    width: 1,
+                  }}
+                >
+                  <OutlinedInput
+                    fullWidth
+                    id="search"
+                    aria-describedby="my-helper-text"
+                    name="search"
+                    placeholder="Search"
+                    color="inherit"
+                    size="small"
+                    startAdornment={
+                      <IconButton type="submit" color="inherit">
+                        <Search />
+                      </IconButton>
+                    }
+                    sx={{
+                      paddingLeft: 0,
+                      borderRadius: 2,
+                    }}
+                  />
+                </FormControl>
+              </form>
+            </Box>
+          </Collapse>
+        </Box>
       </Container>
     </AppBar>
   );
