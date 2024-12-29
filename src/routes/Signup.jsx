@@ -1,6 +1,8 @@
 import {
   Avatar,
+  Box,
   Button,
+  Container,
   Divider,
   Grid2,
   Link,
@@ -17,13 +19,22 @@ function Signup() {
   return (
     <>
       <AuthNav />
-      <Grid2 container justifyContent="center">
-        <Grid2
-          padding={5}
-          size={{ xs: 10, sm: 7, md: 5, lg: 4, xl: 3, xxl: 2 }}
-          bgcolor={currentTheme === "light" ? "background" : "background.paper"}
-          sx={{ border: "solid 1px", borderColor: "divider" }}
-          borderRadius={2}
+      <Container maxWidth="sm">
+        <Box
+          sx={{
+            padding: 5,
+            placeSelf: "center",
+            width: 450,
+            boxSizing: "border-box",
+            maxWidth: 1,
+            border: "solid 1px",
+            borderColor: "divider",
+            borderRadius: 2,
+            bgcolor:
+              currentTheme === "light"
+                ? "background.default"
+                : "background.paper",
+          }}
         >
           <Stack alignItems="center">
             <Avatar sx={{ bgcolor: "secondary.main", mb: 1 }}>
@@ -34,7 +45,7 @@ function Signup() {
             </Typography>
             <Stack width={1}>
               <Grid2 container spacing={2} sx={{ mb: 2 }}>
-                <Grid2 size={{ xs: 12, sm: 6, md: 6, lg: 6, xl: 6, xxl: 6 }}>
+                <Grid2 size={{ xs: 12, sm: 6 }}>
                   <TextField
                     type="text"
                     label="First Name"
@@ -42,7 +53,7 @@ function Signup() {
                     sx={{ width: 1 }}
                   />
                 </Grid2>
-                <Grid2 size={{ xs: 12, sm: 6, md: 6, lg: 6, xl: 6, xxl: 6 }}>
+                <Grid2 size={{ xs: 12, sm: 6 }}>
                   <TextField
                     type="text"
                     label="Last Name"
@@ -86,8 +97,8 @@ function Signup() {
               </Typography>
             </Stack>
           </Stack>
-        </Grid2>
-      </Grid2>
+        </Box>
+      </Container>
     </>
   );
 }

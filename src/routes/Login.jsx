@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   Button,
+  Container,
   Divider,
   Grid2,
   Link,
@@ -19,13 +20,22 @@ function Login() {
   return (
     <>
       <AuthNav />
-      <Grid2 container justifyContent="center">
-        <Grid2
-          padding={5}
-          size={{ xs: 10, sm: 7, md: 5, lg: 4, xl: 2.5, xxl: 2 }}
-          bgcolor={currentTheme === "light" ? "background" : "background.paper"}
-          sx={{ border: "solid 1px", borderColor: "divider" }}
-          borderRadius={2}
+      <Container maxWidth="sm">
+        <Box
+          sx={{
+            padding: 5,
+            placeSelf: "center",
+            width: 450,
+            boxSizing: "border-box",
+            maxWidth: 1,
+            border: "solid 1px",
+            borderColor: "divider",
+            borderRadius: 2,
+            bgcolor:
+              currentTheme === "light"
+                ? "background.default"
+                : "background.paper",
+          }}
         >
           <Stack alignItems="center">
             <Avatar sx={{ bgcolor: "secondary.main", mb: 1 }}>
@@ -66,8 +76,8 @@ function Login() {
               </Typography>
             </Stack>
           </Stack>
-        </Grid2>
-      </Grid2>
+        </Box>
+      </Container>
     </>
   );
 }
