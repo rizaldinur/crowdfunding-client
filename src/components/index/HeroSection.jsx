@@ -71,7 +71,7 @@ function HeroSection() {
           >
             <img
               width="100%"
-              src="/public/images/hero-image.png"
+              src="/images/hero-image.png"
               alt="Main hero illustration about crowdfunding"
             />
           </Box>
