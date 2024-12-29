@@ -8,17 +8,24 @@ import {
   Link,
   Typography,
 } from "@mui/material";
+import { ThemeContext } from "../../routes/layouts/RootLayout";
+import { useContext } from "react";
 
 function FeatureCard() {
+  const { currentTheme } = useContext(ThemeContext);
+  console.log(typeof currentTheme);
+
   return (
     <Card
+      elevation={0}
       sx={{
         display: "flex",
         flexDirection: { xs: "column", sm: "row" },
         width: 1,
         position: "relative",
-        zIndex: "9999",
         transition: "0.2s",
+        bgcolor: currentTheme === "dark" ? "background.paper" : "initial",
+        boxShadow: "none",
         ":hover": {
           border: "1px solid",
           borderColor: "divider",
