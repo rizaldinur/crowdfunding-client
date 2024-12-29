@@ -119,40 +119,38 @@ function MainHeader() {
                 flexGrow: 1,
                 maxWidth: { xs: 1, md: 500 },
               }}
+              component="form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                navigate("login");
+              }}
             >
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  navigate("login");
+              <FormControl
+                id="search__form-control"
+                sx={{
+                  display: { xs: "none", sm: "inherit" },
+                  // width: 1,
                 }}
               >
-                <FormControl
-                  id="search__form-control"
+                <OutlinedInput
+                  fullWidth
+                  id="search"
+                  aria-describedby="my-helper-text"
+                  name="search"
+                  placeholder="Search"
+                  color="inherit"
+                  size="small"
+                  startAdornment={
+                    <IconButton type="submit" color="inherit">
+                      <Search />
+                    </IconButton>
+                  }
                   sx={{
-                    display: { xs: "none", sm: "inherit" },
-                    // width: 1,
+                    paddingLeft: 0,
+                    borderRadius: 2,
                   }}
-                >
-                  <OutlinedInput
-                    fullWidth
-                    id="search"
-                    aria-describedby="my-helper-text"
-                    name="search"
-                    placeholder="Search"
-                    color="inherit"
-                    size="small"
-                    startAdornment={
-                      <IconButton type="submit" color="inherit">
-                        <Search />
-                      </IconButton>
-                    }
-                    sx={{
-                      paddingLeft: 0,
-                      borderRadius: 2,
-                    }}
-                  />
-                </FormControl>
-              </form>
+                />
+              </FormControl>
             </Box>
 
             <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
@@ -254,39 +252,39 @@ function MainHeader() {
             </IconButton>
           </Toolbar>
           <Collapse in={openSearchBar}>
-            <Box sx={{ mb: 2 }}>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  navigate("login");
+            <Box
+              sx={{ mb: 2 }}
+              component="form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                navigate("login");
+              }}
+            >
+              <FormControl
+                id="search__form-control"
+                sx={{
+                  width: 1,
                 }}
               >
-                <FormControl
-                  id="search__form-control"
+                <OutlinedInput
+                  fullWidth
+                  id="search"
+                  aria-describedby="my-helper-text"
+                  name="search"
+                  placeholder="Search"
+                  color="inherit"
+                  size="small"
+                  startAdornment={
+                    <IconButton type="submit" color="inherit">
+                      <Search />
+                    </IconButton>
+                  }
                   sx={{
-                    width: 1,
+                    paddingLeft: 0,
+                    borderRadius: 2,
                   }}
-                >
-                  <OutlinedInput
-                    fullWidth
-                    id="search"
-                    aria-describedby="my-helper-text"
-                    name="search"
-                    placeholder="Search"
-                    color="inherit"
-                    size="small"
-                    startAdornment={
-                      <IconButton type="submit" color="inherit">
-                        <Search />
-                      </IconButton>
-                    }
-                    sx={{
-                      paddingLeft: 0,
-                      borderRadius: 2,
-                    }}
-                  />
-                </FormControl>
-              </form>
+                />
+              </FormControl>
             </Box>
           </Collapse>
         </Box>
