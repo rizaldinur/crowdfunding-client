@@ -18,7 +18,7 @@ function FeaturedSection() {
             variant="h6"
             color="textSecondary"
           >
-            FEATURED
+            UNGGULAN
           </Typography>
           <FeatureCard />
         </Box>
