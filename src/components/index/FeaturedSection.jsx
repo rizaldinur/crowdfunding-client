@@ -1,5 +1,5 @@
 import { Box, Container, Typography } from "@mui/material";
-import FeatureCard from "./FeatureCard";
+import FeatureCard from "../card/FeatureCard";
 
 function FeaturedSection() {
   return (
