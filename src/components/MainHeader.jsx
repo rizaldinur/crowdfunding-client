@@ -26,12 +26,48 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import { Route, Link as RouterLink, useNavigate } from "react-router";
-import { DarkMode, LightMode, Search, Settings } from "@mui/icons-material";
+import {
+  DarkMode,
+  LightMode,
+  Person2,
+  Search,
+  Settings,
+  Bookmark,
+  Folder,
+  Logout,
+} from "@mui/icons-material";
 import { ThemeContext } from "../routes/layouts/RootLayout";
 import { useContext, useState } from "react";
 
 const pages = ["Mulai Proyek", "Jelajahi", "Login"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const accountMenuItems = [
+  {
+    path: "profile",
+    name: "Profil",
+    icon: <Person2 color="inherit" fontSize="small" />,
+  },
+  {
+    path: "settings",
+    name: "Pengaturan",
+    icon: <Settings color="inherit" fontSize="small" />,
+  },
+  {
+    path: "saved",
+    name: "Proyek Tersimpan",
+    icon: <Bookmark color="inherit" fontSize="small" />,
+  },
+  {
+    path: "projects",
+    name: "Proyek Buatanmu",
+    icon: <Folder color="inherit" fontSize="small" />,
+  },
+  {
+    path: "#",
+    name: "Keluar",
+    icon: <Logout color="error" fontSize="small" />,
+  },
+];
 
 function MainHeader() {
   const user = null;
@@ -76,25 +112,39 @@ function MainHeader() {
                     .filter((page) => !(page === "Login" && user)) // Exclude "Login" if a user exists
                     .map((page) => (
                       <ListItem key={page}>
-                        <ListItemButton>
-                          <ListItemIcon>
-                            <Settings />
-                          </ListItemIcon>
-                          <ListItemText primary={page} />
-                        </ListItemButton>
+                        {page === "Mulai Proyek" ? (
+                          <Button
+                            sx={{ width: 1 }}
+                            variant="outlined"
+                            color="inherit"
+                          >
+                            {page}
+                          </Button>
+                        ) : (
+                          <ListItemButton>
+                            <ListItemText primary={page} />
+                          </ListItemButton>
+                        )}
                       </ListItem>
                     ))}
                 </List>
                 {user && <Divider />}
                 {user && (
                   <List>
-                    {settings.map((setting) => (
-                      <ListItem key={setting}>
-                        <ListItemButton>
-                          <ListItemIcon>
-                            <Settings />
-                          </ListItemIcon>
-                          <ListItemText primary={setting} />
+                    {accountMenuItems.map((item) => (
+                      <ListItem key={item.name}>
+                        {item.name === "Keluar" && <Divider />}
+                        <ListItemButton sx={{ gap: 2 }}>
+                          {item.icon}
+                          <ListItemText
+                            primary={item.name}
+                            sx={{
+                              color:
+                                item.name === "Keluar"
+                                  ? "error.main"
+                                  : "inherit",
+                            }}
+                          />
                         </ListItemButton>
                       </ListItem>
                     ))}
@@ -203,23 +253,24 @@ function MainHeader() {
                 onClose={handleCloseUserMenu}
               >
                 <MenuList>
-                  {settings.map((setting) => (
-                    <Box key={setting}>
-                      {setting === "Logout" && (
-                        <Divider key={`divider-${setting}`} />
+                  {accountMenuItems.map((item, index) => (
+                    <Box key={item.name}>
+                      {item.name === "Keluar" && (
+                        <Divider key={`divider-${index}`} />
                       )}
-                      <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                        <ListItemIcon>
-                          <Settings
-                            color={setting === "Logout" ? "error" : "inherit"}
-                            fontSize="small"
-                          />
-                        </ListItemIcon>
+                      <MenuItem
+                        key={item.name}
+                        onClick={handleCloseUserMenu}
+                        component={RouterLink}
+                        to={item.path}
+                        sx={{ py: 1 }}
+                      >
+                        <ListItemIcon>{item.icon}</ListItemIcon>
                         <ListItemText>
                           <Typography
-                            color={setting === "Logout" ? "error" : "inherit"}
+                            color={item.name === "Keluar" ? "error" : "inherit"}
                           >
-                            {setting}
+                            {item.name}
                           </Typography>
                         </ListItemText>
                       </MenuItem>
