@@ -7,7 +7,11 @@ import Index from "./routes/Index.jsx";
 import DiscoverProjects from "./routes/DiscoverProjects.jsx";
 import MainLayout from "./routes/layouts/MainLayout.jsx";
 import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
+import Cookies from "js-cookie";
 
+const getUser = () => {
+  return Boolean(Cookies.get("token"));
+};
 const router = createBrowserRouter([
   {
     element: <RootLayout />,
@@ -89,7 +93,7 @@ const router = createBrowserRouter([
       {
         path: "/start-project",
         element: (
-          <ProtectedRoutes user={null}>
+          <ProtectedRoutes user={getUser()}>
             {/* <StartProject /> */}
             <h2>Inside protected route</h2>
           </ProtectedRoutes>
