@@ -3,7 +3,7 @@ import { Box, Container, Link, Stack, Typography } from "@mui/material";
 
 function MainFooter({ full = false }) {
   return (
-    <Box sx={{ py: 8 }}>
+    <Box sx={{ py: 8 }} component="footer">
       {full && (
         <Container maxWidth="md">
           <Box
