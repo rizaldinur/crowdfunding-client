@@ -4,6 +4,7 @@ import ErrorBoundary from "./routes/ErrorBoundary.jsx";
 import Login from "./routes/Login.jsx";
 import Signup from "./routes/Signup.jsx";
 import Index from "./routes/Index.jsx";
+import DiscoverProjects from "./routes/DiscoverProjects.jsx";
 import MainLayout from "./routes/layouts/MainLayout.jsx";
 import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
 
@@ -24,10 +25,10 @@ const router = createBrowserRouter([
             index: true,
             element: <Index />,
           },
-          // {
-          //   path: "discover",
-          //   element: <DiscoverProjects />,
-          // },
+          {
+            path: "discover",
+            element: <DiscoverProjects />,
+          },
           // {
           //   path: "project/details/:projectId",
           //   element: <ProjectDetailsLayout />,
