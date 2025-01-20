@@ -16,6 +16,7 @@ import {
   Divider,
   Drawer,
   FormControl,
+  InputLabel,
   Link,
   List,
   ListItem,
@@ -24,6 +25,7 @@ import {
   ListItemText,
   MenuList,
   OutlinedInput,
+  Select,
 } from "@mui/material";
 import { Route, Link as RouterLink, useNavigate } from "react-router";
 import {
@@ -39,8 +41,7 @@ import {
 import { ThemeContext } from "../../routes/layouts/RootLayout";
 import { useContext, useState } from "react";
 
-const pages = ["Mulai Proyek", "Jelajahi", "Login"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const navItems = ["Mulai Proyek", "Jelajahi", "Login"];
 const accountMenuItems = [
   {
     path: "profile",
@@ -72,10 +73,16 @@ const accountMenuItems = [
 function MainHeader() {
   const user = null;
   const navigate = useNavigate();
-  const { currentTheme, handleThemeChange } = useContext(ThemeContext);
+  const { currentTheme, setCurrentTheme, handleThemeChange } =
+    useContext(ThemeContext);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [openNav, setOpenNav] = useState(false);
   const [openSearchBar, setOpenSearchBar] = useState(false);
+  // const [age, setAge] = React.useState("");
+
+  const handleSelectThemeChange = (event) => {
+    setCurrentTheme(event.target.value);
+  };
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -108,21 +115,36 @@ function MainHeader() {
             >
               <Box sx={{ width: 250 }}>
                 <List>
-                  {pages
-                    .filter((page) => !(page === "Login" && user)) // Exclude "Login" if a user exists
-                    .map((page) => (
-                      <ListItem key={page}>
-                        {page === "Mulai Proyek" ? (
+                  <ListItem key="Tema">
+                    <FormControl fullWidth size="small">
+                      <InputLabel id="theme-select-label">Tema</InputLabel>
+                      <Select
+                        labelId="theme-select-label"
+                        id="theme-select"
+                        value={currentTheme}
+                        label="Tema"
+                        onChange={handleSelectThemeChange}
+                      >
+                        <MenuItem value={"dark"}>Dark</MenuItem>
+                        <MenuItem value={"light"}>Light</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </ListItem>
+                  {navItems
+                    .filter((item) => !(item === "Login" && user)) // Exclude "Login" if a user exists
+                    .map((item) => (
+                      <ListItem key={item}>
+                        {item === "Mulai Proyek" ? (
                           <Button
                             sx={{ width: 1 }}
                             variant="outlined"
                             color="inherit"
                           >
-                            {page}
+                            {item}
                           </Button>
                         ) : (
                           <ListItemButton>
-                            <ListItemText primary={page} />
+                            <ListItemText primary={item} />
                           </ListItemButton>
                         )}
                       </ListItem>
@@ -213,17 +235,17 @@ function MainHeader() {
               >
                 {currentTheme === "light" ? <DarkMode /> : <LightMode />}
               </IconButton>
-              {pages
-                .filter((page) => !(page === "Login" && user))
-                .map((page) => (
+              {navItems
+                .filter((item) => !(item === "Login" && user))
+                .map((item) => (
                   <Button
-                    key={page}
+                    key={item}
                     component={RouterLink}
                     to="login"
-                    variant={page === "Mulai Proyek" ? "outlined" : "text"}
+                    variant={item === "Mulai Proyek" ? "outlined" : "text"}
                     color="inherit"
                   >
-                    {page}
+                    {item}
                   </Button>
                 ))}
               {user && (

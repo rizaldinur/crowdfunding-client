@@ -22,7 +22,9 @@ function RootLayout({ children }) {
 
   return (
     <ThemeContainer activeTheme={activeTheme}>
-      <ThemeContext.Provider value={{ currentTheme, handleThemeChange }}>
+      <ThemeContext.Provider
+        value={{ currentTheme, setCurrentTheme, handleThemeChange }}
+      >
         {children ? (
           children
         ) : (
