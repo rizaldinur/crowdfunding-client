@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useOutletContext, Link as RouterLink } from "react-router";
 import { AppRegistration } from "@mui/icons-material";
-import AuthNav from "../components/AuthNav";
+import AuthNav from "../components/navigation/AuthNav";
 
 function Signup() {
   const [currentTheme] = useOutletContext();

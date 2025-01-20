@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { Link as RouterLink } from "react-router";
 import { Form, useOutletContext } from "react-router";
-import AuthNav from "../components/AuthNav";
+import AuthNav from "../components/navigation/AuthNav";
 
 function Login() {
   const [currentTheme] = useOutletContext();

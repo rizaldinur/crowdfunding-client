@@ -36,7 +36,7 @@ import {
   Folder,
   Logout,
 } from "@mui/icons-material";
-import { ThemeContext } from "../routes/layouts/RootLayout";
+import { ThemeContext } from "../../routes/layouts/RootLayout";
 import { useContext, useState } from "react";
 
 const pages = ["Mulai Proyek", "Jelajahi", "Login"];
