@@ -41,7 +41,11 @@ import {
 import { ThemeContext } from "../../routes/layouts/RootLayout";
 import { useContext, useState } from "react";
 
-const navItems = ["Mulai Proyek", "Jelajahi", "Login"];
+const navItems = [
+  { name: "Mulai Proyek", path: "start-project" },
+  { name: "Jelajahi", path: "discover" },
+  { name: "Login", path: "login" },
+];
 const accountMenuItems = [
   {
     path: "profile",
@@ -131,20 +135,22 @@ function MainHeader() {
                     </FormControl>
                   </ListItem>
                   {navItems
-                    .filter((item) => !(item === "Login" && user)) // Exclude "Login" if a user exists
+                    .filter((item) => !(item.name === "Login" && user)) // Exclude "Login" if a user exists
                     .map((item) => (
-                      <ListItem key={item}>
-                        {item === "Mulai Proyek" ? (
+                      <ListItem key={item.name}>
+                        {item.name === "Mulai Proyek" ? (
                           <Button
                             sx={{ width: 1 }}
                             variant="outlined"
                             color="inherit"
+                            component={RouterLink}
+                            to={item.path}
                           >
-                            {item}
+                            {item.name}
                           </Button>
                         ) : (
-                          <ListItemButton>
-                            <ListItemText primary={item} />
+                          <ListItemButton component={RouterLink} to={item.path}>
+                            <ListItemText primary={item.name} />
                           </ListItemButton>
                         )}
                       </ListItem>
@@ -179,7 +185,7 @@ function MainHeader() {
               underline="none"
               color="inherit"
               component={RouterLink}
-              to="#"
+              to="/"
             >
               <Typography variant="h5" fontWeight={700} color="primary">
                 RUANG MODAL
@@ -236,16 +242,16 @@ function MainHeader() {
                 {currentTheme === "light" ? <DarkMode /> : <LightMode />}
               </IconButton>
               {navItems
-                .filter((item) => !(item === "Login" && user))
+                .filter((item) => !(item.name === "Login" && user))
                 .map((item) => (
                   <Button
-                    key={item}
+                    key={item.name}
                     component={RouterLink}
-                    to="login"
-                    variant={item === "Mulai Proyek" ? "outlined" : "text"}
+                    to={item.path}
+                    variant={item.name === "Mulai Proyek" ? "outlined" : "text"}
                     color="inherit"
                   >
-                    {item}
+                    {item.name}
                   </Button>
                 ))}
               {user && (

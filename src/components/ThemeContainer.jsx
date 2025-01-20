@@ -6,7 +6,12 @@ function ThemeContainer({ activeTheme, children }) {
       <Container
         disableGutters
         maxWidth={false}
-        sx={{ minHeight: "100vh", bgcolor: "background.default" }}
+        sx={{
+          minHeight: "100vh",
+          bgcolor: "background.default",
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         {children}
       </Container>

@@ -3,52 +3,64 @@ import { Box, Container, Link, Stack, Typography } from "@mui/material";
 
 function MainFooter({ full = false }) {
   return (
-    <Box sx={{ py: 8 }} component="footer">
+    <Box sx={{ py: 5, mt: "auto" }} component="footer">
       {full && (
         <Container maxWidth="md">
           <Box
             sx={{
               display: "flex",
-              mb: 8,
+              mb: 5,
               justifyContent: "space-between",
             }}
           >
             <Stack gap={1}>
-              <Typography variant="h6" color="textPrimary" sx={{ mb: 1 }}>
+              <Typography
+                variant="subtitle2"
+                color="textPrimary"
+                sx={{ mb: 1 }}
+              >
                 TENTANG
               </Typography>
-              <Typography variant="body1" color="textPrimary">
+              <Typography variant="body2" color="textPrimary">
                 Tentang kami
               </Typography>
-              <Typography variant="body1" color="textPrimary">
+              <Typography variant="body2" color="textPrimary">
                 Statistik
               </Typography>
-              <Typography variant="body1" color="textPrimary">
+              <Typography variant="body2" color="textPrimary">
                 Karir
               </Typography>
             </Stack>
             <Stack gap={1}>
-              <Typography variant="h6" color="textPrimary" sx={{ mb: 1 }}>
+              <Typography
+                variant="subtitle2"
+                color="textPrimary"
+                sx={{ mb: 1 }}
+              >
                 DUKUNGAN
               </Typography>
-              <Typography variant="body1" color="textPrimary">
+              <Typography variant="body2" color="textPrimary">
                 Pusat bantuan
               </Typography>
-              <Typography variant="body1" color="textPrimary">
+              <Typography variant="body2" color="textPrimary">
                 Aturan kami
               </Typography>
-              <Typography variant="body1" color="textPrimary">
+              <Typography variant="body2" color="textPrimary">
                 Resources
               </Typography>
             </Stack>
             <Stack gap={1}>
-              <Typography variant="h6" color="textPrimary" sx={{ mb: 1 }}>
+              <Typography
+                variant="subtitle2"
+                color="textPrimary"
+                sx={{ mb: 1 }}
+              >
                 LAINNYA
               </Typography>
-              <Typography variant="body1" color="textPrimary">
+              <Typography variant="body2" color="textPrimary">
                 Berita
               </Typography>
-              <Typography variant="body1" color="textPrimary">
+              <Typography variant="body2" color="textPrimary">
                 Riset
               </Typography>
             </Stack>
@@ -64,7 +76,7 @@ function MainFooter({ full = false }) {
             gap: 2,
           }}
         >
-          <Typography variant="body1" color="textPrimary">
+          <Typography variant="body2" color="textPrimary">
             Ruang Modal Program Double Track © 2024
           </Typography>
           <Stack direction="row" gap={3}>
