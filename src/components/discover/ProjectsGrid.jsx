@@ -17,8 +17,9 @@ function ProjectsGrid() {
           {Array(6)
             .fill(0)
             .map((val, i) => val + i + 1)
-            .map((item) => (
+            .map((item, i) => (
               <Grid2
+                key={`grid-${i}`}
                 size={{ xs: 12, sm: 6, md: 6, lg: 4 }}
                 sx={{ display: "flex", justifyContent: "center" }}
               >
