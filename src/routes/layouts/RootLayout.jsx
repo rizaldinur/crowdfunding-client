@@ -1,16 +1,34 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import { Outlet } from "react-router";
 import themes from "../../themes";
 import ThemeContainer from "../../components/ThemeContainer";
+import Cookies from "js-cookie";
 
 export const ThemeContext = createContext(
   localStorage.getItem("theme") || "light"
 );
 
+export const AuthContext = createContext(null);
+
 function RootLayout({ children }) {
   const [currentTheme, setCurrentTheme] = useState(
     localStorage.getItem("theme") || "light"
   );
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      setToken(token);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    setToken(null);
+    window.location.reload();
+  };
+
   const activeTheme = useMemo(() => themes[currentTheme], [currentTheme]);
 
   function handleThemeChange() {
@@ -25,11 +43,13 @@ function RootLayout({ children }) {
       <ThemeContext.Provider
         value={{ currentTheme, setCurrentTheme, handleThemeChange }}
       >
-        {children ? (
-          children
-        ) : (
-          <Outlet context={[currentTheme, handleThemeChange]} />
-        )}
+        <AuthContext.Provider value={{ token, setToken, handleLogout }}>
+          {children ? (
+            children
+          ) : (
+            <Outlet context={[currentTheme, handleThemeChange]} />
+          )}
+        </AuthContext.Provider>
       </ThemeContext.Provider>
     </ThemeContainer>
   );
