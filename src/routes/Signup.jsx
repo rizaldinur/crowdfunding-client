@@ -16,6 +16,7 @@ import AuthNav from "../components/navigation/AuthNav";
 
 function Signup() {
   const [currentTheme] = useOutletContext();
+  document.title = "Daftar";
   return (
     <>
       <AuthNav />

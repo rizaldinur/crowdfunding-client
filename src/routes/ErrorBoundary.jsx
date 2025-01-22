@@ -12,6 +12,7 @@ import RootLayout from "./layouts/RootLayout";
 
 function ErrorBoundary() {
   const error = useRouteError();
+  document.title = "Error";
 
   let errorContent;
   if (isRouteErrorResponse(error)) {

@@ -3,6 +3,7 @@ import HeroSection from "../components/index/HeroSection";
 import RecommendedSection from "../components/index/RecommendedSection";
 
 function Index() {
+  document.title = "Ruang Modal";
   return (
     <>
       <HeroSection />

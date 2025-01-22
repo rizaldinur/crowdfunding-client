@@ -14,9 +14,12 @@ import {
 import { Link as RouterLink } from "react-router";
 import { Form, useOutletContext } from "react-router";
 import AuthNav from "../components/navigation/AuthNav";
+import { useEffect } from "react";
 
 function Login() {
   const [currentTheme] = useOutletContext();
+  document.title = "Masuk";
+
   return (
     <>
       <AuthNav />
