@@ -5,7 +5,7 @@ import MediaCard from "../card/MediaCard";
 function RecommendedSection() {
   return (
     <Box
-      id="featured"
+      id="recommended"
       component="section"
       sx={{
         borderBottom: "1px solid",
