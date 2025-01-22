@@ -11,13 +11,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Link as RouterLink } from "react-router";
+import { Link as RouterLink, useNavigate } from "react-router";
 import { Form, useOutletContext } from "react-router";
 import AuthNav from "../components/navigation/AuthNav";
 import { useEffect } from "react";
+import Cookies from "js-cookie";
 
 function Login() {
   const [currentTheme] = useOutletContext();
+  const navigate = useNavigate();
   document.title = "Masuk";
 
   return (
@@ -63,7 +65,16 @@ function Login() {
               <Link href="#" underline="hover" marginBottom={3}>
                 <Typography variant="body2">Forgot Password?</Typography>
               </Link>
-              <Button variant="contained" sx={{ width: 1, mb: 2 }}>
+              <Button
+                variant="contained"
+                sx={{ width: 1, mb: 2 }}
+                onClick={() => {
+                  Cookies.set("token", "Base 64 token here", {
+                    expires: 1 / 96,
+                  });
+                  window.location.assign("/");
+                }}
+              >
                 Login
               </Button>
               <Divider component="div" role="presentation" sx={{ mb: 2 }}>

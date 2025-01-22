@@ -9,9 +9,6 @@ import MainLayout from "./routes/layouts/MainLayout.jsx";
 import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
 import Cookies from "js-cookie";
 
-const getUser = () => {
-  return Boolean(Cookies.get("token"));
-};
 const router = createBrowserRouter([
   {
     element: <RootLayout />,
@@ -93,7 +90,7 @@ const router = createBrowserRouter([
       {
         path: "/start-project",
         element: (
-          <ProtectedRoutes user={getUser()}>
+          <ProtectedRoutes>
             {/* <StartProject /> */}
             <h2>Inside protected route</h2>
           </ProtectedRoutes>

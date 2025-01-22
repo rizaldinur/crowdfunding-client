@@ -38,7 +38,7 @@ import {
   Folder,
   Logout,
 } from "@mui/icons-material";
-import { ThemeContext } from "../../routes/layouts/RootLayout";
+import { AuthContext, ThemeContext } from "../../routes/layouts/RootLayout";
 import { useContext, useState } from "react";
 
 const navItems = [
@@ -75,7 +75,8 @@ const accountMenuItems = [
 ];
 
 function MainHeader() {
-  const user = null;
+  const { token, handleLogout } = useContext(AuthContext);
+  const user = token;
   const navigate = useNavigate();
   const { currentTheme, setCurrentTheme, handleThemeChange } =
     useContext(ThemeContext);
@@ -119,8 +120,8 @@ function MainHeader() {
             >
               <Box sx={{ width: 250 }}>
                 <List>
-                  <ListItem key="Tema">
-                    <FormControl fullWidth size="small">
+                  <ListItem key="Tema-drawerItem">
+                    <FormControl fullWidth size="small" key={"Tema-select"}>
                       <InputLabel id="theme-select-label">Tema</InputLabel>
                       <Select
                         labelId="theme-select-label"
@@ -137,9 +138,10 @@ function MainHeader() {
                   {navItems
                     .filter((item) => !(item.name === "Login" && user)) // Exclude "Login" if a user exists
                     .map((item) => (
-                      <ListItem key={item.name}>
+                      <ListItem key={item.name + "-drawerItem"}>
                         {item.name === "Mulai Proyek" ? (
                           <Button
+                            key={item.name + "-drawerButton"}
                             sx={{ width: 1 }}
                             variant="outlined"
                             color="inherit"
@@ -149,7 +151,11 @@ function MainHeader() {
                             {item.name}
                           </Button>
                         ) : (
-                          <ListItemButton component={RouterLink} to={item.path}>
+                          <ListItemButton
+                            key={item.name + "-drawerButton"}
+                            component={RouterLink}
+                            to={item.path}
+                          >
                             <ListItemText primary={item.name} />
                           </ListItemButton>
                         )}
@@ -160,21 +166,46 @@ function MainHeader() {
                 {user && (
                   <List>
                     {accountMenuItems.map((item) => (
-                      <ListItem key={item.name}>
-                        {item.name === "Keluar" && <Divider />}
-                        <ListItemButton sx={{ gap: 2 }}>
-                          {item.icon}
-                          <ListItemText
-                            primary={item.name}
-                            sx={{
-                              color:
-                                item.name === "Keluar"
-                                  ? "error.main"
-                                  : "inherit",
-                            }}
-                          />
-                        </ListItemButton>
-                      </ListItem>
+                      <>
+                        {item.name === "Keluar" && (
+                          <Divider key={"dividerDrawer-" + item.name} />
+                        )}
+                        <ListItem key={item.name + "-drawerItem"}>
+                          {item.name === "Keluar" ? (
+                            <ListItemButton
+                              key={item.name + "-drawerButton"}
+                              sx={{ gap: 2 }}
+                            >
+                              {item.icon}
+                              <ListItemText
+                                primary={item.name}
+                                sx={{
+                                  color:
+                                    item.name === "Keluar"
+                                      ? "error.main"
+                                      : "inherit",
+                                }}
+                              />
+                            </ListItemButton>
+                          ) : (
+                            <ListItemButton
+                              key={item.name + "-drawerButton"}
+                              sx={{ gap: 2 }}
+                            >
+                              {item.icon}
+                              <ListItemText
+                                primary={item.name}
+                                sx={{
+                                  color:
+                                    item.name === "Keluar"
+                                      ? "error.main"
+                                      : "inherit",
+                                }}
+                              />
+                            </ListItemButton>
+                          )}
+                        </ListItem>
+                      </>
                     ))}
                   </List>
                 )}
@@ -245,7 +276,7 @@ function MainHeader() {
                 .filter((item) => !(item.name === "Login" && user))
                 .map((item) => (
                   <Button
-                    key={item.name}
+                    key={item.name + "-normalNav"}
                     component={RouterLink}
                     to={item.path}
                     variant={item.name === "Mulai Proyek" ? "outlined" : "text"}
@@ -280,28 +311,54 @@ function MainHeader() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuList>
+                <MenuList key={"MenuListAccount"}>
                   {accountMenuItems.map((item, index) => (
-                    <Box key={item.name}>
+                    <Box key={item.name + "-wrapper"}>
                       {item.name === "Keluar" && (
                         <Divider key={`divider-${index}`} />
                       )}
-                      <MenuItem
-                        key={item.name}
-                        onClick={handleCloseUserMenu}
-                        component={RouterLink}
-                        to={item.path}
-                        sx={{ py: 1 }}
-                      >
-                        <ListItemIcon>{item.icon}</ListItemIcon>
-                        <ListItemText>
-                          <Typography
-                            color={item.name === "Keluar" ? "error" : "inherit"}
-                          >
-                            {item.name}
-                          </Typography>
-                        </ListItemText>
-                      </MenuItem>
+                      {item.name === "Keluar" ? (
+                        <MenuItem
+                          key={item.name + "-menuItem"}
+                          onClick={() => {
+                            handleCloseUserMenu();
+                            handleLogout();
+                          }}
+                          component={RouterLink}
+                          to={item.path}
+                          sx={{ py: 1 }}
+                        >
+                          <ListItemIcon>{item.icon}</ListItemIcon>
+                          <ListItemText>
+                            <Typography
+                              color={
+                                item.name === "Keluar" ? "error" : "inherit"
+                              }
+                            >
+                              {item.name}
+                            </Typography>
+                          </ListItemText>
+                        </MenuItem>
+                      ) : (
+                        <MenuItem
+                          key={item.name + "-menuItem"}
+                          onClick={handleCloseUserMenu}
+                          component={RouterLink}
+                          to={item.path}
+                          sx={{ py: 1 }}
+                        >
+                          <ListItemIcon>{item.icon}</ListItemIcon>
+                          <ListItemText>
+                            <Typography
+                              color={
+                                item.name === "Keluar" ? "error" : "inherit"
+                              }
+                            >
+                              {item.name}
+                            </Typography>
+                          </ListItemText>
+                        </MenuItem>
+                      )}
                     </Box>
                   ))}
                 </MenuList>
