@@ -4,13 +4,47 @@ import {
   Box,
   Button,
   ButtonGroup,
+  CircularProgress,
   Container,
   Grid2,
   TextField,
 } from "@mui/material";
+import { useState } from "react";
+import { useFetcher } from "react-router";
 
 function FilterTab() {
   const options = ["Surabaya", "Jakarta"];
+  const [locations, setLocations] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [locationValue, setLocationValue] = useState([]);
+
+  const handleOpen = () => {
+    setOpen(true);
+    (async () => {
+      if (locations.length > 0) {
+        return;
+      }
+      setLoading(true);
+      const response = await fetch(
+        "https://www.emsifa.com/api-wilayah-indonesia/api/regencies/35.json"
+      );
+      const data = await response.json();
+      console.log(data);
+
+      setLoading(false);
+
+      setLocations([...data]);
+    })();
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    if (locations.length > 0) {
+      return;
+    }
+    setLocations([]);
+  };
   return (
     <Box
       component="nav"
@@ -31,7 +65,6 @@ function FilterTab() {
               id="tags-outlined"
               options={options}
               getOptionLabel={(option) => option}
-              defaultValue={options[0].name}
               filterSelectedOptions
               renderInput={(params) => (
                 <TextField {...params} label="Kategori" />
@@ -42,12 +75,37 @@ function FilterTab() {
           <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <Autocomplete
               multiple
+              open={open}
+              value={locationValue}
+              onChange={(e, value) => {
+                setLocationValue([...value]);
+                console.log(value);
+              }}
+              onOpen={handleOpen}
+              onClose={handleClose}
               id="tags-outlined"
-              options={options}
-              getOptionLabel={(option) => option}
-              defaultValue={options[0].name}
-              filterSelectedOptions
-              renderInput={(params) => <TextField {...params} label="Lokasi" />}
+              options={locations}
+              loading={loading}
+              getOptionLabel={(option) => option.name}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Lokasi"
+                  slotProps={{
+                    input: {
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {loading ? (
+                            <CircularProgress color="inherit" size={20} />
+                          ) : null}
+                          {params.InputProps.endAdornment}
+                        </>
+                      ),
+                    },
+                  }}
+                />
+              )}
               sx={{ flexGrow: 1 }}
             />
           </Grid2>
@@ -57,7 +115,6 @@ function FilterTab() {
               id="tags-outlined"
               options={options}
               getOptionLabel={(option) => option}
-              defaultValue={options[0].name}
               filterSelectedOptions
               renderInput={(params) => (
                 <TextField {...params} label="Urutkan" />
