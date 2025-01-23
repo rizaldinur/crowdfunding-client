@@ -75,6 +75,7 @@ function FilterTab() {
           <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <Autocomplete
               multiple
+              disableCloseOnSelect
               open={open}
               value={locationValue}
               onChange={(e, value) => {
