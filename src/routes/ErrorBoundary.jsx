@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { isRouteErrorResponse, Link, useRouteError } from "react-router";
-import themes from "../themes";
+import themes from "../styles/themes";
 import ThemeContainer from "../components/ThemeContainer";
 import RootLayout from "./layouts/RootLayout";
 

@@ -1,6 +1,6 @@
 import { createContext, useEffect, useMemo, useState } from "react";
 import { Outlet } from "react-router";
-import themes from "../../themes";
+import themes from "../../styles/themes";
 import ThemeContainer from "../../components/ThemeContainer";
 import Cookies from "js-cookie";
 
