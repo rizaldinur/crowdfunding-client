@@ -8,6 +8,7 @@ import DiscoverProjects from "./routes/DiscoverProjects.jsx";
 import MainLayout from "./routes/layouts/MainLayout.jsx";
 import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
 import Cookies from "js-cookie";
+import StartProject from "./routes/StartProject.jsx";
 
 const router = createBrowserRouter([
   {
@@ -89,12 +90,7 @@ const router = createBrowserRouter([
       { path: "/signup", element: <Signup /> },
       {
         path: "/start-project",
-        element: (
-          <ProtectedRoutes>
-            {/* <StartProject /> */}
-            <h2>Inside protected route</h2>
-          </ProtectedRoutes>
-        ),
+        element: <StartProject />,
       },
     ],
   },
