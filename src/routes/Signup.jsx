@@ -23,6 +23,7 @@ function Signup() {
       <Container maxWidth="sm">
         <Box
           sx={{
+            mt: 10,
             padding: 5,
             placeSelf: "center",
             width: 450,
