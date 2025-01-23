@@ -46,7 +46,7 @@ function StartProjectMain() {
           <Typography variant="caption" color="textSecondary">
             Tidak harus diisi sekarang. Kamu tetap bisa mengubahnya nanti.
           </Typography>
-          <Stack gap={2} sx={{ mt: 2 }}>
+          <Stack gap={2} sx={{ mt: 1 }}>
             <TextField variant="outlined" size="medium" label="Nama proyek" />
             <Autocomplete
               id="tags-outlined"
@@ -83,7 +83,7 @@ function StartProjectMain() {
         >
           <Stack>
             <Typography variant="body1" fontWeight={700} color="textPrimary">
-              Apa nama sekolahmu?
+              Apa nama sekolahmu?*
             </Typography>
             <Autocomplete
               id="tags-outlined"
@@ -94,7 +94,7 @@ function StartProjectMain() {
               renderInput={(params) => (
                 <TextField {...params} label="Nama sekolah" />
               )}
-              sx={{ mt: 2 }}
+              sx={{ mt: 1 }}
             />
             <Typography
               sx={{ mt: 3 }}
@@ -103,13 +103,17 @@ function StartProjectMain() {
               color="textPrimary"
             >
               Mohon sediakan bukti bahwa kamu adalah pelajar SMA aktif di
-              sekolahmu.
+              sekolahmu.*
             </Typography>
             <Typography variant="caption" color="textSecondary">
               Unggah file berupa gambar tentang status kepelajaranmu sekarang
               sebagai bagian dari proses verifikasi untuk memulai proyek.
             </Typography>
-            <Box sx={{ mt: 2, position: "relative" }}>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              gap={1}
+              sx={{ mt: 1, position: "relative" }}
+            >
               <Button
                 component="label"
                 variant="outlined"
@@ -132,12 +136,16 @@ function StartProjectMain() {
                 <Typography
                   variant="caption"
                   color="textSecondary"
-                  sx={{ ml: 1 }}
+                  sx={{ alignSelf: { xs: "start", sm: "center" } }}
                 >
                   {file.name}
                 </Typography>
               )}
-            </Box>
+            </Stack>
+            <Typography variant="caption" color="textSecondary" sx={{ mt: 3 }}>
+              *Pastikan data sekolah sudah benar karena tidak bisa diubah lagi
+              setelah dikirim.
+            </Typography>
           </Stack>
         </Box>
         <Stack direction={{ xs: "column", sm: "row" }} gap={2} sx={{ mt: 3 }}>
