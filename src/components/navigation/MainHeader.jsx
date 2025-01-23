@@ -10,7 +10,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import {
   Collapse,
   Divider,
@@ -27,63 +26,22 @@ import {
   OutlinedInput,
   Select,
 } from "@mui/material";
-import { Route, Link as RouterLink, useNavigate } from "react-router";
-import {
-  DarkMode,
-  LightMode,
-  Person2,
-  Search,
-  Settings,
-  Bookmark,
-  Folder,
-  Logout,
-} from "@mui/icons-material";
-import { AuthContext, ThemeContext } from "../../routes/layouts/RootLayout";
-import { useContext, useState } from "react";
-
-const navItems = [
-  { name: "Mulai Proyek", path: "start-project" },
-  { name: "Jelajahi", path: "discover" },
-  { name: "Login", path: "login" },
-];
-const accountMenuItems = [
-  {
-    path: "profile",
-    name: "Profil",
-    icon: <Person2 color="inherit" fontSize="small" />,
-  },
-  {
-    path: "settings",
-    name: "Pengaturan",
-    icon: <Settings color="inherit" fontSize="small" />,
-  },
-  {
-    path: "saved",
-    name: "Proyek Tersimpan",
-    icon: <Bookmark color="inherit" fontSize="small" />,
-  },
-  {
-    path: "projects",
-    name: "Proyek Buatanmu",
-    icon: <Folder color="inherit" fontSize="small" />,
-  },
-  {
-    path: "#",
-    name: "Keluar",
-    icon: <Logout color="error" fontSize="small" />,
-  },
-];
+import { Link as RouterLink, useNavigate } from "react-router";
+import { DarkMode, LightMode, Search } from "@mui/icons-material";
+import { useState } from "react";
+import { navItems, accountMenuItems } from "../../data/staticData";
+import useAuthContext from "../../hooks/useAuthContext";
+import useThemeContext from "../../hooks/useThemeContext";
 
 function MainHeader() {
-  const { token, handleLogout } = useContext(AuthContext);
+  const { token, handleLogout } = useAuthContext();
   const user = token;
   const navigate = useNavigate();
   const { currentTheme, setCurrentTheme, handleThemeChange } =
-    useContext(ThemeContext);
+    useThemeContext();
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [openNav, setOpenNav] = useState(false);
   const [openSearchBar, setOpenSearchBar] = useState(false);
-  // const [age, setAge] = React.useState("");
 
   const handleSelectThemeChange = (event) => {
     setCurrentTheme(event.target.value);
