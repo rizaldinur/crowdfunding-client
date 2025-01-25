@@ -44,7 +44,8 @@ function FeatureCard() {
       <CardMedia
         sx={{
           borderRadius: 1,
-          width: { xs: 1, sm: 0.6 },
+          flexShrink: 0,
+          width: { xs: 1, sm: 0.5 },
           height: { xs: 300, sm: "auto" },
           aspectRatio: "16/9",
         }}
@@ -56,7 +57,6 @@ function FeatureCard() {
         sx={{
           padding: 2,
           display: "flex",
-          width: { xs: "auto", sm: 0.5 },
           flexDirection: "column",
         }}
       >
