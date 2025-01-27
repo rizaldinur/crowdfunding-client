@@ -27,7 +27,7 @@ function ErrorBoundary() {
     errorContent = (
       <>
         <Typography variant="h4" color="textSecondary">
-          {error.status}
+          {error.status || 500}
         </Typography>
         <Typography variant="h2" color="textPrimary" marginBottom={4}>
           {errorMessage}
@@ -49,7 +49,7 @@ function ErrorBoundary() {
     errorContent = (
       <>
         <Typography variant="h3" color="textSecondary">
-          {error.status}
+          {error.status || 500}
         </Typography>
         <Typography variant="h2" color="textPrimary" marginBottom={4}>
           {errorMessage}
