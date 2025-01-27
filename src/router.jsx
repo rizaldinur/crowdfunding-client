@@ -9,6 +9,7 @@ import MainLayout from "./routes/layouts/MainLayout.jsx";
 import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
 import Cookies from "js-cookie";
 import StartProject from "./routes/StartProject.jsx";
+import ProjectDetailsLayout from "./routes/layouts/ProjectDetailsLayout.jsx";
 
 const router = createBrowserRouter([
   {
@@ -31,17 +32,17 @@ const router = createBrowserRouter([
             path: "discover",
             element: <DiscoverProjects />,
           },
-          // {
-          //   path: "project/details/:projectId",
-          //   element: <ProjectDetailsLayout />,
-          //   children: [
-          //     { index: true, element: <Navigate to="campaign" /> },
-          //     { index: "campaign", element: <CampaignPage /> },
-          //     { path: "updates", element: <CampaignUpdatesPage /> },
-          //     { path: "comments", element: <CommentsPage /> },
-          //     { path: "faqs", element: <FaqsPage /> },
-          //   ],
-          // },
+          {
+            path: "project/details/:projectId",
+            element: <ProjectDetailsLayout />,
+            // children: [
+            //   { index: true, element: <Navigate to="campaign" /> },
+            //   { index: "campaign", element: <CampaignPage /> },
+            //   { path: "updates", element: <CampaignUpdatesPage /> },
+            //   { path: "comments", element: <CommentsPage /> },
+            //   { path: "faqs", element: <FaqsPage /> },
+            // ],
+          },
           // {
           //   path: "profile/:profileId",
           //   element: <ProfileLayout user={currentUser} />,
