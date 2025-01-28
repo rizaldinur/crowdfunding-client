@@ -24,7 +24,7 @@ import {
 
 function ProjectHead() {
   return (
-    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <Box>
       <Container maxWidth="xl">
         <Box sx={{ py: 5 }}>
           <Typography
