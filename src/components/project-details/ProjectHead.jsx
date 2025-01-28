@@ -1,7 +1,9 @@
 import {
   Bookmark,
+  Category,
   Facebook,
   Instagram,
+  LocationOn,
   Mail,
   Save,
   Share,
@@ -12,6 +14,7 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   Grid2,
   LinearProgress,
   Link,
@@ -21,7 +24,7 @@ import {
 
 function ProjectHead() {
   return (
-    <Box>
+    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
       <Container maxWidth="xl">
         <Box sx={{ py: 5 }}>
           <Typography
@@ -40,19 +43,46 @@ function ProjectHead() {
             Subjudul konten yang menjelaskan proyek secara singkat, padat, dan
             jelas.
           </Typography>
-          <Grid2 container spacing={3} sx={{ mt: 5 }}>
-            <Grid2 size={7}>
+          <Grid2 container spacing={5} sx={{ mt: 5 }}>
+            <Grid2 size={{ xs: 12, md: 6.5 }}>
               <Box sx={{ aspectRatio: "16/9" }}>
                 <img
                   src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
                   alt="project main image"
                   width={640}
                   height={360}
-                  style={{ width: "100%", height: "100%" }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    objectPosition: "center",
+                  }}
                 />
               </Box>
+              <Stack direction="row" gap={2} sx={{ mt: 1 }}>
+                <Link
+                  color="textPrimary"
+                  underline="none"
+                  variant="body2"
+                  href="#"
+                  sx={{ display: "flex", gap: 1, alignItems: "center" }}
+                >
+                  <Category />
+                  Kategori
+                </Link>
+                <Link
+                  color="textPrimary"
+                  underline="none"
+                  variant="body2"
+                  href="#"
+                  sx={{ display: "flex", gap: 1, alignItems: "center" }}
+                >
+                  <LocationOn />
+                  Surabaya
+                </Link>
+              </Stack>
             </Grid2>
-            <Grid2 size={5}>
+            <Grid2 size={{ xs: 12, md: 5 }}>
               <Box>
                 <LinearProgress
                   value={70}
