@@ -10,6 +10,8 @@ import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
 import Cookies from "js-cookie";
 import StartProject from "./routes/StartProject.jsx";
 import ProjectDetailsLayout from "./routes/layouts/ProjectDetailsLayout.jsx";
+import StoryPanel from "./components/project-details/StoryPanel.jsx";
+import { Typography } from "@mui/material";
 
 const router = createBrowserRouter([
   {
@@ -35,13 +37,18 @@ const router = createBrowserRouter([
           {
             path: "project/details/:projectId",
             element: <ProjectDetailsLayout />,
-            // children: [
-            //   { index: true, element: <Navigate to="campaign" /> },
-            //   { index: "campaign", element: <CampaignPage /> },
-            //   { path: "updates", element: <CampaignUpdatesPage /> },
-            //   { path: "comments", element: <CommentsPage /> },
-            //   { path: "faqs", element: <FaqsPage /> },
-            // ],
+            children: [
+              { index: true, element: <Navigate to="story" /> },
+              { path: "story", element: <StoryPanel /> },
+              {
+                path: "update",
+                element: (
+                  <Typography color="textPrimary">Update panel</Typography>
+                ),
+              },
+              // { path: "comments", element: <CommentsPage /> },
+              // { path: "faqs", element: <FaqsPage /> },
+            ],
           },
           // {
           //   path: "profile/:profileId",
