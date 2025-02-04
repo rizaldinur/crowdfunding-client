@@ -40,7 +40,7 @@ function ProjectTabs() {
   const lastSegment = location.pathname.split("/").filter(Boolean).pop();
   const tabValue = useMemo(() => {
     if (lastSegment === "story") return 0;
-    else if (lastSegment === "update") return 1;
+    else if (lastSegment === "updates") return 1;
     else if (lastSegment === "faqs") return 2;
 
     return 3;
@@ -68,7 +68,7 @@ function ProjectTabs() {
           <Tab
             label="Update"
             component={RouterLink}
-            to="update"
+            to="updates"
             {...a11yProps(1)}
           />
           <Tab label="FAQS" {...a11yProps(2)} />

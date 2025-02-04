@@ -42,7 +42,7 @@ const router = createBrowserRouter([
               { index: true, element: <Navigate to="story" /> },
               { path: "story", element: <StoryPanel /> },
               {
-                path: "update",
+                path: "updates",
                 element: <UpdatePanel />,
               },
               // { path: "comments", element: <CommentsPage /> },
