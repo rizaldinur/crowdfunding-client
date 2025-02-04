@@ -12,6 +12,7 @@ import StartProject from "./routes/StartProject.jsx";
 import ProjectDetailsLayout from "./routes/layouts/ProjectDetailsLayout.jsx";
 import StoryPanel from "./components/project-details/StoryPanel.jsx";
 import { Typography } from "@mui/material";
+import UpdatePanel from "./components/project-details/UpdatePanel.jsx";
 
 const router = createBrowserRouter([
   {
@@ -42,9 +43,7 @@ const router = createBrowserRouter([
               { path: "story", element: <StoryPanel /> },
               {
                 path: "update",
-                element: (
-                  <Typography color="textPrimary">Update panel</Typography>
-                ),
+                element: <UpdatePanel />,
               },
               // { path: "comments", element: <CommentsPage /> },
               // { path: "faqs", element: <FaqsPage /> },
