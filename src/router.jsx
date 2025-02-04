@@ -45,6 +45,12 @@ const router = createBrowserRouter([
                 path: "updates",
                 element: <UpdatePanel />,
               },
+              {
+                path: "updates/:updatesId",
+                element: (
+                  <Typography color="textPrimary">Hello skibidi</Typography>
+                ),
+              },
               // { path: "comments", element: <CommentsPage /> },
               // { path: "faqs", element: <FaqsPage /> },
             ],

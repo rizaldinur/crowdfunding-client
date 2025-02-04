@@ -8,6 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { Link as RouterLink } from "react-router";
 
 function UpdatePanel() {
   return (
@@ -38,11 +39,31 @@ function UpdatePanel() {
           </Stack>
         </Stack>
         <Divider sx={{ mt: 2 }} />
-        <Box sx={{ mt: 5 }}>
-          <Typography>Content of the news update here</Typography>
+        <Box
+          sx={{
+            mt: 5,
+            display: "-webkit-box", // Enables the use of line-clamp
+            WebkitBoxOrient: "vertical", // Required for multi-line truncation
+            overflow: "hidden", // Prevents overflow
+            WebkitLineClamp: 3, // Limits the text to 3 lines
+          }}
+        >
+          <Typography>
+            Content of the news update here. Lorem ipsum dolor sit amet
+            consectetur adipisicing elit. Esse, pariatur deserunt vel modi nihil
+            earum voluptatem ipsum! Error neque explicabo aspernatur
+            reprehenderit numquam officia eaque ex illo, deserunt id adipisci.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis,
+            odit. Maxime nobis ut facilis? Aspernatur earum harum nam, error
+            perspiciatis corrupti doloremque porro assumenda numquam obcaecati
+            soluta, dolorum, a esse?
+          </Typography>
         </Box>
         <Button
           sx={{ alignSelf: "start", mt: 5 }}
+          component={RouterLink}
+          to="update-1"
+          state={{ tabValue: 1 }}
           size="large"
           variant="outlined"
           color="inherit"
