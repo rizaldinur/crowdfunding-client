@@ -15,6 +15,32 @@ function StoryPanel() {
   const headingRefs = useRef([]);
   const location = useLocation();
 
+  useEffect(() => {
+    console.log(location.hash);
+
+    const hash = location.hash;
+    if (!hash) return;
+
+    const subTabValue = parseInt(location.hash.split("-").pop()[0] - 1) || 0;
+    setValue(subTabValue);
+
+    const offset = 72;
+    const headingEl = document.querySelector(hash);
+    const topPosition = headingEl.getBoundingClientRect().top + window.scrollY;
+
+    window.scrollTo({
+      top: topPosition - offset,
+      behavior: "smooth", // Smooth scrolling effect
+    });
+
+    return () => {
+      window.scrollTo({
+        top: topPosition - offset,
+        behavior: "smooth", // Smooth scrolling effect
+      });
+    };
+  }, [location.hash]);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -50,8 +76,6 @@ function StoryPanel() {
         })
         .filter(({ offsetTop }) => offsetTop >= 0) // Only headings in the viewport or above
         .sort((a, b) => a.offsetTop - b.offsetTop)[0]; // Sort by closest to the top
-
-      console.log(topMostHeading);
 
       if (topMostHeading) {
         setValue(topMostHeading.id);

@@ -37,14 +37,21 @@ CustomTabPanel.propTypes = {
 function ProjectTabs() {
   const location = useLocation();
   console.log(location);
-  const lastSegment = location.pathname.split("/").filter(Boolean).pop();
-  const tabValue = useMemo(() => {
-    if (lastSegment === "story") return 0;
-    else if (lastSegment === "updates") return 1;
-    else if (lastSegment === "faqs") return 2;
+  const tabSegment = location.pathname.split("/")[4];
 
-    return 3;
-  }, [lastSegment]);
+  console.log(tabSegment);
+
+  const tabValue =
+    location.state?.tabValue ||
+    (tabSegment === "story"
+      ? 0
+      : tabSegment === "updates"
+      ? 1
+      : tabSegment === "faqs"
+      ? 2
+      : 3);
+
+  console.log(tabValue);
 
   return (
     <Box
@@ -63,12 +70,14 @@ function ProjectTabs() {
             label="Cerita"
             component={RouterLink}
             to="story"
+            state={{ tabValue: 0 }}
             {...a11yProps(0)}
           />
           <Tab
             label="Update"
             component={RouterLink}
             to="updates"
+            state={{ tabValue: 1 }}
             {...a11yProps(1)}
           />
           <Tab label="FAQS" {...a11yProps(2)} />
