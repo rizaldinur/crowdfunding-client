@@ -13,6 +13,7 @@ import ProjectDetailsLayout from "./routes/layouts/ProjectDetailsLayout.jsx";
 import StoryPanel from "./components/project-details/StoryPanel.jsx";
 import { Typography } from "@mui/material";
 import UpdatePanel from "./components/project-details/UpdatePanel.jsx";
+import FaqsPanel from "./components/project-details/FaqsPanel.jsx";
 
 const router = createBrowserRouter([
   {
@@ -52,7 +53,7 @@ const router = createBrowserRouter([
                 ),
               },
               // { path: "comments", element: <CommentsPage /> },
-              // { path: "faqs", element: <FaqsPage /> },
+              { path: "faqs", element: <FaqsPanel /> },
             ],
           },
           // {

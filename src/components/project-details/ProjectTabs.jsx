@@ -80,7 +80,13 @@ function ProjectTabs() {
             state={{ tabValue: 1 }}
             {...a11yProps(1)}
           />
-          <Tab label="FAQS" {...a11yProps(2)} />
+          <Tab
+            label="FAQS"
+            component={RouterLink}
+            to="faqs"
+            state={{ tabValue: 2 }}
+            {...a11yProps(2)}
+          />
           <Tab label="Komentar" {...a11yProps(3)} />
         </Tabs>
       </Container>
