@@ -1,4 +1,18 @@
-import { Box, Container, Tab, Tabs, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Container,
+  Stack,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { yellow } from "@mui/material/colors";
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router";
 
@@ -89,7 +103,7 @@ function StoryPanel() {
   }, []);
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       <Box sx={{ display: "flex", gap: 3, py: 5 }}>
         <Tabs
           value={value}
@@ -98,8 +112,9 @@ function StoryPanel() {
           orientation="vertical"
           sx={{
             flexShrink: 0,
+            width: 200,
             position: "sticky",
-            top: "96px",
+            top: "80px",
             alignSelf: "flex-start",
             zIndex: 10,
           }}
@@ -210,6 +225,76 @@ function StoryPanel() {
             pariatur soluta?
           </Typography>
         </Box>
+        <Stack
+          sx={{
+            width: 250,
+            flexShrink: 0,
+            position: "sticky",
+            top: "80px",
+            alignSelf: "start",
+            gap: 3,
+          }}
+        >
+          <Card sx={{ height: 270 }}>
+            <CardHeader
+              avatar={<Avatar />}
+              title="Creator Name"
+              subheader="Asal sekolah"
+            />
+            <CardContent>
+              <Typography variant="body2">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Repudiandae corporis dolor, illum quisquam aspernatur,
+                architecto suscipit nulla commodi animi mollitia, provident
+                reiciendis quia enim molestias. Fuga neque veniam nulla ab.
+              </Typography>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader
+              title={<Typography variant="h5">Dukung Proyek</Typography>}
+            />
+            <CardContent>
+              <TextField type="number" fullWidth label="Jumlah dukungan" />
+              <Button sx={{ mt: 4 }} variant="contained" fullWidth>
+                Lanjutkan
+              </Button>
+            </CardContent>
+          </Card>
+          <Box>
+            <Typography
+              variant="h5"
+              fontWeight={700}
+              sx={{ p: 2, bgcolor: yellow["100"] }}
+            >
+              Penting!
+            </Typography>
+            <ul>
+              <li>
+                <Typography variant="body2">
+                  Ruang Modal menghubungkan kreator dengan investor
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
+                  Benefit tidak terjamin, tapi kreator tetap harus update
+                  perkembangan proyeknya{" "}
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
+                  Dana diteruskan ke kreator hanya jika target pendanaan
+                  terpenuhi
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
+                  Jika target tidak tercapai, dana akan dikembalikan sepenuhnya
+                </Typography>
+              </li>
+            </ul>
+          </Box>
+        </Stack>
       </Box>
     </Container>
   );
