@@ -10,7 +10,7 @@ import {
 
 function FaqsPanel() {
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="md">
       <Box sx={{ my: 5 }}>
         {Array(3)
           .fill(0)
