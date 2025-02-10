@@ -14,6 +14,7 @@ import StoryPanel from "./components/project-details/StoryPanel.jsx";
 import { Typography } from "@mui/material";
 import UpdatePanel from "./components/project-details/UpdatePanel.jsx";
 import FaqsPanel from "./components/project-details/FaqsPanel.jsx";
+import CommentsPanel from "./components/project-details/CommentsPanel.jsx";
 
 const router = createBrowserRouter([
   {
@@ -52,7 +53,7 @@ const router = createBrowserRouter([
                   <Typography color="textPrimary">Hello skibidi</Typography>
                 ),
               },
-              // { path: "comments", element: <CommentsPage /> },
+              { path: "comments", element: <CommentsPanel /> },
               { path: "faqs", element: <FaqsPanel /> },
             ],
           },
