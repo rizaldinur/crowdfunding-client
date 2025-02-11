@@ -1,6 +1,4 @@
 import { Outlet, useLocation } from "react-router";
-import MainFooter from "../../components/navigation/MainFooter";
-import MainHeader from "../../components/navigation/MainHeader";
 import ProfileTabs from "../../components/profile/ProfileTabs";
 import { Box } from "@mui/material";
 import { useEffect } from "react";

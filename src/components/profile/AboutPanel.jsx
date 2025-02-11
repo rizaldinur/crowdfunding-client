@@ -8,8 +8,10 @@ function AboutPanel() {
         <Typography variant="h6" color="textSecondary">
           Biografi
         </Typography>
-        <Stack alignItems="start" gap={2}>
-          <Typography>Kamu belum menambahkan biografi.</Typography>
+        <Stack alignItems="start" gap={2} color="text.primary">
+          <Typography color="textSecondary">
+            Kamu belum menambahkan biografi.
+          </Typography>
           <Button variant="outlined" color="inherit" startIcon={<OpenInNew />}>
             Edit biografi
           </Button>
