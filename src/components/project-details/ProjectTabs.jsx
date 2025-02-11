@@ -49,7 +49,9 @@ function ProjectTabs() {
       ? 1
       : tabSegment === "faqs"
       ? 2
-      : 3);
+      : tabSegment === "comments"
+      ? 3
+      : null);
 
   console.log(tabValue);
 
