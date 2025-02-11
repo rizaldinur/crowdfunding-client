@@ -81,21 +81,21 @@ function ProfileTabs() {
           <Tab
             label="Didukung"
             component={RouterLink}
-            to="updates"
+            to="backed"
             state={{ tabValue: 1 }}
             {...a11yProps(1)}
           />
           <Tab
             label="Disimpan"
-            component={RouterLink}
-            to="faqs"
+            // component={RouterLink}
+            // to="faqs"
             state={{ tabValue: 2 }}
             {...a11yProps(2)}
           />
           <Tab
             label="Proyek buatanmu"
-            component={RouterLink}
-            to="comments"
+            // component={RouterLink}
+            // to="comments"
             state={{ tabValue: 3 }}
             {...a11yProps(3)}
           />

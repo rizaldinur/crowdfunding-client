@@ -17,6 +17,7 @@ import FaqsPanel from "./components/project-details/FaqsPanel.jsx";
 import CommentsPanel from "./components/project-details/CommentsPanel.jsx";
 import AboutPanel from "./components/profile/AboutPanel.jsx";
 import ProfileLayout from "./routes/layouts/ProfileLayout.jsx";
+import BackedProjectsPanel from "./components/profile/BackedProjectsPanel.jsx";
 
 const router = createBrowserRouter([
   {
@@ -65,7 +66,7 @@ const router = createBrowserRouter([
             children: [
               { index: true, element: <Navigate to="about" /> },
               { path: "about", element: <AboutPanel /> },
-              // { path: "backed", element: <BackedProjects /> },
+              { path: "backed", element: <BackedProjectsPanel /> },
               // { path: "saved", element: <SavedProjects /> },
               // { path: "projects", element: <CreatedProjects /> },
             ],
