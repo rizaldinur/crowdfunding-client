@@ -15,6 +15,8 @@ import { Typography } from "@mui/material";
 import UpdatePanel from "./components/project-details/UpdatePanel.jsx";
 import FaqsPanel from "./components/project-details/FaqsPanel.jsx";
 import CommentsPanel from "./components/project-details/CommentsPanel.jsx";
+import AboutPanel from "./components/profile/AboutPanel.jsx";
+import ProfileLayout from "./routes/layouts/ProfileLayout.jsx";
 
 const router = createBrowserRouter([
   {
@@ -57,16 +59,17 @@ const router = createBrowserRouter([
               { path: "faqs", element: <FaqsPanel /> },
             ],
           },
-          // {
-          //   path: "profile/:profileId",
-          //   element: <ProfileLayout user={currentUser} />,
-          //   children: [
-          //     { index: true, element: <AboutProfile /> },
-          //     { path: "backed", element: <BackedProjects /> },
-          //     { path: "saved", element: <SavedProjects /> },
-          //     { path: "projects", element: <CreatedProjects /> },
-          //   ],
-          // },
+          {
+            path: "profile/:profileId",
+            element: <ProfileLayout />,
+            children: [
+              { index: true, element: <Navigate to="about" /> },
+              { path: "about", element: <AboutPanel /> },
+              // { path: "backed", element: <BackedProjects /> },
+              // { path: "saved", element: <SavedProjects /> },
+              // { path: "projects", element: <CreatedProjects /> },
+            ],
+          },
           // {
           //   element: <ProtectedRoute user={currentUser} />,
           //   children: [
