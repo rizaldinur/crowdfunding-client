@@ -13,6 +13,7 @@ import { UploadFile } from "@mui/icons-material";
 import VisuallyHiddenInput from "../input/VisuallyHiddenInput";
 import { useCallback, useEffect, useState } from "react";
 import debounce from "lodash.debounce";
+import LocationAutocomplete from "../input/LocationAutocomplete";
 
 const fetchAllData = async () => {
   const endpoint1 =
@@ -31,41 +32,13 @@ const fetchAllData = async () => {
 function StartProjectMain() {
   const { currentTheme } = useThemeContext();
   const [file, setFile] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [locations, setLocations] = useState([]);
-  const [locationValue, setLocationValue] = useState(null);
+  const [locationValue, setLocationValue] = useState("");
 
   const [inputValue, setInputValue] = useState("");
   const [schools, setSchools] = useState([]);
   const [schoolValue, setSchoolValue] = useState(null);
   const [loadingSchool, setLoadingSchool] = useState(false);
   const [onDebounce, setOnDebounce] = useState(false);
-
-  const handleLocationsOpen = () => {
-    setOpen(true);
-    (async () => {
-      if (locations.length > 0) {
-        return;
-      }
-      setLoading(true);
-      const response = await fetch(
-        "https://www.emsifa.com/api-wilayah-indonesia/api/regencies/35.json"
-      );
-      const data = await response.json();
-      console.log(data);
-      setLoading(false);
-      setLocations([...data]);
-    })();
-  };
-
-  const handleLocationsClose = () => {
-    setOpen(false);
-    if (locations.length > 0) {
-      return;
-    }
-    setLocations([]);
-  };
 
   // Debounce the fetch function
   const debouncedFilter = debounce((query) => {
@@ -144,39 +117,11 @@ function StartProjectMain() {
                 <TextField {...params} label="Pilih kategori" />
               )}
             />
-            <Autocomplete
-              id="locationOptions"
-              options={locations}
-              open={open}
-              value={locationValue}
-              loading={loading}
-              autoComplete
-              onOpen={handleLocationsOpen}
-              onClose={handleLocationsClose}
-              onChange={(e, value) => {
-                setLocationValue(value);
-              }}
-              getOptionKey={(option) => option.id}
-              getOptionLabel={(option) => option.name}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Pilih lokasi"
-                  slotProps={{
-                    input: {
-                      ...params.InputProps,
-                      endAdornment: (
-                        <>
-                          {loading ? (
-                            <CircularProgress color="inherit" size={20} />
-                          ) : null}
-                          {params.InputProps.endAdornment}
-                        </>
-                      ),
-                    },
-                  }}
-                />
-              )}
+            <LocationAutocomplete
+              label="Lokasi"
+              handleLocationChange={(value) =>
+                setLocationValue(value ? value : "")
+              }
             />
           </Stack>
         </Box>
