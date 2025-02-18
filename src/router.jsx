@@ -18,6 +18,9 @@ import CommentsPanel from "./components/project-details/CommentsPanel.jsx";
 import AboutPanel from "./components/profile/AboutPanel.jsx";
 import ProfileLayout from "./routes/layouts/ProfileLayout.jsx";
 import BackedProjectsPanel from "./components/profile/BackedProjectsPanel.jsx";
+import SettingsLayout from "./routes/layouts/SettingsLayout.jsx";
+import AccountSettings from "./components/settings-account/AccountSettings.jsx";
+import ProfileSettings from "./components/settings-account/ProfileSettings.jsx";
 
 const router = createBrowserRouter([
   {
@@ -71,20 +74,16 @@ const router = createBrowserRouter([
               // { path: "projects", element: <CreatedProjects /> },
             ],
           },
-          // {
-          //   element: <ProtectedRoute user={currentUser} />,
-          //   children: [
-          //     {
-          //       path: "settings",
-          //       element: <SettingsLayout />,
-          //       children: [
-          //         { index: true, element: <Navigate to="account" /> },
-          //         { path: "account", element: <AccountSettings /> },
-          //         { path: "profile", element: <ProfileSettings /> },
-          //       ],
-          //     },
-          //   ],
-          // },
+
+          {
+            path: "settings/:profileId",
+            element: <SettingsLayout />,
+            children: [
+              { index: true, element: <Navigate to="profile" /> },
+              { path: "profile", element: <ProfileSettings /> },
+              { path: "account", element: <AccountSettings /> },
+            ],
+          },
         ],
       },
       // {
