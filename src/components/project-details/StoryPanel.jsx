@@ -6,6 +6,7 @@ import {
   CardContent,
   CardHeader,
   Container,
+  ListItemText,
   Stack,
   Tab,
   Tabs,
@@ -269,30 +270,33 @@ function StoryPanel() {
             >
               Penting!
             </Typography>
-            <ul>
+            <Box component="ul" sx={{ color: "text.primary" }}>
               <li>
-                <Typography variant="body2">
-                  Ruang Modal menghubungkan kreator dengan investor
-                </Typography>
+                <ListItemText
+                  primary="Ruang Modal menghubungkan kreator dengan investor"
+                  slotProps={{ primary: { variant: "body2" } }}
+                />
               </li>
               <li>
-                <Typography variant="body2">
-                  Benefit tidak terjamin, tapi kreator tetap harus update
-                  perkembangan proyeknya{" "}
-                </Typography>
+                <ListItemText
+                  primary=" Benefit tidak terjamin, tapi kreator tetap harus update
+                perkembangan proyeknya"
+                  slotProps={{ primary: { variant: "body2" } }}
+                />
               </li>
               <li>
-                <Typography variant="body2">
-                  Dana diteruskan ke kreator hanya jika target pendanaan
-                  terpenuhi
-                </Typography>
+                <ListItemText
+                  primary="Dana diteruskan ke kreator hanya jika target pendanaan terpenuhi"
+                  slotProps={{ primary: { variant: "body2" } }}
+                />
               </li>
               <li>
-                <Typography variant="body2">
-                  Jika target tidak tercapai, dana akan dikembalikan sepenuhnya
-                </Typography>
+                <ListItemText
+                  primary="Jika target tidak tercapai, dana akan dikembalikan sepenuhnya"
+                  slotProps={{ primary: { variant: "body2" } }}
+                />
               </li>
-            </ul>
+            </Box>
           </Box>
         </Stack>
       </Box>
