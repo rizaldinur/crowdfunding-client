@@ -21,6 +21,7 @@ import BackedProjectsPanel from "./components/profile/BackedProjectsPanel.jsx";
 import SettingsLayout from "./routes/layouts/SettingsLayout.jsx";
 import AccountSettings from "./components/settings-account/AccountSettings.jsx";
 import ProfileSettings from "./components/settings-account/ProfileSettings.jsx";
+import BuildOverview from "./routes/BuildOverview.jsx";
 
 const router = createBrowserRouter([
   {
@@ -86,22 +87,19 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: "/:profileId/:projectId/build-overview",
+        element: <BuildOverview />,
+      },
       // {
-      //   path: "/profile/:profileId/projects/:projectId",
+      //   path: "/:profileId/:projectId/build",
       //   element: <ProtectedRoute user={currentUser} />,
       //   children: [
-      //     { path: "build-overview", element: <BuildOverview /> },
-      //     {
-      //       path: "edit",
-      //       element: <BuildProjectLayout />,
-      //       children: [
-      //         { index: true, element: <Navigate to="basic" /> },
-      //         { path: "basic", element: <BasicPage /> },
-      //         { path: "story", element: <StoryPage /> },
-      //         { path: "payment", element: <PaymentPage /> },
-      //         { path: "preview", element: <PreviewPage /> },
-      //       ],
-      //     },
+      //     { index: true, element: <Navigate to="basic" /> },
+      //     { path: "basic", element: <BasicPage /> },
+      //     { path: "story", element: <StoryPage /> },
+      //     { path: "payment", element: <PaymentPage /> },
+      //     { path: "preview", element: <PreviewPage /> },
       //   ],
       // },
       { path: "/login", element: <Login /> },
