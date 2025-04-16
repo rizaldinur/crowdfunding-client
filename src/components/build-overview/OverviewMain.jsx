@@ -2,25 +2,38 @@ import {
   Avatar,
   Box,
   Button,
-  CircularProgress,
   Container,
   Link,
   Stack,
   Typography,
 } from "@mui/material";
+import { Link as RouterLink, useLocation } from "react-router";
 import CircularProgressWithLabel from "../progress/CircularProgressWithLabel";
 import { Timer } from "@mui/icons-material";
 
 function OverviewMain() {
+  const location = useLocation();
+  const buildLocation =
+    location.pathname.split("/").slice(0, -1).join("/") + "/edit";
+  console.log(buildLocation);
+
   return (
     <Container maxWidth="md" sx={{ color: "text.primary", mt: 4 }}>
       <Typography variant="h5">Ringkasan Draf Proyek</Typography>
       <Box sx={{ mt: 3 }}>
         <Stack
           direction="row"
+          component={RouterLink}
+          to={buildLocation + "/basic"}
           alignItems="center"
           gap={2}
-          sx={{ p: 3, border: "1px solid", borderColor: "divider" }}
+          sx={{
+            textDecoration: "none",
+            p: 3,
+            border: "1px solid",
+            borderColor: "divider",
+            color: "text.primary",
+          }}
         >
           <CircularProgressWithLabel value={75} />
           <Stack>
@@ -36,8 +49,16 @@ function OverviewMain() {
         <Stack
           direction="row"
           alignItems="center"
+          component={RouterLink}
+          to={buildLocation + "/story"}
           gap={2}
-          sx={{ p: 3, border: "1px solid", borderColor: "divider" }}
+          sx={{
+            textDecoration: "none",
+            color: "text.primary",
+            p: 3,
+            border: "1px solid",
+            borderColor: "divider",
+          }}
         >
           <CircularProgressWithLabel value={75} />
           <Stack>
@@ -54,8 +75,16 @@ function OverviewMain() {
         <Stack
           direction="row"
           alignItems="center"
+          component={RouterLink}
+          to={buildLocation + "/profile"}
           gap={2}
-          sx={{ p: 3, border: "1px solid", borderColor: "divider" }}
+          sx={{
+            textDecoration: "none",
+            color: "text.primary",
+            p: 3,
+            border: "1px solid",
+            borderColor: "divider",
+          }}
         >
           <CircularProgressWithLabel value={75} />
           <Stack>
@@ -70,8 +99,16 @@ function OverviewMain() {
         <Stack
           direction="row"
           alignItems="center"
+          component={RouterLink}
+          to={buildLocation + "/payment"}
           gap={2}
-          sx={{ p: 3, border: "1px solid", borderColor: "divider" }}
+          sx={{
+            textDecoration: "none",
+            color: "text.primary",
+            p: 3,
+            border: "1px solid",
+            borderColor: "divider",
+          }}
         >
           <CircularProgressWithLabel value={75} />
           <Stack>
