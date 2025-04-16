@@ -2,7 +2,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { useMemo, useState } from "react";
 
-function CustomPasswordTextField({ value, ...props }) {
+function CustomPasswordTextField({ value, sx, ...props }) {
   const [showPassword, setShowPassword] = useState(false);
   const password = useMemo(() => {
     return value;
@@ -26,6 +26,7 @@ function CustomPasswordTextField({ value, ...props }) {
         "input::-ms-reveal": {
           display: "none",
         },
+        ...sx,
       }}
       slotProps={{
         input: {
