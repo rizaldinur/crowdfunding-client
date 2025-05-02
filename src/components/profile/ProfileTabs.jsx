@@ -66,7 +66,7 @@ function ProfileTabs() {
     >
       <Container maxWidth="md">
         <Tabs
-          value={tabValue ? tabValue : 0}
+          value={tabValue || 0}
           aria-label="nav tabs"
           role="navigation"
           sx={{ placeSelf: "center" }}
