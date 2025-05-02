@@ -43,27 +43,10 @@ function Signup() {
               <AppRegistration />
             </Avatar>
             <Typography variant="h4" color="textPrimary" marginBottom={3}>
-              Signup
+              Daftar
             </Typography>
             <Stack width={1}>
-              <Grid2 container spacing={2} sx={{ mb: 2 }}>
-                <Grid2 size={{ xs: 12, sm: 6 }}>
-                  <TextField
-                    type="text"
-                    label="First Name"
-                    name="firstName"
-                    sx={{ width: 1 }}
-                  />
-                </Grid2>
-                <Grid2 size={{ xs: 12, sm: 6 }}>
-                  <TextField
-                    type="text"
-                    label="Last Name"
-                    name="lastName"
-                    sx={{ width: 1 }}
-                  />
-                </Grid2>
-              </Grid2>
+              <TextField type="text" label="Nama" name="nama" sx={{ mb: 2 }} />
               <TextField
                 type="email"
                 label="Email"
@@ -78,23 +61,23 @@ function Signup() {
               />
               <TextField
                 type="password"
-                label="Confirm Password"
+                label="Konfirmasi password"
                 name="confirmPassword"
                 sx={{ mb: 2 }}
               />
 
               <Button variant="contained" sx={{ width: 1, mb: 2 }}>
-                Login
+                Daftar
               </Button>
               <Divider component="div" role="presentation" sx={{ mb: 2 }}>
                 <Typography variant="subtitle2" color="divider">
-                  Or
+                  Atau
                 </Typography>
               </Divider>
               <Typography variant="body2" color="textSecondary">
-                Already have account?&nbsp;
+                Sudah punya akun?&nbsp;
                 <Link component={RouterLink} to="/login" underline="hover">
-                  Login
+                  Masuk
                 </Link>
               </Typography>
             </Stack>

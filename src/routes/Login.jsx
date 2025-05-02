@@ -48,7 +48,7 @@ function Login() {
               <Lock />
             </Avatar>
             <Typography variant="h4" color="textPrimary" marginBottom={3}>
-              Login
+              Masuk
             </Typography>
             <Stack width={1}>
               <TextField
@@ -64,7 +64,7 @@ function Login() {
                 sx={{ mb: 2 }}
               />
               <Link href="#" underline="hover" marginBottom={3}>
-                <Typography variant="body2">Forgot Password?</Typography>
+                <Typography variant="body2">Lupa Password?</Typography>
               </Link>
               <Button
                 variant="contained"
@@ -76,17 +76,17 @@ function Login() {
                   window.location.assign("/");
                 }}
               >
-                Login
+                Masuk
               </Button>
               <Divider component="div" role="presentation" sx={{ mb: 2 }}>
                 <Typography variant="subtitle2" color="divider">
-                  Or
+                  Atau
                 </Typography>
               </Divider>
               <Typography variant="body2" color="textSecondary">
-                Don't have account?&nbsp;
+                Belum punya akun?&nbsp;
                 <Link component={RouterLink} to="/signup" underline="hover">
-                  Signup
+                  Daftar
                 </Link>
               </Typography>
             </Stack>
