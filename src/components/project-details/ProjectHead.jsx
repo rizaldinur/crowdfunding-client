@@ -15,7 +15,7 @@ import {
   Button,
   Container,
   Divider,
-  Grid2,
+  Grid,
   LinearProgress,
   Link,
   Stack,
@@ -43,8 +43,8 @@ function ProjectHead() {
             Subjudul konten yang menjelaskan proyek secara singkat, padat, dan
             jelas.
           </Typography>
-          <Grid2 container spacing={5} sx={{ mt: 5 }}>
-            <Grid2 size={{ xs: 12, md: 6.5 }}>
+          <Grid container spacing={5} sx={{ mt: 5 }}>
+            <Grid size={{ xs: 12, md: 6.5 }}>
               <Box sx={{ aspectRatio: "16/9" }}>
                 <img
                   src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
@@ -81,8 +81,8 @@ function ProjectHead() {
                   Surabaya
                 </Link>
               </Stack>
-            </Grid2>
-            <Grid2 size={{ xs: 12, md: 5 }}>
+            </Grid>
+            <Grid size={{ xs: 12, md: 5 }}>
               <Box>
                 <LinearProgress
                   value={70}
@@ -142,8 +142,8 @@ function ProjectHead() {
                   </Stack>
                 </Stack>
               </Box>
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
         </Box>
       </Container>
     </Box>

@@ -6,7 +6,7 @@ import {
   ButtonGroup,
   CircularProgress,
   Container,
-  Grid2,
+  Grid,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
@@ -51,7 +51,7 @@ function FilterTab() {
       sx={{ borderBottom: "1px solid", borderBottomColor: "divider" }}
     >
       <Container maxWidth="lg">
-        <Grid2
+        <Grid
           container
           sx={{
             py: 5,
@@ -59,7 +59,7 @@ function FilterTab() {
           }}
           spacing={3}
         >
-          <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <Autocomplete
               multiple
               id="tags-outlined"
@@ -71,8 +71,8 @@ function FilterTab() {
               )}
               sx={{ flexGrow: 1 }}
             />
-          </Grid2>
-          <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <Autocomplete
               multiple
               disableCloseOnSelect
@@ -109,8 +109,8 @@ function FilterTab() {
               )}
               sx={{ flexGrow: 1 }}
             />
-          </Grid2>
-          <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <Autocomplete
               multiple
               id="tags-outlined"
@@ -122,8 +122,8 @@ function FilterTab() {
               )}
               sx={{ flexGrow: 1 }}
             />
-          </Grid2>
-          <Grid2 color="text.primary" size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+          </Grid>
+          <Grid color="text.primary" size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <ButtonGroup
               variant="outlined"
               sx={{ width: 1 }}
@@ -140,8 +140,8 @@ function FilterTab() {
                 expand
               </Button>
             </ButtonGroup>
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       </Container>
     </Box>
   );

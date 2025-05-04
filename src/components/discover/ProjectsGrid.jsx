@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Grid2, Pagination, Stack } from "@mui/material";
+import { Box, Container, Grid, Pagination, Stack } from "@mui/material";
 import MediaCard from "../card/MediaCard";
 
 function ProjectsGrid() {
@@ -13,20 +13,20 @@ function ProjectsGrid() {
       }}
     >
       <Container maxWidth="xl">
-        <Grid2 container spacing={4} sx={{ my: 5 }}>
+        <Grid container spacing={4} sx={{ my: 5 }}>
           {Array(6)
             .fill(0)
             .map((val, i) => val + i + 1)
             .map((item, i) => (
-              <Grid2
+              <Grid
                 key={`grid-${i}`}
                 size={{ xs: 12, sm: 6, md: 6, lg: 4 }}
                 sx={{ display: "flex", justifyContent: "center" }}
               >
                 <MediaCard />
-              </Grid2>
+              </Grid>
             ))}
-        </Grid2>
+        </Grid>
       </Container>
       <Container maxWidth="xl" sx={{ mt: "auto" }}>
         <Stack sx={{ mb: 5 }}>
