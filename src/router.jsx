@@ -1,8 +1,8 @@
 import { Navigate, createBrowserRouter } from "react-router";
 import RootLayout from "./routes/layouts/RootLayout.jsx";
 import ErrorBoundary from "./routes/ErrorBoundary.jsx";
-import Login from "./routes/Login.jsx";
-import Signup from "./routes/Signup.jsx";
+import Login, { action as loginAction } from "./routes/Login.jsx";
+import Signup, { action as signupAction } from "./routes/Signup.jsx";
 import Index from "./routes/Index.jsx";
 import DiscoverProjects from "./routes/DiscoverProjects.jsx";
 import MainLayout from "./routes/layouts/MainLayout.jsx";
@@ -102,8 +102,8 @@ const router = createBrowserRouter([
       //     { path: "preview", element: <PreviewPage /> },
       //   ],
       // },
-      { path: "/login", element: <Login /> },
-      { path: "/signup", element: <Signup /> },
+      { path: "/login", element: <Login />, action: loginAction },
+      { path: "/signup", element: <Signup />, action: signupAction },
       {
         path: "/start-project",
         element: <StartProject />,
