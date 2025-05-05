@@ -2,11 +2,9 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { useMemo, useState } from "react";
 
-function CustomPasswordTextField({ value, sx, ...props }) {
+function CustomPasswordTextField({ onChange, sx, ...props }) {
   const [showPassword, setShowPassword] = useState(false);
-  const password = useMemo(() => {
-    return value;
-  }, [value]);
+  const [value, setValue] = useState("");
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -20,7 +18,6 @@ function CustomPasswordTextField({ value, sx, ...props }) {
   return (
     <TextField
       {...props}
-      value={value}
       type={showPassword ? "text" : "password"}
       sx={{
         "input::-ms-reveal": {
@@ -28,9 +25,13 @@ function CustomPasswordTextField({ value, sx, ...props }) {
         },
         ...sx,
       }}
+      onChange={(e) => {
+        setValue(e.target.value);
+        onChange(e);
+      }}
       slotProps={{
         input: {
-          endAdornment: password && (
+          endAdornment: value && (
             <InputAdornment position="end">
               <IconButton
                 aria-label={
@@ -40,6 +41,7 @@ function CustomPasswordTextField({ value, sx, ...props }) {
                 onMouseDown={handleMouseDownPassword}
                 onMouseUp={handleMouseUpPassword}
                 edge="end"
+                tabIndex={-1}
               >
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
