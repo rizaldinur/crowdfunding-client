@@ -4,9 +4,7 @@ import { useMemo, useState } from "react";
 import themes from "../styles/themes";
 
 function LoadingPage() {
-  const [currentTheme, setCurrentTheme] = useState(
-    localStorage.getItem("theme") || "light"
-  );
+  const [currentTheme] = useState(localStorage.getItem("theme") || "light");
 
   const activeTheme = useMemo(() => themes[currentTheme], [currentTheme]);
 
