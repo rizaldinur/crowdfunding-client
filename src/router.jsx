@@ -5,7 +5,7 @@ import Login, { loginAction, loginLoader } from "./routes/Login.jsx";
 import Signup, { signupLoader, signupAction } from "./routes/Signup.jsx";
 import Index from "./routes/Index.jsx";
 import DiscoverProjects from "./routes/DiscoverProjects.jsx";
-import MainLayout from "./routes/layouts/MainLayout.jsx";
+import MainLayout, { mainLayoutLoader } from "./routes/layouts/MainLayout.jsx";
 import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
 import Cookies from "js-cookie";
 import StartProject from "./routes/StartProject.jsx";
@@ -31,6 +31,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <MainLayout />,
+        loader: mainLayoutLoader,
         children: [
           {
             index: true,
