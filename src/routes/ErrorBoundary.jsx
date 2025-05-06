@@ -9,10 +9,18 @@ import { isRouteErrorResponse, Link, useRouteError } from "react-router";
 import themes from "../styles/themes";
 import ThemeContainer from "../components/ThemeContainer";
 import RootLayout from "./layouts/RootLayout";
+import { useEffect, useMemo, useState } from "react";
 
 function ErrorBoundary() {
+  const [currentTheme] = useState(localStorage.getItem("theme") || "light");
+  const activeTheme = useMemo(() => themes[currentTheme], [currentTheme]);
+
   const error = useRouteError();
-  document.title = "Error";
+  console.log(error);
+
+  useEffect(() => {
+    document.title = "Terjadi kesalahan.";
+  }, []);
 
   let errorContent;
   if (isRouteErrorResponse(error)) {
@@ -76,18 +84,20 @@ function ErrorBoundary() {
   }
 
   return (
-    <Box display="flex" justifyContent="center">
-      <Box
-        sx={{ bgcolor: "background.paper" }}
-        maxWidth={400}
-        marginTop={2}
-        borderRadius={3}
-        padding={10}
-        textAlign="center"
-      >
-        {errorContent}
+    <ThemeContainer activeTheme={activeTheme}>
+      <Box display="flex" justifyContent="center">
+        <Box
+          sx={{ bgcolor: "background.paper" }}
+          maxWidth={400}
+          marginTop={2}
+          borderRadius={3}
+          padding={10}
+          textAlign="center"
+        >
+          {errorContent}
+        </Box>
       </Box>
-    </Box>
+    </ThemeContainer>
   );
 }
 export default ErrorBoundary;
