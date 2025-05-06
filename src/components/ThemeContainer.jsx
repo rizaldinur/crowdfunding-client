@@ -1,6 +1,6 @@
 import { Container, ThemeProvider } from "@mui/material";
 
-function ThemeContainer({ activeTheme, children }) {
+function ThemeContainer({ activeTheme, children, sx, ...props }) {
   return (
     <ThemeProvider theme={activeTheme}>
       <Container
@@ -11,7 +11,9 @@ function ThemeContainer({ activeTheme, children }) {
           bgcolor: "background.default",
           display: "flex",
           flexDirection: "column",
+          ...sx,
         }}
+        {...props}
       >
         {children}
       </Container>
