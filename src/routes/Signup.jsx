@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   Button,
+  CircularProgress,
   Container,
   Divider,
   Link,
@@ -16,26 +17,49 @@ import {
   Link as RouterLink,
   Form,
   useActionData,
-  isRouteErrorResponse,
+  useFetcher,
+  useNavigate,
+  useLoaderData,
+  Await,
+  Navigate,
 } from "react-router";
 import { AppRegistration } from "@mui/icons-material";
 import AuthNav from "../components/navigation/AuthNav";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import validator from "validator";
 import CustomPasswordTextField from "../components/input/CustomPasswordTextField";
+import { getError } from "../utils/utils";
+import LoadingPage from "../components/LoadingPage";
+import { authenticateJWT, postSignup } from "../api/api";
+import Cookies from "js-cookie";
 
 function Signup() {
-  const data = useActionData();
+  useEffect(() => {
+    document.title = "Daftar";
+  }, []);
+
+  // const data = useActionData();
+  const fetcher = useFetcher();
   const [alertErrorOpen, setAlertErrorOpen] = useState(false);
   const [alertSuccessOpen, setAlertSuccessOpen] = useState(false);
+  const [formErrorData, setFormErrorData] = useState([]);
+  const { authData } = useLoaderData();
+
+  let navigate = useNavigate();
+
+  let busy = fetcher.state !== "idle";
+
   useEffect(() => {
-    if (data) {
-      if (data.error) {
-        return setAlertErrorOpen(true);
+    if (fetcher.data) {
+      if (fetcher.data.error) {
+        console.log(fetcher.data.error);
+        setAlertErrorOpen(true);
+        setFormErrorData(fetcher.data.data);
+        return;
       }
-      return setAlertSuccessOpen(true);
+      setAlertSuccessOpen(true);
     }
-  }, [data]);
+  }, [fetcher.data]);
 
   const [currentTheme] = useOutletContext();
 
@@ -45,12 +69,6 @@ function Signup() {
     password: "",
     confirmPassword: "",
   });
-  const [error, setError] = useState({
-    name: { status: false, message: "" },
-    email: { status: false, message: "" },
-    password: { status: false, message: "" },
-    confirmPassword: { status: false, message: "" },
-  });
 
   const handleChange = (e) => {
     console.log(e.target.value);
@@ -59,315 +77,278 @@ function Signup() {
     setForm((prevForm) => {
       return { ...prevForm, [name]: value };
     });
+    setFormErrorData((prevData) => {
+      return prevData.filter((error) => {
+        return error.body !== name;
+      });
+    });
   };
 
   const validateSubmit = (e) => {
-    setAlertErrorOpen(false);
-    setAlertSuccessOpen(false);
-    //validate email
-    let email = validator.trim(form.email);
-    while (true) {
-      if (validator.isEmpty(email)) {
-        e.preventDefault();
-        setError((prevError) => {
-          return {
-            ...prevError,
-            email: { status: true, message: "Harus diisi." },
-          };
-        });
-        break;
-      }
-      if (!validator.isEmail(email)) {
-        e.preventDefault();
-        setError((prevError) => {
-          return {
-            ...prevError,
-            email: {
-              status: true,
-              message: "Masukkan format email yang benar.",
-            },
-          };
-        });
-        break;
-      }
-      setError((prevError) => {
-        return {
-          ...prevError,
-          email: { status: false, message: "" },
-        };
-      });
+    let error = [];
+    let { email, name, password, confirmPassword } = form;
+
+    //sanitize and validate email
+    email = validator.trim(email);
+    if (email.length > 0) {
       email = validator.normalizeEmail(email);
-      setForm((prevForm) => {
-        return { ...prevForm, email: email };
+    }
+    console.log(email, email.length);
+
+    if (validator.isEmpty(email)) {
+      error.push({
+        body: "email",
+        message: "Harus diisi.",
       });
-      break;
+    }
+    if (!validator.isEmail(email)) {
+      error.push({
+        body: "email",
+        message: "Masukkan format email yang benar.",
+      });
     }
 
-    //validate name
-    const name = validator.trim(form.name);
-    while (true) {
-      if (validator.isEmpty(name)) {
-        e.preventDefault();
-        setError((prevError) => {
-          return {
-            ...prevError,
-            name: { status: true, message: "Harus diisi." },
-          };
-        });
-        break;
-      }
-      if (!validator.isLength(name, { min: 2, max: 100 })) {
-        e.preventDefault();
-        setError((prevError) => {
-          return {
-            ...prevError,
-            name: {
-              status: true,
-              message: "Minimal 2 huruf, maksimal 100 huruf.",
-            },
-          };
-        });
-        break;
-      }
-      if (!validator.matches(name, /^[a-zA-Z .'-]+$/)) {
-        e.preventDefault();
-        setError((prevError) => {
-          return {
-            ...prevError,
-            name: {
-              status: true,
-              message:
-                "Hanya boleh huruf (A-Z, a-z), spasi, karakter (-, ', .).",
-            },
-          };
-        });
-        break;
-      }
-      setError((prevError) => {
-        return {
-          ...prevError,
-          name: { status: false, message: "" },
-        };
+    //sanitize and validate name
+    name = validator.trim(name);
+    if (validator.isEmpty(name)) {
+      error.push({
+        body: "name",
+        message: "Harus diisi.",
       });
-      setForm((prevForm) => {
-        return { ...prevForm, name: name };
+    }
+    if (!validator.isLength(name, { min: 2, max: 100 })) {
+      error.push({
+        body: "name",
+        message: "Minimal 2 huruf, maksimal 100 huruf.",
       });
-      break;
+    }
+    if (!validator.matches(name, /^[a-zA-Z .'-]+$/)) {
+      error.push({
+        body: "name",
+        message: "Hanya boleh huruf (A-Z, a-z), spasi, karakter (-, ', .).",
+      });
     }
 
     //validate password
-    const password = form.password;
-    while (true) {
-      if (validator.isEmpty(password)) {
-        e.preventDefault();
-        setError((prevError) => {
-          return {
-            ...prevError,
-            password: { status: true, message: "Harus diisi." },
-          };
-        });
-        break;
-      }
-      if (!validator.isStrongPassword(password) || /\s/.test(password)) {
-        e.preventDefault();
-        setError((prevError) => {
-          return {
-            ...prevError,
-            password: {
-              status: true,
-              message:
-                "Minimal 8 karakter, 1 huruf kecil, 1 huruf kapital, 1 simbol, 1 angka, tanpa spasi.",
-            },
-          };
-        });
-        break;
-      }
-      setError((prevError) => {
-        return {
-          ...prevError,
-          password: { status: false, message: "" },
-        };
+    if (validator.isEmpty(password)) {
+      error.push({
+        body: "password",
+        message: "Harus diisi.",
       });
-      setForm((prevForm) => {
-        return { ...prevForm, password: password };
+    }
+    if (!validator.isStrongPassword(password) || /\s/.test(password)) {
+      error.push({
+        body: "password",
+        message:
+          "Minimal 8 karakter, 1 huruf kecil, 1 huruf kapital, 1 simbol, 1 angka, tanpa spasi.",
       });
-      break;
     }
 
     //validate confirm password
-    const confirmPassword = form.confirmPassword;
-    while (true) {
-      if (!validator.equals(password, confirmPassword)) {
-        e.preventDefault();
-        setError((prevError) => {
-          return {
-            ...prevError,
-            confirmPassword: { status: true, message: "Password tidak cocok." },
-          };
-        });
-        break;
-      }
-      setError((prevError) => {
-        return {
-          ...prevError,
-          confirmPassword: { status: false, message: "" },
-        };
+    if (!validator.equals(password, confirmPassword)) {
+      error.push({
+        body: "confirmPassword",
+        message: "Password tidak cocok.",
       });
-      setForm((prevForm) => {
-        return { ...prevForm, confirmPassword: confirmPassword };
-      });
-      break;
     }
+
+    if (error.length > 0) {
+      e.preventDefault();
+      setFormErrorData([...error]);
+      return;
+    }
+    setForm((prevForm) => {
+      return { ...prevForm, email: email, name: name };
+    });
+
+    setFormErrorData([...error]);
   };
 
-  document.title = "Daftar";
   return (
-    <>
-      <AuthNav />
-      <Snackbar
-        open={alertErrorOpen}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        onClose={() => setAlertErrorOpen(false)}
-      >
-        <Alert
-          sx={{
-            width: 300,
-          }}
-          onClose={() => setAlertErrorOpen(false)}
-          variant="filled"
-          severity="error"
-        >
-          {data?.message || "Something went wrong."}
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={alertSuccessOpen}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        onClose={() => setAlertSuccessOpen(false)}
-      >
-        <Alert
-          sx={{ width: 300 }}
-          onClose={() => setAlertSuccessOpen(false)}
-          variant="filled"
-          severity="success"
-        >
-          {data ? data.message : "Sukses."}
-        </Alert>
-      </Snackbar>
-      <Container sx={{ position: "relative" }} maxWidth="sm">
-        <Box
-          sx={{
-            mt: 10,
-            padding: 5,
-            placeSelf: "center",
-            width: 450,
-            boxSizing: "border-box",
-            maxWidth: 1,
-            border: "solid 1px",
-            borderColor: "divider",
-            borderRadius: 2,
-            bgcolor:
-              currentTheme === "light"
-                ? "background.default"
-                : "background.paper",
-          }}
-        >
-          <Stack alignItems="center">
-            <Avatar sx={{ bgcolor: "secondary.main", mb: 1 }}>
-              <AppRegistration />
-            </Avatar>
-            <Typography variant="h4" color="textPrimary" marginBottom={3}>
-              Daftar
-            </Typography>
-            <Stack width={1}>
-              <Form method="post" noValidate onSubmit={validateSubmit}>
-                <TextField
-                  type="text"
-                  label="Nama"
-                  name="name"
-                  onChange={handleChange}
-                  value={form.name}
-                  error={error.name.status}
-                  helperText={error.name.status && error.name.message}
-                  fullWidth
-                  sx={{ mb: 2 }}
-                />
-                <TextField
-                  type="email"
-                  label="Email"
-                  name="email"
-                  onChange={handleChange}
-                  value={form.email}
-                  error={error.email.status}
-                  helperText={error.email.status && error.email.message}
-                  fullWidth
-                  sx={{ mb: 2 }}
-                />
-                <CustomPasswordTextField
-                  type="password"
-                  label="Password"
-                  name="password"
-                  onChange={handleChange}
-                  value={form.password}
-                  error={error.password.status}
-                  helperText={error.password.status && error.password.message}
-                  fullWidth
-                  sx={{ mb: 2 }}
-                />
-                <CustomPasswordTextField
-                  type="password"
-                  label="Konfirmasi password"
-                  name="confirmPassword"
-                  onChange={handleChange}
-                  value={form.confirmPassword}
-                  error={error.confirmPassword.status}
-                  helperText={
-                    error.confirmPassword.status &&
-                    error.confirmPassword.message
-                  }
-                  fullWidth
-                  sx={{ mb: 2 }}
-                />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ width: 1, mb: 2 }}
+    <Suspense fallback={<LoadingPage />}>
+      <Await resolve={authData}>
+        {(authData) => {
+          if (authData.data.authenticated) {
+            return <Navigate to=".." replace />;
+          }
+          return (
+            <>
+              <AuthNav />
+              <Snackbar
+                open={alertErrorOpen}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                onClose={() => setAlertErrorOpen(false)}
+              >
+                <Alert
+                  sx={{
+                    width: 300,
+                  }}
+                  onClose={() => setAlertErrorOpen(false)}
+                  variant="filled"
+                  severity="error"
                 >
-                  Daftar
-                </Button>
-              </Form>
-              <Divider component="div" role="presentation" sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" color="divider">
-                  Atau
-                </Typography>
-              </Divider>
-              <Typography variant="body2" color="textSecondary">
-                Sudah punya akun?&nbsp;
-                <Link component={RouterLink} to="/login" underline="hover">
-                  Masuk
-                </Link>
-              </Typography>
-            </Stack>
-          </Stack>
-        </Box>
-      </Container>
-    </>
+                  {fetcher.data?.message || "Something went wrong."}
+                </Alert>
+              </Snackbar>
+              <Snackbar
+                open={alertSuccessOpen}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                onClose={() => {
+                  setAlertSuccessOpen(false);
+                  navigate("/login");
+                }}
+                autoHideDuration={1000}
+              >
+                <Alert
+                  sx={{ width: 300 }}
+                  onClose={() => setAlertSuccessOpen(false)}
+                  variant="filled"
+                  severity="success"
+                >
+                  {fetcher.data?.message || "Sukses."}
+                </Alert>
+              </Snackbar>
+              <Container sx={{ position: "relative" }} maxWidth="sm">
+                <Box
+                  sx={{
+                    mt: 10,
+                    padding: 5,
+                    placeSelf: "center",
+                    width: 450,
+                    boxSizing: "border-box",
+                    maxWidth: 1,
+                    border: "solid 1px",
+                    borderColor: "divider",
+                    borderRadius: 2,
+                    bgcolor:
+                      currentTheme === "light"
+                        ? "background.default"
+                        : "background.paper",
+                  }}
+                >
+                  <Stack alignItems="center">
+                    <Avatar sx={{ bgcolor: "secondary.main", mb: 1 }}>
+                      <AppRegistration />
+                    </Avatar>
+                    <Typography
+                      variant="h4"
+                      color="textPrimary"
+                      marginBottom={3}
+                    >
+                      Daftar
+                    </Typography>
+                    <Stack width={1}>
+                      <fetcher.Form
+                        method="post"
+                        noValidate
+                        autoComplete="off"
+                        onSubmit={validateSubmit}
+                      >
+                        <TextField
+                          type="text"
+                          label="Nama"
+                          name="name"
+                          onChange={handleChange}
+                          value={form.name}
+                          error={Boolean(getError("name", formErrorData))}
+                          helperText={getError("name", formErrorData)?.message}
+                          fullWidth
+                          sx={{ mb: 2 }}
+                        />
+                        <TextField
+                          type="email"
+                          label="Email"
+                          name="email"
+                          onChange={handleChange}
+                          value={form.email}
+                          error={Boolean(getError("email", formErrorData))}
+                          helperText={getError("email", formErrorData)?.message}
+                          fullWidth
+                          sx={{ mb: 2 }}
+                        />
+                        <CustomPasswordTextField
+                          type="password"
+                          label="Password"
+                          name="password"
+                          onChange={handleChange}
+                          value={form.password}
+                          error={Boolean(getError("password", formErrorData))}
+                          helperText={
+                            getError("password", formErrorData)?.message
+                          }
+                          fullWidth
+                          sx={{ mb: 2 }}
+                        />
+                        <CustomPasswordTextField
+                          type="password"
+                          label="Konfirmasi password"
+                          name="confirmPassword"
+                          onChange={handleChange}
+                          value={form.confirmPassword}
+                          error={Boolean(
+                            getError("confirmPassword", formErrorData)
+                          )}
+                          helperText={
+                            getError("confirmPassword", formErrorData)?.message
+                          }
+                          fullWidth
+                          sx={{ mb: 2 }}
+                        />
+                        <Button
+                          variant="contained"
+                          disabled={busy}
+                          type="submit"
+                          sx={{ width: 1, mb: 2 }}
+                          startIcon={
+                            busy && (
+                              <CircularProgress size={30} color="inherit" />
+                            )
+                          }
+                        >
+                          {busy ? "memperoses" : "Daftar"}
+                        </Button>
+                      </fetcher.Form>
+                      <Divider
+                        component="div"
+                        role="presentation"
+                        sx={{ mb: 2 }}
+                      >
+                        <Typography variant="subtitle2" color="divider">
+                          Atau
+                        </Typography>
+                      </Divider>
+                      <Typography variant="body2" color="textSecondary">
+                        Sudah punya akun?&nbsp;
+                        <Link
+                          component={RouterLink}
+                          to="/login"
+                          underline="hover"
+                        >
+                          Masuk
+                        </Link>
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                </Box>
+              </Container>
+            </>
+          );
+        }}
+      </Await>
+    </Suspense>
   );
 }
 
-export const action = async ({ request }) => {
+export const signupLoader = () => {
+  const authData = authenticateJWT(Cookies.get("jwt") || "");
+  return { authData };
+};
+
+export const signupAction = async ({ request }) => {
   const formData = await request.formData();
   const postData = Object.fromEntries(formData);
 
-  const response = await fetch("http://localhost:8000/signup", {
-    method: "POST",
-    body: JSON.stringify(postData),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  const data = await response.json();
+  const data = await postSignup(postData);
   return data;
 };
 
