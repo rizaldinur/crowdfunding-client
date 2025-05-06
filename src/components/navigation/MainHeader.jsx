@@ -30,12 +30,10 @@ import { Link as RouterLink, useNavigate } from "react-router";
 import { DarkMode, LightMode, Search } from "@mui/icons-material";
 import { useState } from "react";
 import { navItems, accountMenuItems } from "../../data/staticData";
-import useAuthContext from "../../hooks/useAuthContext";
 import useThemeContext from "../../hooks/useThemeContext";
+import Cookies from "js-cookie";
 
-function MainHeader() {
-  const { token, handleLogout } = useAuthContext();
-  const user = token;
+function MainHeader({ user }) {
   const navigate = useNavigate();
   const { currentTheme, setCurrentTheme, handleThemeChange } =
     useThemeContext();
@@ -53,6 +51,11 @@ function MainHeader() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    Cookies.remove("jwt");
+    navigate(0);
   };
 
   return (
@@ -133,6 +136,10 @@ function MainHeader() {
                             <ListItemButton
                               key={item.name + "-drawerButton"}
                               sx={{ gap: 2 }}
+                              onClick={() => {
+                                handleCloseUserMenu();
+                                handleLogout();
+                              }}
                             >
                               {item.icon}
                               <ListItemText
