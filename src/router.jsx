@@ -8,7 +8,7 @@ import DiscoverProjects from "./routes/DiscoverProjects.jsx";
 import MainLayout, { mainLayoutLoader } from "./routes/layouts/MainLayout.jsx";
 import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
 import Cookies from "js-cookie";
-import StartProject from "./routes/StartProject.jsx";
+import StartProject, { startProjectLoader } from "./routes/StartProject.jsx";
 import ProjectDetailsLayout from "./routes/layouts/ProjectDetailsLayout.jsx";
 import StoryPanel from "./components/project-details/StoryPanel.jsx";
 import { Typography } from "@mui/material";
@@ -114,6 +114,7 @@ const router = createBrowserRouter([
       {
         path: "/start-project",
         element: <StartProject />,
+        loader: startProjectLoader,
       },
     ],
   },

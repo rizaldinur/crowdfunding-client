@@ -10,4 +10,9 @@ function StartProject() {
   );
 }
 
+export const startProjectLoader = () => {
+  const authData = authenticateJWT(Cookies.get("jwt") || "");
+  return { authData };
+};
+
 export default StartProject;
