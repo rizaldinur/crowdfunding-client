@@ -16,7 +16,7 @@ const fetchSchoolsData = async () => {
   return [...data1.dataSekolah, ...data2.dataSekolah]; // Combine the data arrays
 };
 
-function SchoolAutocomplete({ label, setSchoolValue, ...props }) {
+function SchoolAutocomplete({ label, setSchoolValue, error, ...props }) {
   const [inputValue, setInputValue] = useState("");
   const [schools, setSchools] = useState([]);
   const [loadingSchool, setLoadingSchool] = useState(false);
@@ -90,7 +90,7 @@ function SchoolAutocomplete({ label, setSchoolValue, ...props }) {
       onInputChange={(event, newValue) => {
         if (newValue.toLowerCase() !== inputValue.toLowerCase()) {
           setOnDebounce(true);
-          setInputValue(newValue);
+          setInputValue(newValue.trim());
         }
       }}
       getOptionLabel={(option) => {
@@ -106,7 +106,7 @@ function SchoolAutocomplete({ label, setSchoolValue, ...props }) {
 
         if (inputValue !== "" && options.length === 0 && !onDebounce) {
           options.push({
-            inputValue,
+            inputValue: inputValue.trim(),
             sekolah: `Tambahkan "${inputValue.toUpperCase()}"`,
           });
         }
@@ -123,6 +123,7 @@ function SchoolAutocomplete({ label, setSchoolValue, ...props }) {
       renderInput={(params) => (
         <TextField
           {...params}
+          error={error}
           label={label || "Nama sekolah"}
           slotProps={{
             input: {
