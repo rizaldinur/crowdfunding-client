@@ -40,4 +40,27 @@ const accountMenuItems = [
   },
 ];
 
-export { navItems, accountMenuItems };
+const businessCategories = [
+  "Teknologi",
+  "Makanan",
+  "Game",
+  "Seni",
+  "Musik",
+  "Film & Video",
+  "Fashion",
+  "Desain Produk",
+  "Kerajinan",
+  "Publikasi",
+  "Kesehatan",
+  "Lingkungan",
+  "Pendidikan",
+  "Sosial",
+  "Aplikasi & Web",
+  "Pertanian",
+  "Gaya Hidup",
+  "Olahraga",
+  "Kecantikan",
+  "Pariwisata",
+];
+
+export { navItems, accountMenuItems, businessCategories };
