@@ -1,11 +1,10 @@
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import { useState } from "react";
 
-function LocationAutocomplete({ sx, handleLocationChange, label }) {
+function LocationAutocomplete({ onChange, label, ...props }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [locations, setLocations] = useState([]);
-  const [locationValue, setLocationValue] = useState(null);
 
   const handleLocationsOpen = () => {
     setOpen(true);
@@ -34,26 +33,22 @@ function LocationAutocomplete({ sx, handleLocationChange, label }) {
 
   return (
     <Autocomplete
-      id="locationOptions"
-      sx={sx ? sx : null}
-      options={locations}
+      {...props}
+      freeSolo={false}
+      options={locations.map((location) => location.name)}
       open={open}
-      value={locationValue}
       loading={loading}
       autoComplete
       onOpen={handleLocationsOpen}
       onClose={handleLocationsClose}
       onChange={(e, value) => {
-        setLocationValue(value);
         console.log(value);
-        return handleLocationChange(value?.name);
+        onChange(e, value);
       }}
-      getOptionKey={(option) => option.id}
-      getOptionLabel={(option) => option.name}
       renderInput={(params) => (
         <TextField
           {...params}
-          label={label ? label : "Pilih lokasi"}
+          label={label || "Pilih lokasi"}
           slotProps={{
             input: {
               ...params.InputProps,
