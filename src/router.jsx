@@ -22,6 +22,10 @@ import SettingsLayout from "./routes/layouts/SettingsLayout.jsx";
 import AccountSettings from "./components/settings-account/AccountSettings.jsx";
 import ProfileSettings from "./components/settings-account/ProfileSettings.jsx";
 import BuildOverview from "./routes/BuildOverview.jsx";
+import LoadingPage from "./components/LoadingPage.jsx";
+import StartProjectMain, {
+  startProjectMainAction,
+} from "./components/start-project/StartProjectMain.jsx";
 
 const router = createBrowserRouter([
   {
@@ -114,6 +118,13 @@ const router = createBrowserRouter([
       {
         path: "/start-project",
         element: <StartProject />,
+        children: [
+          {
+            index: true,
+            element: <StartProjectMain />,
+            action: startProjectMainAction,
+          },
+        ],
         loader: startProjectLoader,
       },
     ],
