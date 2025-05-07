@@ -28,7 +28,7 @@ import {
 } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router";
 import { DarkMode, LightMode, Search } from "@mui/icons-material";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { navItems, accountMenuItems } from "../../data/staticData";
 import useThemeContext from "../../hooks/useThemeContext";
 import Cookies from "js-cookie";
@@ -37,9 +37,10 @@ function MainHeader({ user }) {
   const navigate = useNavigate();
   const { currentTheme, setCurrentTheme, handleThemeChange } =
     useThemeContext();
-  const [anchorElUser, setAnchorElUser] = useState(null);
-  const [openNav, setOpenNav] = useState(false);
-  const [openSearchBar, setOpenSearchBar] = useState(false);
+
+  const [anchorElUser, setAnchorElUser] = useState(null); // For user menu anchor
+  const [openNav, setOpenNav] = useState(false); // Drawer toggle state
+  const [openSearchBar, setOpenSearchBar] = useState(false); // Search bar visibility toggle
 
   const handleSelectThemeChange = (event) => {
     setCurrentTheme(event.target.value);
@@ -55,7 +56,7 @@ function MainHeader({ user }) {
 
   const handleLogout = () => {
     Cookies.remove("jwt");
-    navigate(0);
+    navigate(0); // Refresh the page after logout
   };
 
   return (
@@ -70,10 +71,12 @@ function MainHeader({ user }) {
     >
       <Container maxWidth="xl">
         <Box sx={{ display: "flex", flexDirection: "column" }}>
+          {/* Header Toolbar */}
           <Toolbar
             disableGutters
             sx={{ justifyContent: "space-between", gap: { xs: "none", sm: 2 } }}
           >
+            {/* Navigation Drawer for mobile */}
             <Drawer
               open={openNav}
               onClose={() => setOpenNav(false)}
@@ -81,8 +84,9 @@ function MainHeader({ user }) {
             >
               <Box sx={{ width: 250 }}>
                 <List>
+                  {/* Theme switcher dropdown inside drawer */}
                   <ListItem key="Tema-drawerItem">
-                    <FormControl fullWidth size="small" key={"Tema-select"}>
+                    <FormControl fullWidth size="small" key="Tema-select">
                       <InputLabel id="theme-select-label">Tema</InputLabel>
                       <Select
                         labelId="theme-select-label"
@@ -91,13 +95,14 @@ function MainHeader({ user }) {
                         label="Tema"
                         onChange={handleSelectThemeChange}
                       >
-                        <MenuItem value={"dark"}>Dark</MenuItem>
-                        <MenuItem value={"light"}>Light</MenuItem>
+                        <MenuItem value="dark">Dark</MenuItem>
+                        <MenuItem value="light">Light</MenuItem>
                       </Select>
                     </FormControl>
                   </ListItem>
+                  {/* Drawer nav items */}
                   {navItems
-                    .filter((item) => !(item.name === "Login" && user)) // Exclude "Login" if a user exists
+                    .filter((item) => !(item.name === "Login" && user))
                     .map((item) => (
                       <ListItem key={item.name + "-drawerItem"}>
                         {item.name === "Mulai Proyek" ? (
@@ -127,56 +132,41 @@ function MainHeader({ user }) {
                 {user && (
                   <List>
                     {accountMenuItems.map((item) => (
-                      <>
+                      <Fragment key={item.name + "-fragment"}>
                         {item.name === "Keluar" && (
                           <Divider key={"dividerDrawer-" + item.name} />
                         )}
                         <ListItem key={item.name + "-drawerItem"}>
-                          {item.name === "Keluar" ? (
-                            <ListItemButton
-                              key={item.name + "-drawerButton"}
-                              sx={{ gap: 2 }}
-                              onClick={() => {
+                          <ListItemButton
+                            key={item.name + "-drawerButton"}
+                            sx={{ gap: 2 }}
+                            onClick={() => {
+                              if (item.name === "Keluar") {
                                 handleCloseUserMenu();
                                 handleLogout();
+                              }
+                            }}
+                          >
+                            {item.icon}
+                            <ListItemText
+                              primary={item.name}
+                              sx={{
+                                color:
+                                  item.name === "Keluar"
+                                    ? "error.main"
+                                    : "inherit",
                               }}
-                            >
-                              {item.icon}
-                              <ListItemText
-                                primary={item.name}
-                                sx={{
-                                  color:
-                                    item.name === "Keluar"
-                                      ? "error.main"
-                                      : "inherit",
-                                }}
-                              />
-                            </ListItemButton>
-                          ) : (
-                            <ListItemButton
-                              key={item.name + "-drawerButton"}
-                              sx={{ gap: 2 }}
-                            >
-                              {item.icon}
-                              <ListItemText
-                                primary={item.name}
-                                sx={{
-                                  color:
-                                    item.name === "Keluar"
-                                      ? "error.main"
-                                      : "inherit",
-                                }}
-                              />
-                            </ListItemButton>
-                          )}
+                            />
+                          </ListItemButton>
                         </ListItem>
-                      </>
+                      </Fragment>
                     ))}
                   </List>
                 )}
               </Box>
             </Drawer>
 
+            {/* Logo and title */}
             <Link
               underline="none"
               color="inherit"
@@ -188,23 +178,18 @@ function MainHeader({ user }) {
               </Typography>
             </Link>
 
+            {/* Search form (hidden on xs) */}
             <Box
-              sx={{
-                flexGrow: 1,
-                maxWidth: { xs: 1, md: 500 },
-              }}
+              sx={{ flexGrow: 1, maxWidth: { xs: 1, md: 500 } }}
               component="form"
               onSubmit={(e) => {
                 e.preventDefault();
-                navigate("login");
+                navigate("login"); // Placeholder redirect on search submit
               }}
             >
               <FormControl
                 id="search__form-control"
-                sx={{
-                  display: { xs: "none", sm: "inherit" },
-                  // width: 1,
-                }}
+                sx={{ display: { xs: "none", sm: "inherit" } }}
               >
                 <OutlinedInput
                   fullWidth
@@ -219,22 +204,14 @@ function MainHeader({ user }) {
                       <Search />
                     </IconButton>
                   }
-                  sx={{
-                    paddingLeft: 0,
-                    borderRadius: 2,
-                  }}
+                  sx={{ paddingLeft: 0, borderRadius: 2 }}
                 />
               </FormControl>
             </Box>
 
+            {/* Right side actions: theme, nav, avatar */}
             <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
-              <IconButton
-                color="inherit"
-                type="button"
-                onClick={() => {
-                  handleThemeChange();
-                }}
-              >
+              <IconButton color="inherit" onClick={handleThemeChange}>
                 {currentTheme === "light" ? <DarkMode /> : <LightMode />}
               </IconButton>
               {navItems
@@ -250,6 +227,7 @@ function MainHeader({ user }) {
                     {item.name}
                   </Button>
                 ))}
+              {/* Avatar for logged-in user */}
               {user && (
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -260,91 +238,63 @@ function MainHeader({ user }) {
                   </IconButton>
                 </Tooltip>
               )}
+              {/* User account menu */}
               <Menu
                 id="menu-appbar"
                 elevation={2}
                 anchorEl={anchorElUser}
                 keepMounted
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuList key={"MenuListAccount"}>
+                <MenuList key="MenuListAccount">
                   {accountMenuItems.map((item, index) => (
                     <Box key={item.name + "-wrapper"}>
                       {item.name === "Keluar" && (
                         <Divider key={`divider-${index}`} />
                       )}
-                      {item.name === "Keluar" ? (
-                        <MenuItem
-                          key={item.name + "-menuItem"}
-                          onClick={() => {
-                            handleCloseUserMenu();
-                            handleLogout();
-                          }}
-                          component={RouterLink}
-                          to={item.path}
-                          sx={{ py: 1 }}
-                        >
-                          <ListItemIcon>{item.icon}</ListItemIcon>
-                          <ListItemText>
-                            <Typography
-                              color={
-                                item.name === "Keluar" ? "error" : "inherit"
-                              }
-                            >
-                              {item.name}
-                            </Typography>
-                          </ListItemText>
-                        </MenuItem>
-                      ) : (
-                        <MenuItem
-                          key={item.name + "-menuItem"}
-                          onClick={handleCloseUserMenu}
-                          component={RouterLink}
-                          to={item.path}
-                          sx={{ py: 1 }}
-                        >
-                          <ListItemIcon>{item.icon}</ListItemIcon>
-                          <ListItemText>
-                            <Typography
-                              color={
-                                item.name === "Keluar" ? "error" : "inherit"
-                              }
-                            >
-                              {item.name}
-                            </Typography>
-                          </ListItemText>
-                        </MenuItem>
-                      )}
+                      <MenuItem
+                        key={item.name + "-menuItem"}
+                        onClick={() => {
+                          handleCloseUserMenu();
+                          if (item.name === "Keluar") handleLogout();
+                        }}
+                        component={RouterLink}
+                        to={item.path}
+                        sx={{ py: 1 }}
+                      >
+                        <ListItemIcon>{item.icon}</ListItemIcon>
+                        <ListItemText>
+                          <Typography
+                            color={item.name === "Keluar" ? "error" : "inherit"}
+                          >
+                            {item.name}
+                          </Typography>
+                        </ListItemText>
+                      </MenuItem>
                     </Box>
                   ))}
                 </MenuList>
               </Menu>
             </Box>
+
+            {/* Mobile search button */}
             <IconButton
               size="large"
               aria-label="show search bar"
-              aria-controls="search-bar"
-              aria-haspopup="true"
               onClick={() => setOpenSearchBar((prevState) => !prevState)}
               color="inherit"
               sx={{ display: { xs: "inherit", sm: "none" } }}
             >
               <Search />
             </IconButton>
+
+            {/* Mobile menu icon */}
             <IconButton
               size="large"
               aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
               onClick={() => setOpenNav(true)}
               color="inherit"
               sx={{ display: { xs: "inherit", md: "none" } }}
@@ -352,6 +302,8 @@ function MainHeader({ user }) {
               <MenuIcon />
             </IconButton>
           </Toolbar>
+
+          {/* Collapsible search form for mobile */}
           <Collapse in={openSearchBar}>
             <Box
               sx={{ mb: 2 }}
@@ -361,16 +313,10 @@ function MainHeader({ user }) {
                 navigate("login");
               }}
             >
-              <FormControl
-                id="search__form-control"
-                sx={{
-                  width: 1,
-                }}
-              >
+              <FormControl id="search__form-control" sx={{ width: 1 }}>
                 <OutlinedInput
                   fullWidth
                   id="search"
-                  aria-describedby="my-helper-text"
                   name="search"
                   placeholder="Search"
                   color="inherit"
@@ -380,10 +326,7 @@ function MainHeader({ user }) {
                       <Search />
                     </IconButton>
                   }
-                  sx={{
-                    paddingLeft: 0,
-                    borderRadius: 2,
-                  }}
+                  sx={{ paddingLeft: 0, borderRadius: 2 }}
                 />
               </FormControl>
             </Box>
@@ -393,4 +336,5 @@ function MainHeader({ user }) {
     </AppBar>
   );
 }
+
 export default MainHeader;
