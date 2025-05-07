@@ -38,7 +38,6 @@ function LocationAutocomplete({ onChange, label, ...props }) {
       options={locations.map((location) => location.name)}
       open={open}
       loading={loading}
-      autoComplete
       onOpen={handleLocationsOpen}
       onClose={handleLocationsClose}
       onChange={(e, value) => {
