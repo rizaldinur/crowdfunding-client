@@ -16,7 +16,13 @@ const fetchSchoolsData = async () => {
   return [...data1.dataSekolah, ...data2.dataSekolah]; // Combine the data arrays
 };
 
-function SchoolAutocomplete({ label, setSchoolValue, error, ...props }) {
+function SchoolAutocomplete({
+  setSchoolValue,
+  label,
+  error,
+  helperText,
+  ...props
+}) {
   const [inputValue, setInputValue] = useState("");
   const [schools, setSchools] = useState([]);
   const [loadingSchool, setLoadingSchool] = useState(false);
@@ -124,6 +130,7 @@ function SchoolAutocomplete({ label, setSchoolValue, error, ...props }) {
         <TextField
           {...params}
           error={error}
+          helperText={helperText}
           label={label || "Nama sekolah"}
           slotProps={{
             input: {
