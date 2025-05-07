@@ -18,6 +18,7 @@ const fetchSchoolsData = async () => {
 
 function SchoolAutocomplete({
   setSchoolValue,
+  onChange,
   label,
   error,
   helperText,
@@ -92,6 +93,7 @@ function SchoolAutocomplete({
         } else {
           setSchoolValue(newValue);
         }
+        onChange(event, newValue);
       }}
       onInputChange={(event, newValue) => {
         if (newValue.toLowerCase() !== inputValue.toLowerCase()) {
