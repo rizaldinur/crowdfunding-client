@@ -4,3 +4,24 @@ export const getError = (body, errorData = []) => {
   });
   return error;
 };
+
+export const assignMenuPath = (path, param) => {
+  let completePath;
+  switch (path) {
+    case "profile":
+      completePath = `${path}/${param}`;
+      break;
+    case "settings":
+      completePath = `${path}/${param}`;
+      break;
+    case "saved":
+      completePath = `profile/${param}/${path}`;
+      break;
+    case "projects":
+      completePath = `profile/${param}/${path}`;
+      break;
+    default:
+      completePath = "..";
+  }
+  return completePath;
+};
