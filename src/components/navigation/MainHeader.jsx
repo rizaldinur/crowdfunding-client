@@ -32,13 +32,14 @@ import { Fragment, useState } from "react";
 import { navItems, accountMenuItems } from "../../data/staticData";
 import useThemeContext from "../../hooks/useThemeContext";
 import Cookies from "js-cookie";
+import { assignMenuPath } from "../../utils/utils";
 
-function MainHeader({ user }) {
+function MainHeader({ user, authenticated }) {
   const navigate = useNavigate();
   const { currentTheme, setCurrentTheme, handleThemeChange } =
     useThemeContext();
 
-  const [anchorElUser, setAnchorElUser] = useState(null); // For user menu anchor
+  const [anchorElUser, setAnchorElUser] = useState(null); // For authenticated menu anchor
   const [openNav, setOpenNav] = useState(false); // Drawer toggle state
   const [openSearchBar, setOpenSearchBar] = useState(false); // Search bar visibility toggle
 
@@ -52,6 +53,10 @@ function MainHeader({ user }) {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleCloseNav = () => {
+    setOpenNav(false);
   };
 
   const handleLogout = () => {
@@ -102,7 +107,7 @@ function MainHeader({ user }) {
                   </ListItem>
                   {/* Drawer nav items */}
                   {navItems
-                    .filter((item) => !(item.name === "Login" && user))
+                    .filter((item) => !(item.name === "Login" && authenticated))
                     .map((item) => (
                       <ListItem key={item.name + "-drawerItem"}>
                         {item.name === "Mulai Proyek" ? (
@@ -121,6 +126,7 @@ function MainHeader({ user }) {
                             key={item.name + "-drawerButton"}
                             component={RouterLink}
                             to={item.path}
+                            onClick={handleCloseNav}
                           >
                             <ListItemText primary={item.name} />
                           </ListItemButton>
@@ -128,8 +134,8 @@ function MainHeader({ user }) {
                       </ListItem>
                     ))}
                 </List>
-                {user && <Divider />}
-                {user && (
+                {authenticated && <Divider />}
+                {authenticated && (
                   <List>
                     {accountMenuItems.map((item) => (
                       <Fragment key={item.name + "-fragment"}>
@@ -141,11 +147,13 @@ function MainHeader({ user }) {
                             key={item.name + "-drawerButton"}
                             sx={{ gap: 2 }}
                             onClick={() => {
+                              handleCloseNav();
                               if (item.name === "Keluar") {
-                                handleCloseUserMenu();
                                 handleLogout();
                               }
                             }}
+                            component={RouterLink}
+                            to={assignMenuPath(item.path, user)}
                           >
                             {item.icon}
                             <ListItemText
@@ -215,7 +223,7 @@ function MainHeader({ user }) {
                 {currentTheme === "light" ? <DarkMode /> : <LightMode />}
               </IconButton>
               {navItems
-                .filter((item) => !(item.name === "Login" && user))
+                .filter((item) => !(item.name === "Login" && authenticated))
                 .map((item) => (
                   <Button
                     key={item.name + "-normalNav"}
@@ -227,18 +235,15 @@ function MainHeader({ user }) {
                     {item.name}
                   </Button>
                 ))}
-              {/* Avatar for logged-in user */}
-              {user && (
+              {/* Avatar for logged-in authenticated */}
+              {authenticated && (
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
-                    />
+                    <Avatar alt="Remy Sharp" />
                   </IconButton>
                 </Tooltip>
               )}
-              {/* User account menu */}
+              {/* authenticated account menu */}
               <Menu
                 id="menu-appbar"
                 elevation={2}
@@ -262,7 +267,7 @@ function MainHeader({ user }) {
                           if (item.name === "Keluar") handleLogout();
                         }}
                         component={RouterLink}
-                        to={item.path}
+                        to={assignMenuPath(item.path, user)}
                         sx={{ py: 1 }}
                       >
                         <ListItemIcon>{item.icon}</ListItemIcon>
@@ -294,7 +299,7 @@ function MainHeader({ user }) {
             {/* Mobile menu icon */}
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="account of current authenticated"
               onClick={() => setOpenNav(true)}
               color="inherit"
               sx={{ display: { xs: "inherit", md: "none" } }}
