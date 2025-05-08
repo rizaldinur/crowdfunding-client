@@ -106,14 +106,14 @@ function Login() {
     }
     console.log(error);
 
+    setForm((prevForm) => {
+      return { ...prevForm, email: email, password: password };
+    });
     if (error.length > 0) {
       e.preventDefault();
       setFormErrorData([...error]);
       return;
     }
-    setForm((prevForm) => {
-      return { ...prevForm, email: email, password: password };
-    });
     setFormErrorData([...error]);
   };
 
@@ -228,14 +228,10 @@ function Login() {
                         </Link>
                         <Button
                           variant="contained"
-                          disabled={busy}
+                          loading={busy}
+                          loadingPosition="start"
                           type="submit"
                           sx={{ width: 1, mb: 2 }}
-                          startIcon={
-                            busy && (
-                              <CircularProgress size={30} color="inherit" />
-                            )
-                          }
                         >
                           {busy ? "mengautentikasi" : "Masuk"}
                         </Button>

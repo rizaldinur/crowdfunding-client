@@ -116,10 +116,10 @@ function Signup() {
         message: "Harus diisi.",
       });
     }
-    if (!validator.isLength(name, { min: 2, max: 100 })) {
+    if (!validator.isLength(name, { min: 2, max: 30 })) {
       error.push({
         body: "name",
-        message: "Minimal 2 huruf, maksimal 100 huruf.",
+        message: "Minimal 2, maksimal 30.",
       });
     }
     if (!validator.matches(name, /^[a-zA-Z .'-]+$/)) {
@@ -152,14 +152,14 @@ function Signup() {
       });
     }
 
+    setForm((prevForm) => {
+      return { ...prevForm, email: email, name: name };
+    });
     if (error.length > 0) {
       e.preventDefault();
       setFormErrorData([...error]);
       return;
     }
-    setForm((prevForm) => {
-      return { ...prevForm, email: email, name: name };
-    });
 
     setFormErrorData([...error]);
   };
@@ -296,16 +296,12 @@ function Signup() {
                         />
                         <Button
                           variant="contained"
-                          disabled={busy}
+                          loading={busy}
+                          loadingPosition="start"
                           type="submit"
                           sx={{ width: 1, mb: 2 }}
-                          startIcon={
-                            busy && (
-                              <CircularProgress size={30} color="inherit" />
-                            )
-                          }
                         >
-                          {busy ? "memperoses" : "Daftar"}
+                          {busy ? "Memproses" : "Daftar"}
                         </Button>
                       </fetcher.Form>
                       <Divider
