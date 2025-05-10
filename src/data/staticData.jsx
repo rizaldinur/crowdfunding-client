@@ -34,7 +34,7 @@ const accountMenuItems = [
     icon: <Folder color="inherit" fontSize="small" />,
   },
   {
-    path: "#",
+    path: "logout",
     name: "Keluar",
     icon: <Logout color="error" fontSize="small" />,
   },
