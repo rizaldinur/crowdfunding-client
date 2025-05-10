@@ -8,6 +8,10 @@ import LoadingPage from "../../components/LoadingPage";
 
 function MainLayout() {
   const [authenticated, setAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [slug, setSlug] = useState(null);
+  const [avatar, setAvatar] = useState(null);
+
   let { authData } = useLoaderData();
 
   return (
@@ -17,6 +21,9 @@ function MainLayout() {
           useEffect(() => {
             if (authData.data?.authenticated) {
               setAuthenticated(true);
+              setUser(authData.data.userId);
+              setSlug(authData.data.slug);
+              setAvatar(authData.data.avatar);
             }
             if (authData.data?.refreshToken) {
               Cookies.set("jwt", authData.data.refreshToken, {
@@ -26,7 +33,12 @@ function MainLayout() {
           }, [authData]);
           return (
             <>
-              <MainHeader user={authenticated} />
+              <MainHeader
+                user={user}
+                slug={slug}
+                avatar={avatar}
+                authenticated={authenticated}
+              />
               <Outlet />
               <MainFooter full />
             </>

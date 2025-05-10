@@ -34,7 +34,7 @@ import useThemeContext from "../../hooks/useThemeContext";
 import Cookies from "js-cookie";
 import { assignMenuPath } from "../../utils/utils";
 
-function MainHeader({ user, authenticated }) {
+function MainHeader({ user, slug, avatar, authenticated }) {
   const navigate = useNavigate();
   const { currentTheme, setCurrentTheme, handleThemeChange } =
     useThemeContext();
@@ -153,7 +153,7 @@ function MainHeader({ user, authenticated }) {
                               }
                             }}
                             component={RouterLink}
-                            to={assignMenuPath(item.path, user)}
+                            to={assignMenuPath(item.path, slug || user)}
                           >
                             {item.icon}
                             <ListItemText
@@ -239,7 +239,7 @@ function MainHeader({ user, authenticated }) {
               {authenticated && (
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Remy Sharp" />
+                    <Avatar alt="Remy Sharp" src={avatar} />
                   </IconButton>
                 </Tooltip>
               )}
@@ -267,7 +267,7 @@ function MainHeader({ user, authenticated }) {
                           if (item.name === "Keluar") handleLogout();
                         }}
                         component={RouterLink}
-                        to={assignMenuPath(item.path, user)}
+                        to={assignMenuPath(item.path, slug || user)}
                         sx={{ py: 1 }}
                       >
                         <ListItemIcon>{item.icon}</ListItemIcon>
