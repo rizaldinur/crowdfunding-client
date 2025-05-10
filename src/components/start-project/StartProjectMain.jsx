@@ -1,9 +1,10 @@
 import {
+  Alert,
   Autocomplete,
   Box,
   Button,
-  CircularProgress,
   Container,
+  Snackbar,
   Stack,
   TextField,
   Typography,
@@ -11,73 +12,153 @@ import {
 import useThemeContext from "../../hooks/useThemeContext";
 import { UploadFile } from "@mui/icons-material";
 import VisuallyHiddenInput from "../input/VisuallyHiddenInput";
-import { useCallback, useEffect, useState } from "react";
-import debounce from "lodash.debounce";
+import { useEffect, useState } from "react";
 import LocationAutocomplete from "../input/LocationAutocomplete";
-
-const fetchAllData = async () => {
-  const endpoint1 =
-    "https://api-sekolah-indonesia.vercel.app/sekolah/SMA?provinsi=050000&perPage=1488";
-  const endpoint2 =
-    "https://api-sekolah-indonesia.vercel.app/sekolah/SMK?provinsi=050000&perPage=1927";
-
-  const [data1, data2] = await Promise.all([
-    fetch(endpoint1).then((res) => res.json()),
-    fetch(endpoint2).then((res) => res.json()),
-  ]);
-
-  return [...data1.dataSekolah, ...data2.dataSekolah]; // Combine the data arrays
-};
+import { businessCategories } from "../../data/staticData";
+import SchoolAutocomplete from "../input/SchoolAutocomplete";
+import validator from "validator";
+import { Link, useFetcher, useNavigate } from "react-router";
+import { getError } from "../../utils/utils";
+import Cookies from "js-cookie";
 
 function StartProjectMain() {
   const { currentTheme } = useThemeContext();
+  let fetcher = useFetcher();
+  let navigate = useNavigate();
+  let busy = fetcher.state !== "idle";
+  const [alertOpen, setAlertOpen] = useState(false);
+
   const [file, setFile] = useState(null);
   const [locationValue, setLocationValue] = useState("");
-
-  const [inputValue, setInputValue] = useState("");
-  const [schools, setSchools] = useState([]);
   const [schoolValue, setSchoolValue] = useState(null);
-  const [loadingSchool, setLoadingSchool] = useState(false);
-  const [onDebounce, setOnDebounce] = useState(false);
+  const [category, setCategory] = useState("");
+  const [projectName, setProjectName] = useState("");
 
-  // Debounce the fetch function
-  const debouncedFilter = debounce((query) => {
-    if (!query) {
-      setSchools([]);
-      return;
-    }
-
-    (async () => {
-      // console.log(query);
-
-      setLoadingSchool(true);
-      const data = await fetchAllData();
-
-      const filtered = data.filter((item) =>
-        item.sekolah.toLowerCase().includes(query.toLowerCase())
-      );
-      console.log(filtered);
-      setSchools(filtered);
-      setLoadingSchool(false);
-      setOnDebounce(false);
-    })();
-  }, 1000);
+  const [formErrorData, setFormErrorData] = useState([]);
 
   useEffect(() => {
-    if (inputValue) {
-      debouncedFilter(inputValue);
-    } else {
-      setSchools([]); // Clear options if input is empty
+    if (fetcher.data) {
+      console.log(fetcher.data);
+      setAlertOpen(true);
+      if (!fetcher.data.error) {
+        setFile(null);
+        setLocationValue("");
+        setSchoolValue(null);
+        setCategory("");
+        setProjectName("");
+      }
+    }
+  }, [fetcher.data]);
+
+  const validateForm = (e) => {
+    let error = [];
+    let project_name = projectName;
+    let school = schoolValue?.sekolah || "";
+    let fileImg = file;
+    console.log(project_name, school);
+
+    // validate name
+    project_name = project_name.trim();
+    if (!validator.isLength(project_name, { max: 60 })) {
+      error.push({
+        body: "projectName",
+        message: "Maksimal 60 karakter.",
+      });
     }
 
-    // Cleanup debounce on unmount
-    return () => {
-      debouncedFilter.cancel();
-    };
-  }, [inputValue]);
+    if (
+      project_name != "" &&
+      !validator.matches(project_name, /^[a-zA-Z .'-]+$/)
+    ) {
+      error.push({
+        body: "projectName",
+        message: "Hanya boleh huruf (A-Z, a-z), spasi, karakter (-, ', .).",
+      });
+    }
+
+    //validate school
+    school = school.trim();
+    if (!validator.isLength(school, { min: 5, max: 150 })) {
+      error.push({
+        body: "school",
+        message: "Minimal 5 karakter, maksimal 50.",
+      });
+    }
+    if (!validator.matches(school, /^[a-zA-Z0-9 .'-]+$/)) {
+      error.push({
+        body: "school",
+        message: "Hanya boleh huruf (A-Z, a-z), spasi, karakter (-, ', .).",
+      });
+    }
+
+    //validate file
+    if (!fileImg || fileImg.size > 1048576 * 2) {
+      error.push({
+        body: "file",
+      });
+    }
+
+    if (error.length > 0) {
+      e.preventDefault();
+      setFormErrorData([...error]);
+      return false;
+    }
+    setProjectName(project_name);
+    setSchoolValue((prev) => {
+      return { ...prev, sekolah: school };
+    });
+
+    setFormErrorData([...error]);
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    let validated = validateForm(e);
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("school", schoolValue?.sekolah || "");
+    formData.append("projectName", projectName || "");
+    formData.append("category", category || "");
+    formData.append("location", locationValue || "");
+    formData.append("otherSchool", schoolValue?.other || false);
+
+    if (validated) {
+      fetcher.submit(formData, {
+        method: "post",
+        encType: "multipart/form-data",
+      });
+    }
+  };
 
   return (
     <Container maxWidth="sm">
+      <Snackbar
+        open={alertOpen}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        onClose={() => {
+          setAlertOpen(false);
+          if (!fetcher.data?.error) {
+            navigate(
+              `/${fetcher.data.data.userSlug}/${fetcher.data.data.projectSlug}/build-overview`
+            );
+          }
+        }}
+        autoHideDuration={1000}
+      >
+        <Alert
+          sx={{
+            width: 300,
+          }}
+          onClose={() => setAlertOpen(false)}
+          variant="filled"
+          severity={fetcher.data?.error ? "error" : "success"}
+        >
+          {fetcher.data?.error
+            ? "Terjadi kesalahan. Coba lagi nanti."
+            : fetcher.data?.message}
+        </Alert>
+      </Snackbar>
       <Stack sx={{ my: 10 }}>
         <Typography
           variant="h3"
@@ -107,21 +188,50 @@ function StartProjectMain() {
             Tidak harus diisi sekarang. Kamu tetap bisa mengubahnya nanti.
           </Typography>
           <Stack gap={2} sx={{ mt: 2 }}>
-            <TextField variant="outlined" size="medium" label="Nama proyek" />
+            <TextField
+              variant="outlined"
+              size="medium"
+              type="text"
+              name="projectName"
+              error={Boolean(getError("projectName", formErrorData))}
+              helperText={getError("projectName", formErrorData)?.message}
+              label="Nama proyek"
+              value={projectName}
+              onChange={(e) => {
+                const value = e.target.value;
+                setProjectName(value);
+                //reset error on change
+                setFormErrorData((prevData) => {
+                  return prevData.filter((error) => {
+                    return error.body !== "projectName";
+                  });
+                });
+              }}
+            />
             <Autocomplete
               id="categoryOptions"
-              options={[]}
-              getOptionLabel={(option) => option}
-              // filterSelectedOptions
+              selectOnFocus
+              autoHighlight
+              openOnFocus
+              value={category}
+              options={businessCategories}
+              onChange={(e, value) => {
+                setCategory(value);
+              }}
               renderInput={(params) => (
                 <TextField {...params} label="Pilih kategori" />
               )}
             />
             <LocationAutocomplete
               label="Lokasi"
-              handleLocationChange={(value) =>
-                setLocationValue(value ? value : "")
-              }
+              autoHighlight
+              selectOnFocus
+              openOnFocus
+              value={locationValue}
+              onChange={(e, value) => {
+                console.log(value);
+                setLocationValue(value);
+              }}
             />
           </Stack>
         </Box>
@@ -143,95 +253,26 @@ function StartProjectMain() {
               Apa nama sekolahmu?*
             </Typography>
             <Typography variant="caption" color="textSecondary">
-              Ketik sekolahmu dan tunggu sejenak. Jika tidak ada, pilih
+              Ketik nama sekolahmu dan tunggu sejenak. Jika tidak ada, pilih
               "Tambahkan".
             </Typography>
-            <Autocomplete
-              freeSolo
-              selectOnFocus
-              clearOnBlur
-              handleHomeEndKeys
-              id="school-options"
-              options={schools.map((school) => {
-                return { id: school.id, sekolah: school.sekolah };
-              })}
-              loading={loadingSchool}
+            <SchoolAutocomplete
+              autoHighlight
+              error={Boolean(getError("school", formErrorData))}
+              helperText={getError("school", formErrorData)?.message}
+              onChange={(e, val) => {
+                //reset error on change
+                setFormErrorData((prevData) => {
+                  return prevData.filter((error) => {
+                    return error.body !== "school";
+                  });
+                });
+              }}
               value={schoolValue}
-              onClose={() => {
-                setLoadingSchool(false);
-                debouncedFilter.cancel();
-              }}
-              onChange={(event, newValue) => {
-                if (typeof newValue === "string") {
-                  setSchoolValue({
-                    id: "Others",
-                    sekolah: newValue.toUpperCase(),
-                  });
-                } else if (newValue && newValue.inputValue) {
-                  // Create a new value from the user input
-                  setSchoolValue({
-                    id: "Others",
-                    sekolah: newValue.inputValue.toUpperCase(),
-                  });
-                } else {
-                  setSchoolValue(newValue);
-                }
-                console.log(newValue);
-              }}
-              onInputChange={(event, newValue) => {
-                if (newValue.toLowerCase() !== inputValue.toLowerCase()) {
-                  setOnDebounce(true);
-                  setInputValue(newValue);
-                }
-              }}
-              getOptionLabel={(option) => {
-                if (typeof option === "string") {
-                  return option;
-                }
-
-                return option.sekolah;
-              }}
-              getOptionKey={(option) => option.id}
-              filterSelectedOptions
-              filterOptions={(options, params) => {
-                const { inputValue } = params;
-                if (inputValue !== "" && options.length === 0 && !onDebounce) {
-                  options.push({
-                    inputValue,
-                    sekolah: `Tambahkan "${inputValue.toUpperCase()}"`,
-                  });
-                }
-                return options;
-              }}
-              renderOption={(props, option) => {
-                const { key, ...optionProps } = props;
-                return (
-                  <li key={key} {...optionProps}>
-                    {option.sekolah}
-                  </li>
-                );
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Nama sekolah"
-                  slotProps={{
-                    input: {
-                      ...params.InputProps,
-                      endAdornment: (
-                        <>
-                          {loadingSchool ? (
-                            <CircularProgress color="inherit" size={20} />
-                          ) : null}
-                          {params.InputProps.endAdornment}
-                        </>
-                      ),
-                    },
-                  }}
-                />
-              )}
+              setSchoolValue={setSchoolValue}
               sx={{ mt: 2 }}
             />
+
             <Typography
               sx={{ mt: 3 }}
               variant="body1"
@@ -253,30 +294,62 @@ function StartProjectMain() {
               <Button
                 component="label"
                 variant="outlined"
+                color={
+                  Boolean(getError("file", formErrorData)) ? "error" : "primary"
+                }
                 startIcon={<UploadFile />}
               >
-                Unggah
+                {"Pilih file"}
                 <VisuallyHiddenInput
                   type="file"
-                  onClick={() => {
-                    if (file) setFile(null);
+                  value={file?.filename || ""}
+                  onClick={(event) => {
+                    event.target.value = "";
+                    setFormErrorData((prevData) => {
+                      return prevData.filter((error) => {
+                        return error.body !== "file";
+                      });
+                    });
+                    setFile(null);
                   }}
                   onChange={(event) => {
-                    console.log(event.target.files[0]);
-                    setFile(event.target.files[0]);
+                    const file = event.target.files[0];
+                    event.target.value = "";
+
+                    console.log(file);
+                    if (file) {
+                      setFile(file);
+                    } else {
+                      setFile(null);
+                    }
                   }}
-                  accept="image/png, image/jpg, image/jpeg"
+                  accept=" image/jpg, image/jpeg"
                 />
               </Button>
-              {file && (
+              <Stack justifyContent="center">
                 <Typography
                   variant="caption"
-                  color="textSecondary"
-                  sx={{ alignSelf: { xs: "start", sm: "center" } }}
+                  color={
+                    Boolean(getError("file", formErrorData))
+                      ? "error"
+                      : "textSecondary"
+                  }
+                  // sx={{ alignSelf: { xs: "start" } }}
                 >
-                  {file.name}
+                  {file && file.name}
                 </Typography>
-              )}
+                <Typography
+                  variant="caption"
+                  color={
+                    Boolean(getError("file", formErrorData))
+                      ? "error"
+                      : "textSecondary"
+                  }
+                  // sx={{ alignSelf: { xs: "start" } }}
+                >
+                  {"Pilih 1 file berupa gambar (jpg/jpeg), ukuran maks 2MB."}
+                </Typography>
+              </Stack>
             </Stack>
             <Typography variant="caption" color="textSecondary" sx={{ mt: 3 }}>
               *Harus diisi. Pastikan data sekolah sudah benar karena tidak bisa
@@ -285,10 +358,18 @@ function StartProjectMain() {
           </Stack>
         </Box>
         <Stack direction={{ xs: "column", sm: "row" }} gap={2} sx={{ mt: 3 }}>
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            loading={busy}
+            loadingPosition="start"
+            type="button"
+            color="primary"
+            onClick={handleSubmit}
+            // onSubmit={handleSubmit}
+          >
             lanjutkan membuat
           </Button>
-          <Button variant="outlined" color="error">
+          <Button variant="outlined" color="error" component={Link} to="..">
             batalkan
           </Button>
         </Stack>
@@ -297,4 +378,27 @@ function StartProjectMain() {
   );
 }
 
+export const startProjectMainAction = async ({ request }) => {
+  await new Promise((resolve, reject) => setTimeout(() => resolve(), 2000));
+  const formData = await request.formData();
+
+  let token = Cookies.get("jwt") || "";
+  const requestOptions = {
+    method: "POST",
+    body: formData,
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+    redirect: "follow",
+  };
+
+  const response = await fetch(
+    "http://localhost:8000/start-project",
+    requestOptions
+  );
+
+  const data = await response.json();
+
+  return data;
+};
 export default StartProjectMain;
