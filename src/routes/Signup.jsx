@@ -90,11 +90,6 @@ function Signup() {
 
     //sanitize and validate email
     email = validator.trim(email);
-    if (email.length > 0) {
-      email = validator.normalizeEmail(email);
-    }
-    console.log(email, email.length);
-
     if (validator.isEmpty(email)) {
       error.push({
         body: "email",
@@ -106,6 +101,8 @@ function Signup() {
         body: "email",
         message: "Masukkan format email yang benar.",
       });
+    } else {
+      email = validator.normalizeEmail(email);
     }
 
     //sanitize and validate name

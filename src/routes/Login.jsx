@@ -83,9 +83,6 @@ function Login() {
     let { email, password } = form;
 
     email = validator.trim(email);
-    if (email.length > 0) {
-      email = validator.normalizeEmail(email);
-    }
     if (email.length === 0) {
       error.push({
         body: "email",
@@ -97,6 +94,8 @@ function Login() {
         body: "email",
         message: "Masukkan email yang benar.",
       });
+    } else {
+      email = validator.normalizeEmail(email);
     }
     if (password.length === 0) {
       error.push({
