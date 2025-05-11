@@ -47,6 +47,11 @@ function StartProjectMain() {
         setCategory("");
         setProjectName("");
       }
+      if (fetcher.data.refreshToken) {
+        Cookies.set("jwt", authData.data.refreshToken, {
+          expires: 15 / 1440,
+        });
+      }
     }
   }, [fetcher.data]);
 
