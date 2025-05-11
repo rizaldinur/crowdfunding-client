@@ -7,15 +7,25 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Link as RouterLink, useLocation } from "react-router";
+import {
+  Link as RouterLink,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router";
 import CircularProgressWithLabel from "../progress/CircularProgressWithLabel";
-import { Timer } from "@mui/icons-material";
+import { DoneAll, Timer } from "@mui/icons-material";
+import { useMemo } from "react";
 
-function OverviewMain() {
+function OverviewMain({ data }) {
   const location = useLocation();
-  const buildLocation =
-    location.pathname.split("/").slice(0, -1).join("/") + "/edit";
-  console.log(buildLocation);
+  const params = useParams();
+  const navigate = useNavigate();
+
+  const buildLocation = useMemo(() => {
+    let basePath = `/${params.profileId}/${params.projectId}/edit`;
+    return basePath;
+  });
 
   return (
     <Container maxWidth="md" sx={{ color: "text.primary", mt: 4 }}>
@@ -35,7 +45,7 @@ function OverviewMain() {
             color: "text.primary",
           }}
         >
-          <CircularProgressWithLabel value={75} />
+          <CircularProgressWithLabel value={data.basicProgress} />
           <Stack>
             <Typography variant="h6" fontWeight={700}>
               Dasar
@@ -60,7 +70,7 @@ function OverviewMain() {
             borderColor: "divider",
           }}
         >
-          <CircularProgressWithLabel value={75} />
+          <CircularProgressWithLabel value={data.storyProgress} />
           <Stack>
             <Typography variant="h6" fontWeight={700}>
               Cerita
@@ -86,7 +96,7 @@ function OverviewMain() {
             borderColor: "divider",
           }}
         >
-          <CircularProgressWithLabel value={75} />
+          <CircularProgressWithLabel value={data.profileProgress} />
           <Stack>
             <Typography variant="h6" fontWeight={700}>
               Profil
@@ -99,8 +109,6 @@ function OverviewMain() {
         <Stack
           direction="row"
           alignItems="center"
-          component={RouterLink}
-          to={buildLocation + "/payment"}
           gap={2}
           sx={{
             textDecoration: "none",
@@ -110,15 +118,25 @@ function OverviewMain() {
             borderColor: "divider",
           }}
         >
-          <CircularProgressWithLabel value={75} />
+          <CircularProgressWithLabel value={data.paymentProgress} />
           <Stack>
-            <Typography variant="h6" fontWeight={700}>
+            <Link
+              variant="h6"
+              underline="hover"
+              color="textPrimary"
+              component={RouterLink}
+              to={buildLocation + "/payment"}
+              fontWeight={700}
+            >
               Pembayaran
-            </Typography>
+            </Link>
             <Typography variant="body2">
-              Verifikasi akun tujuan pengiriman dana proyek terkumpul. Proses
-              ini memakan waktu 1x24 jam. Jika melebihi, tolong{" "}
-              <Link>hubungi kami.</Link>
+              Verifikasi akun tujuan pengiriman dana proyek yang sudah
+              terkumpul. Proses ini memakan waktu 1x24 jam. Jika melebihi,
+              tolong{" "}
+              <Link href="/" underline="hover" color="secondary">
+                hubungi kami.
+              </Link>
             </Typography>
           </Stack>
         </Stack>
@@ -127,9 +145,29 @@ function OverviewMain() {
             Jika sudah melengkapi semua detail informasi tentang proyekmu,
             submit proyekmu untuk ditinjau.
           </Typography>
-          <Button variant="contained" disabled>
-            Submit proyek
-          </Button>
+          {data.buildStatus === "draft" && (
+            <Button
+              variant="contained"
+              disabled={
+                data.basicProgress !== 100 &&
+                data.storyProgress !== 100 &&
+                data.profileProgress !== 100 &&
+                data.paymentProgress !== 100
+              }
+            >
+              Submit proyek
+            </Button>
+          )}
+          {data.buildStatus === "onreview" && (
+            <Button disabled variant="text" startIcon={<DoneAll />}>
+              Sudah dikirim
+            </Button>
+          )}
+          {data.buildStatus === "accept" && (
+            <Button disabled variant="text" startIcon={<DoneAll />}>
+              Sudah dikirim
+            </Button>
+          )}
         </Stack>
         <Stack
           direction="row"
@@ -147,13 +185,16 @@ function OverviewMain() {
             <Typography variant="body2">
               Kami akan meninjau proyek untuk memastikan jika memenuhi syarat
               dan ketentuan kami. Mohon tunggu 1-3 hari untuk mendapat respon
-              dari kami. Jika melebihi, tolong <Link>hubungi kami.</Link>
+              dari kami. Jika melebihi, tolong{" "}
+              <Link href="/" underline="hover" color="secondary">
+                hubungi kami.
+              </Link>
             </Typography>
           </Stack>
         </Stack>
         <Stack alignItems="start" gap={1} sx={{ p: 3 }}>
           <Typography variant="body2">Luncurkan proyekmu!</Typography>
-          <Button variant="contained" disabled>
+          <Button variant="contained" disabled={data.buildStatus !== "accept"}>
             luncurkan
           </Button>
         </Stack>

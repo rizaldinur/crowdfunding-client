@@ -21,7 +21,7 @@ import BackedProjectsPanel from "./components/profile/BackedProjectsPanel.jsx";
 import SettingsLayout from "./routes/layouts/SettingsLayout.jsx";
 import AccountSettings from "./components/settings-account/AccountSettings.jsx";
 import ProfileSettings from "./components/settings-account/ProfileSettings.jsx";
-import BuildOverview from "./routes/BuildOverview.jsx";
+import BuildOverview, { buildOverviewLoader } from "./routes/BuildOverview.jsx";
 import LoadingPage from "./components/LoadingPage.jsx";
 import StartProjectMain, {
   startProjectMainAction,
@@ -91,6 +91,7 @@ const router = createBrowserRouter([
       {
         path: "/:profileId/:projectId/build-overview",
         element: <BuildOverview />,
+        loader: buildOverviewLoader,
       },
       // {
       //   path: "/:profileId/:projectId/build",
