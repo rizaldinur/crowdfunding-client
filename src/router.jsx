@@ -30,7 +30,9 @@ import LoadingPage from "./components/LoadingPage.jsx";
 import StartProjectMain, {
   startProjectMainAction,
 } from "./components/start-project/StartProjectMain.jsx";
-import CreatedProjectsPanel from "./components/profile/CreatedProjectsPanel.jsx";
+import CreatedProjectsPanel, {
+  createdProjectsPanelLoader,
+} from "./components/profile/CreatedProjectsPanel.jsx";
 
 const router = createBrowserRouter([
   {
@@ -83,7 +85,11 @@ const router = createBrowserRouter([
               },
               { path: "backed", element: <BackedProjectsPanel /> },
               // { path: "saved", element: <SavedProjects /> },
-              { path: "projects", element: <CreatedProjectsPanel /> },
+              {
+                path: "projects",
+                element: <CreatedProjectsPanel />,
+                loader: createdProjectsPanelLoader,
+              },
             ],
           },
 
