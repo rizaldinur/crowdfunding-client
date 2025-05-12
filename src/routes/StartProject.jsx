@@ -9,11 +9,15 @@ import {
   Outlet,
   useFetcher,
   useLoaderData,
+  useLocation,
   useNavigate,
 } from "react-router";
 import LoadingPage from "../components/LoadingPage";
+import { setToken } from "../utils/utils";
 
 function StartProject() {
+  const location = useLocation();
+
   useEffect(() => {
     document.title = "Mulai Proyek";
   }, []);
@@ -26,16 +30,13 @@ function StartProject() {
       <Await resolve={authData}>
         {(authData) => {
           useEffect(() => {
-            if (!authData.data?.authenticated) {
-              navigate("/login");
-              return;
-            }
             if (authData.data?.refreshToken) {
-              Cookies.set("jwt", authData.data.refreshToken, {
-                expires: 15 / 1440,
-              });
+              setToken(authData.data.refreshToken);
             }
           }, [authData]);
+          if (!authData.data?.authenticated) {
+            return <Navigate to="/login" state={{ from: location }} />;
+          }
           return (
             <>
               <AuthNav />

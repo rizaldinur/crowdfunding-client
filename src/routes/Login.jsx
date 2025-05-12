@@ -19,6 +19,7 @@ import {
   Link as RouterLink,
   useFetcher,
   useLoaderData,
+  useLocation,
   useNavigate,
 } from "react-router";
 import { Form, useOutletContext } from "react-router";
@@ -32,6 +33,12 @@ import validator from "validator";
 import { postLogin, authenticateJWT } from "../api/api";
 
 function Login() {
+  const location = useLocation();
+  console.log(location);
+
+  const from = location.state?.from?.pathname || "/";
+  console.log(from);
+
   useEffect(() => {
     document.title = "Masuk";
   }, []);
@@ -120,8 +127,8 @@ function Login() {
     <Suspense fallback={<LoadingPage />}>
       <Await resolve={authData}>
         {(authData) => {
-          if (authData.data.authenticated) {
-            return <Navigate to=".." replace />;
+          if (authData.data?.authenticated) {
+            return <Navigate to={from} replace />;
           }
           return (
             <>
@@ -147,7 +154,7 @@ function Login() {
                 anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 onClose={() => {
                   setAlertSuccessOpen(false);
-                  navigate("/", { replace: true });
+                  navigate(from, { replace: true });
                 }}
                 autoHideDuration={1000}
               >
