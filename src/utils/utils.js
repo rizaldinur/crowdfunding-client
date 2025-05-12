@@ -1,8 +1,15 @@
+import Cookies from "js-cookie";
+
 export const getError = (body, errorData = []) => {
   const error = errorData.find((error) => {
     return error.body === body;
   });
   return error;
+};
+
+export const getToken = () => {
+  let token = Cookies.get("jwt") || "";
+  return token;
 };
 
 export const assignMenuPath = (path, param) => {
