@@ -23,6 +23,8 @@ function ErrorBoundary() {
   }, []);
 
   let errorContent;
+  console.log(isRouteErrorResponse(error), error instanceof Error);
+
   if (isRouteErrorResponse(error)) {
     let errorMessage =
       error.status === 404
@@ -71,10 +73,10 @@ function ErrorBoundary() {
     errorContent = (
       <>
         <Typography variant="h3" color="textSecondary">
-          500
+          {error.status || 500}
         </Typography>
         <Typography variant="h2" color="textPrimary" marginBottom={4}>
-          Something went wrong
+          {error.statusText || "Something went wrong"}
         </Typography>
         <Button component={Link} to="/" type="button" variant="contained">
           HOME
