@@ -34,24 +34,14 @@ CustomTabPanel.propTypes = {
 
 function ProfileTabs() {
   const location = useLocation();
-  console.log(location);
   const tabSegment = location.pathname.split("/")[3];
-
-  console.log(location.pathname.split("/"));
-
-  const tabValue =
-    location.state?.tabValue ||
-    (tabSegment === "about"
-      ? 0
-      : tabSegment === "backed"
-      ? 1
-      : tabSegment === "saved"
-      ? 2
-      : tabSegment === "projects"
-      ? 3
-      : null);
-
-  console.log(tabValue);
+  const tabMap = {
+    about: 0,
+    backed: 1,
+    saved: 2,
+    projects: 3,
+  };
+  const tabValue = location.state?.tabValue ?? tabMap[tabSegment] ?? null;
 
   return (
     <Box
@@ -94,8 +84,8 @@ function ProfileTabs() {
           />
           <Tab
             label="Proyek buatanmu"
-            // component={RouterLink}
-            // to="comments"
+            component={RouterLink}
+            to="projects"
             state={{ tabValue: 3 }}
             {...a11yProps(3)}
           />
