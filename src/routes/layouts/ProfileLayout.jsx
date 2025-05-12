@@ -7,7 +7,7 @@ import {
 } from "react-router";
 import ProfileTabs from "../../components/profile/ProfileTabs";
 import { Box } from "@mui/material";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import ProfileHead from "../../components/profile/ProfileHead";
 import LoadingPage from "../../components/LoadingPage";
 import Cookies from "js-cookie";
@@ -25,6 +25,9 @@ function ProfileLayout() {
     <Suspense fallback={<LoadingPage />}>
       <Await resolve={profileHeader}>
         {(profileHeader) => {
+          useEffect(() => {
+            document.title = `Profil ${profileHeader.data.userName}`;
+          }, [profileHeader]);
           if (profileHeader.error) {
             return <Navigate to="/" />;
           }
