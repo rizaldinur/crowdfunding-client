@@ -64,7 +64,7 @@ function ProfileTabs({ authorized }) {
           <Tab
             label="Tentang"
             component={RouterLink}
-            to="about"
+            to="."
             state={{ tabValue: 0 }}
             {...a11yProps(0)}
           />
