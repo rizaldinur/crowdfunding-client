@@ -15,7 +15,9 @@ import { Typography } from "@mui/material";
 import UpdatePanel from "./components/project-details/UpdatePanel.jsx";
 import FaqsPanel from "./components/project-details/FaqsPanel.jsx";
 import CommentsPanel from "./components/project-details/CommentsPanel.jsx";
-import AboutPanel from "./components/profile/AboutPanel.jsx";
+import AboutPanel, {
+  profileAboutLoader,
+} from "./components/profile/AboutPanel.jsx";
 import ProfileLayout, {
   loaderProfileLayout,
 } from "./routes/layouts/ProfileLayout.jsx";
@@ -74,7 +76,11 @@ const router = createBrowserRouter([
             loader: loaderProfileLayout,
             children: [
               { index: true, element: <Navigate to="about" /> },
-              { path: "about", element: <AboutPanel /> },
+              {
+                path: "about",
+                element: <AboutPanel />,
+                loader: profileAboutLoader,
+              },
               { path: "backed", element: <BackedProjectsPanel /> },
               // { path: "saved", element: <SavedProjects /> },
               { path: "projects", element: <CreatedProjectsPanel /> },
