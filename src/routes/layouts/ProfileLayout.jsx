@@ -5,12 +5,12 @@ import { useEffect } from "react";
 import ProfileHead from "../../components/profile/ProfileHead";
 
 function ProfileLayout() {
-  const { pathname } = useLocation();
-
+  const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname]);
-  document.title = "Profil";
+    document.title = "Profil";
+  }, [location]);
+
   return (
     <>
       <ProfileHead />
@@ -21,5 +21,14 @@ function ProfileLayout() {
     </>
   );
 }
+
+const getProfileHeader = async () => {
+  const response = await fetch();
+};
+
+export const loaderProfileLayout = ({ params }) => {
+  const { profileId } = params;
+  console.log(params);
+};
 
 export default ProfileLayout;

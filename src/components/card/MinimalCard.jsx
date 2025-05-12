@@ -3,13 +3,21 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Chip,
   Link,
   Stack,
   Typography,
 } from "@mui/material";
 import useThemeContext from "../../hooks/useThemeContext";
 
-function MinimalCard() {
+function MinimalCard({
+  projectImage,
+  projectName,
+  creatorAvatar,
+  creatorName,
+  creatorSchool,
+  status,
+}) {
   const { currentTheme } = useThemeContext();
   console.log(currentTheme);
 
@@ -18,6 +26,7 @@ function MinimalCard() {
       elevation={0}
       sx={{
         display: "flex",
+        position: "relative",
         width: 1,
         bgcolor: currentTheme === "dark" ? "background.paper" : "initial",
         transition: "0.2s",
@@ -57,6 +66,23 @@ function MinimalCard() {
           </Stack>
         </Stack>
       </CardContent>
+      <Chip
+        label="Draft"
+        sx={{
+          ml: "auto",
+          mt: 1,
+          mr: 1,
+        }}
+        color={
+          status === "onreview"
+            ? "info"
+            : status === "accept"
+            ? "success"
+            : status === "campaign"
+            ? "primary"
+            : "default"
+        }
+      />
     </Card>
   );
 }

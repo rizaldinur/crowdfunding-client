@@ -16,7 +16,9 @@ import UpdatePanel from "./components/project-details/UpdatePanel.jsx";
 import FaqsPanel from "./components/project-details/FaqsPanel.jsx";
 import CommentsPanel from "./components/project-details/CommentsPanel.jsx";
 import AboutPanel from "./components/profile/AboutPanel.jsx";
-import ProfileLayout from "./routes/layouts/ProfileLayout.jsx";
+import ProfileLayout, {
+  loaderProfileLayout,
+} from "./routes/layouts/ProfileLayout.jsx";
 import BackedProjectsPanel from "./components/profile/BackedProjectsPanel.jsx";
 import SettingsLayout from "./routes/layouts/SettingsLayout.jsx";
 import AccountSettings from "./components/settings-account/AccountSettings.jsx";
@@ -26,6 +28,7 @@ import LoadingPage from "./components/LoadingPage.jsx";
 import StartProjectMain, {
   startProjectMainAction,
 } from "./components/start-project/StartProjectMain.jsx";
+import CreatedProjectsPanel from "./components/profile/CreatedProjectsPanel.jsx";
 
 const router = createBrowserRouter([
   {
@@ -68,12 +71,13 @@ const router = createBrowserRouter([
           {
             path: "profile/:profileId",
             element: <ProfileLayout />,
+            loader: loaderProfileLayout,
             children: [
               { index: true, element: <Navigate to="about" /> },
               { path: "about", element: <AboutPanel /> },
               { path: "backed", element: <BackedProjectsPanel /> },
               // { path: "saved", element: <SavedProjects /> },
-              // { path: "projects", element: <CreatedProjects /> },
+              { path: "projects", element: <CreatedProjectsPanel /> },
             ],
           },
 

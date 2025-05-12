@@ -1,6 +1,6 @@
 import { Avatar, Container, Stack, Typography } from "@mui/material";
 
-function ProfileHead() {
+function ProfileHead({ avatar, userName, totalSupportedProjects, joinDate }) {
   return (
     <Container maxWidth="md">
       <Stack sx={{ py: 5, placeSelf: "center", alignItems: "center" }} gap={2}>
