@@ -8,15 +8,19 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { Link as RouterLink } from "react-router";
 import useThemeContext from "../../hooks/useThemeContext";
 
 function MinimalCard({
+  profileId,
+  projectId,
   projectImage,
   projectName,
   creatorAvatar,
   creatorName,
-  creatorSchool,
+  school,
   status,
+  createdAt,
 }) {
   const { currentTheme } = useThemeContext();
   console.log(currentTheme);
@@ -26,6 +30,7 @@ function MinimalCard({
       elevation={0}
       sx={{
         display: "flex",
+        flexDirection: { xs: "column", sm: "row" },
         position: "relative",
         width: 1,
         bgcolor: currentTheme === "dark" ? "background.paper" : "initial",
@@ -42,32 +47,45 @@ function MinimalCard({
         sx={{
           borderRadius: 1,
           flexShrink: 0,
-          width: 300,
+          width: { xs: 1, sm: 300 },
           aspectRatio: "16/9",
         }}
-        image="https://images2.alphacoders.com/247/247360.jpg"
+        image={
+          projectImage ||
+          "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+        }
         title="green iguana"
       />
-      <CardContent sx={{ placeSelf: "center", minWidth: 0 }}>
+      <CardContent
+        sx={{ placeSelf: { xs: "start", sm: "center" }, minWidth: 0 }}
+      >
         <Stack sx={{ minWidth: 0 }}>
-          <Link variant="h4" underline="hover" color="textPrimary" noWrap>
-            Project name
+          <Link
+            variant="h4"
+            underline="hover"
+            color="textPrimary"
+            noWrap
+            component={RouterLink}
+            to={`/${profileId}/${projectId}/build-overview`}
+          >
+            {projectName || "Proyek tanpa nama"}
           </Link>
+          <Typography variant="caption">{`Dibuat pada ${createdAt}`}</Typography>
         </Stack>
         <Stack direction="row" alignItems="center" gap={1} sx={{ mt: 1 }}>
-          <Avatar sx={{ width: 50, height: 50 }} />
+          <Avatar sx={{ width: 50, height: 50 }} src={creatorAvatar} />
           <Stack>
             <Link variant="subtitle2" underline="hover" color="textPrimary">
-              Project creator
+              {creatorName || "Kreator"}
             </Link>
             <Typography variant="caption" color="textSecondary">
-              School name
+              {school || "Asal sekolah"}
             </Typography>
           </Stack>
         </Stack>
       </CardContent>
       <Chip
-        label="Draft"
+        label={typeof status === "string" ? status.toUpperCase() : "Label"}
         sx={{
           ml: "auto",
           mt: 1,
