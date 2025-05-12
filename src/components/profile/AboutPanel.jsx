@@ -1,11 +1,18 @@
 import { OpenInNew } from "@mui/icons-material";
-import { Button, Container, Stack, Typography } from "@mui/material";
+import { Button, Container, Link, Stack, Typography } from "@mui/material";
 import ProfilePanelLoading from "./skeleton/ProfilePanelLoading";
-import { Await, useLoaderData, useOutletContext } from "react-router";
+import {
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useParams,
+} from "react-router";
 import { Suspense } from "react";
+import { Link as RouterLink } from "react-router";
 
 function AboutPanel() {
   const { authorized } = useOutletContext();
+  const { profileId } = useParams();
   console.log(authorized);
 
   const { aboutData } = useLoaderData();
@@ -38,6 +45,8 @@ function AboutPanel() {
                       variant="outlined"
                       color="inherit"
                       startIcon={<OpenInNew />}
+                      component={RouterLink}
+                      to={`/settings/${profileId}`}
                     >
                       Edit biografi
                     </Button>
@@ -57,13 +66,19 @@ const getProfileAbout = async (path) => {
   let url = `${baseUrl}${path}`;
 
   const response = await fetch(url);
+  if (!response.ok) {
+    throw new Response("Not Found", {
+      status: response.status,
+      statusText: response.statusText,
+    });
+  }
   const data = await response.json();
   return data;
 };
 
 export const profileAboutLoader = ({ params, request }) => {
   const url = new URL(request.url);
-  const pathname = url.pathname;
+  const pathname = url.pathname + "/about";
 
   return { aboutData: getProfileAbout(pathname) };
 };
