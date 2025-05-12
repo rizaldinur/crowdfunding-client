@@ -77,9 +77,8 @@ const router = createBrowserRouter([
             element: <ProfileLayout />,
             loader: loaderProfileLayout,
             children: [
-              { index: true, element: <Navigate to="about" /> },
               {
-                path: "about",
+                index: true,
                 element: <AboutPanel />,
                 loader: profileAboutLoader,
               },
@@ -97,8 +96,7 @@ const router = createBrowserRouter([
             path: "settings/:profileId",
             element: <SettingsLayout />,
             children: [
-              { index: true, element: <Navigate to="profile" /> },
-              { path: "profile", element: <ProfileSettings /> },
+              { index: true, element: <ProfileSettings /> },
               { path: "account", element: <AccountSettings /> },
             ],
           },
