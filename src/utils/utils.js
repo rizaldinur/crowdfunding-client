@@ -12,6 +12,12 @@ export const getToken = () => {
   return token;
 };
 
+export const setToken = (token) => {
+  Cookies.set("jwt", token, {
+    expires: 15 / 1440,
+  });
+};
+
 export const assignMenuPath = (path, param) => {
   let completePath;
   switch (path) {
