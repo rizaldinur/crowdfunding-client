@@ -44,6 +44,7 @@ function MainHeader({ user, slug, avatar, authenticated }) {
   const [openSearchBar, setOpenSearchBar] = useState(false); // Search bar visibility toggle
 
   const handleSelectThemeChange = (event) => {
+    localStorage.setItem("theme", event.target.value);
     setCurrentTheme(event.target.value);
   };
 
