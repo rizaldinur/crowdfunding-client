@@ -32,7 +32,7 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-function ProfileTabs() {
+function ProfileTabs({ authorized }) {
   const location = useLocation();
   const tabSegment = location.pathname.split("/")[3];
   const tabMap = {
@@ -68,27 +68,33 @@ function ProfileTabs() {
             state={{ tabValue: 0 }}
             {...a11yProps(0)}
           />
-          <Tab
-            label="Didukung"
-            component={RouterLink}
-            to="backed"
-            state={{ tabValue: 1 }}
-            {...a11yProps(1)}
-          />
-          <Tab
-            label="Disimpan"
-            // component={RouterLink}
-            // to="faqs"
-            state={{ tabValue: 2 }}
-            {...a11yProps(2)}
-          />
-          <Tab
-            label="Proyek buatanmu"
-            component={RouterLink}
-            to="projects"
-            state={{ tabValue: 3 }}
-            {...a11yProps(3)}
-          />
+          {authorized && (
+            <Tab
+              label="Didukung"
+              component={RouterLink}
+              to="backed"
+              state={{ tabValue: 1 }}
+              {...a11yProps(1)}
+            />
+          )}
+          {authorized && (
+            <Tab
+              label="Disimpan"
+              component={RouterLink}
+              to="saved"
+              state={{ tabValue: 2 }}
+              {...a11yProps(2)}
+            />
+          )}
+          {authorized && (
+            <Tab
+              label="Proyek buatanmu"
+              component={RouterLink}
+              to="projects"
+              state={{ tabValue: 3 }}
+              {...a11yProps(3)}
+            />
+          )}{" "}
         </Tabs>
       </Container>
     </Box>
