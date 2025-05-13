@@ -8,7 +8,7 @@ import { Await, Navigate, useLoaderData, useLocation } from "react-router";
 import Cookies from "js-cookie";
 import { authenticateJWT } from "../api/api";
 import LoadingPage from "../components/LoadingPage";
-import { setToken } from "../utils/utils";
+import { getToken, setToken } from "../utils/utils";
 
 function BuildOverview() {
   const location = useLocation();
@@ -21,7 +21,6 @@ function BuildOverview() {
       <Await resolve={data}>
         {(data) => {
           useEffect(() => {
-            console.log(data);
             if (data.data?.refreshToken) {
               setToken(data.data?.refreshToken);
             }
@@ -40,7 +39,10 @@ function BuildOverview() {
           return (
             <>
               <AuthNav />
-              <OverviewHead />
+              <OverviewHead
+                projectName={data.data.projectName}
+                creatorName={data.data.creatorName}
+              />
               <OverviewMain data={data.data} />
               <Divider />
               <MainFooter />
@@ -52,9 +54,9 @@ function BuildOverview() {
   );
 }
 
-const getBuildOverviewData = async (profileId, projectId) => {
-  let url = `http://localhost:8000/${profileId}/${projectId}/build-overview`;
-  let token = Cookies.get("jwt") || "";
+const getBuildOverviewData = async (path) => {
+  let url = `http://localhost:8000${path}`;
+  let token = getToken();
   const response = await fetch(url, {
     method: "get",
     headers: {
@@ -67,11 +69,10 @@ const getBuildOverviewData = async (profileId, projectId) => {
 };
 
 export const buildOverviewLoader = ({ request, params }) => {
-  const { profileId, projectId } = params;
-  console.log({ profileId, projectId });
+  const pathname = new URL(request.url).pathname;
 
   return {
-    data: getBuildOverviewData(profileId, projectId),
+    data: getBuildOverviewData(pathname),
   };
 };
 

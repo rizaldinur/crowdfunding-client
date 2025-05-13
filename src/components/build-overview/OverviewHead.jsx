@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 
-function OverviewHead() {
+function OverviewHead({ projectName, creatorName }) {
   return (
     <Container maxWidth="md">
       <Box
@@ -17,9 +17,11 @@ function OverviewHead() {
           pt: 6,
         }}
       >
-        <Typography variant="h3">Project name</Typography>
+        <Typography variant="h3">
+          {projectName || "Proyek tanpa nama"}
+        </Typography>
         <Typography variant="subtitle1" color="textSecondary" sx={{ mt: 1 }}>
-          oleh Project Creator
+          oleh {creatorName || "Kreator"}
         </Typography>
         <Stack direction="row" gap={2} sx={{ mt: 4 }}>
           <Button startIcon={<RemoveRedEye />} color="inherit">
