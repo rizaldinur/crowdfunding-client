@@ -33,6 +33,8 @@ import StartProjectMain, {
 import CreatedProjectsPanel, {
   createdProjectsPanelLoader,
 } from "./components/profile/CreatedProjectsPanel.jsx";
+import BuildProjectLayout from "./routes/layouts/BuildProjectLayout.jsx";
+import BasicPage from "./components/build/BasicPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -111,17 +113,16 @@ const router = createBrowserRouter([
         element: <BuildOverview />,
         loader: buildOverviewLoader,
       },
-      // {
-      //   path: "/:profileId/:projectId/build",
-      //   element: <ProtectedRoute user={currentUser} />,
-      //   children: [
-      //     { index: true, element: <Navigate to="basic" /> },
-      //     { path: "basic", element: <BasicPage /> },
-      //     { path: "story", element: <StoryPage /> },
-      //     { path: "payment", element: <PaymentPage /> },
-      //     { path: "preview", element: <PreviewPage /> },
-      //   ],
-      // },
+      {
+        path: "/:profileId/:projectId/build",
+        element: <BuildProjectLayout />,
+        children: [
+          { index: true, path: "basic", element: <BasicPage /> },
+          // { path: "story", element: <StoryPage /> },
+          // { path: "payment", element: <PaymentPage /> },
+          // { path: "preview", element: <PreviewPage /> },
+        ],
+      },
       {
         path: "/login",
         element: <Login />,
