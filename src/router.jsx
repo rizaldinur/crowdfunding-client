@@ -37,7 +37,11 @@ import CreatedProjectsPanel, {
 const router = createBrowserRouter([
   {
     element: <RootLayout />,
-    errorElement: <ErrorBoundary />,
+    errorElement: (
+      <RootLayout>
+        <ErrorBoundary />
+      </RootLayout>
+    ),
     children: [
       {
         path: "/",

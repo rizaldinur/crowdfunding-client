@@ -10,9 +10,10 @@ import themes from "../styles/themes";
 import ThemeContainer from "../components/ThemeContainer";
 import RootLayout from "./layouts/RootLayout";
 import { useEffect, useMemo, useState } from "react";
+import useThemeContext from "../hooks/useThemeContext";
 
 function ErrorBoundary() {
-  const [currentTheme] = useState(localStorage.getItem("theme") || "light");
+  const { currentTheme } = useThemeContext();
   const activeTheme = useMemo(() => themes[currentTheme], [currentTheme]);
 
   const error = useRouteError();
