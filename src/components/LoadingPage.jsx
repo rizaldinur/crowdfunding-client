@@ -2,9 +2,11 @@ import { CircularProgress, Stack, Typography } from "@mui/material";
 import ThemeContainer from "./ThemeContainer";
 import { useMemo, useState } from "react";
 import themes from "../styles/themes";
+import useThemeContext from "../hooks/useThemeContext";
 
 function LoadingPage() {
-  const [currentTheme] = useState(localStorage.getItem("theme") || "light");
+  // const [currentTheme] = useState(localStorage.getItem("theme") || "light");
+  const { currentTheme } = useThemeContext();
 
   const activeTheme = useMemo(() => themes[currentTheme], [currentTheme]);
 

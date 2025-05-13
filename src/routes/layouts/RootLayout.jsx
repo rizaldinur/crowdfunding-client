@@ -11,17 +11,27 @@ export const ThemeContext = createContext(
 export const AuthContext = createContext(null);
 
 function RootLayout({ children }) {
-  const [currentTheme, setCurrentTheme] = useState(
-    localStorage.getItem("theme") || "light"
-  );
+  const [currentTheme, setCurrentTheme] = useState(getPreferredTheme());
   const [token, setToken] = useState(null);
+
+  //handle theming
+  function getPreferredTheme() {
+    const stored = localStorage.getItem("theme");
+    if (stored === "light" || stored === "dark") return stored;
+
+    // "system" or not set at all
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  }
 
   useEffect(() => {
     const handleStorageChange = (e) => {
-      if (e.key === "theme") {
+      if (e.key === "theme" && e.newValue !== null) {
         console.log("localStorage changed!", e.newValue);
         setCurrentTheme(e.newValue);
-      }
+      } else if (e.key === "theme" && e.newValue === null)
+        setCurrentTheme(getPreferredTheme());
     };
 
     window.addEventListener("storage", handleStorageChange);
