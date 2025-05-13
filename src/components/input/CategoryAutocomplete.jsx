@@ -4,6 +4,7 @@ import { businessCategories } from "../../data/staticData";
 function CategoryAutocomplete({ label, ...props }) {
   return (
     <Autocomplete
+      {...props}
       freeSolo={false}
       selectOnFocus
       autoHighlight
