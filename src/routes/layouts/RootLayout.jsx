@@ -17,6 +17,18 @@ function RootLayout({ children }) {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === "theme") {
+        console.log("localStorage changed!", e.newValue);
+        setCurrentTheme(e.newValue);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  useEffect(() => {
     const token = Cookies.get("token");
     if (token) {
       setToken(token);
