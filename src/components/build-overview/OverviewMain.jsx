@@ -23,9 +23,9 @@ function OverviewMain({ data }) {
   const navigate = useNavigate();
 
   const buildLocation = useMemo(() => {
-    let basePath = `/${params.profileId}/${params.projectId}/edit`;
+    let basePath = `/${params.profileId}/${params.projectId}/build`;
     return basePath;
-  });
+  }, [location]);
 
   return (
     <Container maxWidth="md" sx={{ color: "text.primary", mt: 4 }}>
