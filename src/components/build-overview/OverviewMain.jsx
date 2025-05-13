@@ -33,8 +33,6 @@ function OverviewMain({ data }) {
       <Box sx={{ mt: 3 }}>
         <Stack
           direction="row"
-          component={RouterLink}
-          to={buildLocation + "/basic"}
           alignItems="center"
           gap={2}
           sx={{
@@ -47,9 +45,16 @@ function OverviewMain({ data }) {
         >
           <CircularProgressWithLabel value={data.basicProgress} />
           <Stack>
-            <Typography variant="h6" fontWeight={700}>
+            <Link
+              variant="h6"
+              fontWeight={700}
+              underline="hover"
+              color="textPrimary"
+              component={RouterLink}
+              to={buildLocation + "/basic"}
+            >
               Dasar
-            </Typography>
+            </Link>
             <Typography variant="body2">
               Tentukan nama proyek, upload gambar utama proyek, dan detail
               selainnya tentang kampanye proyekmu.
@@ -59,8 +64,6 @@ function OverviewMain({ data }) {
         <Stack
           direction="row"
           alignItems="center"
-          component={RouterLink}
-          to={buildLocation + "/story"}
           gap={2}
           sx={{
             textDecoration: "none",
@@ -72,9 +75,16 @@ function OverviewMain({ data }) {
         >
           <CircularProgressWithLabel value={data.storyProgress} />
           <Stack>
-            <Typography variant="h6" fontWeight={700}>
+            <Link
+              variant="h6"
+              underline="hover"
+              color="textPrimary"
+              fontWeight={700}
+              component={RouterLink}
+              to={buildLocation + "/story"}
+            >
               Cerita
-            </Typography>
+            </Link>
             <Typography variant="body2">
               Deskripsikan proyek secara detail, keuntungan apa saja yang kamu
               tawarkan kepada investor, serta jelaskan potensi risiko dan
@@ -85,8 +95,6 @@ function OverviewMain({ data }) {
         <Stack
           direction="row"
           alignItems="center"
-          component={RouterLink}
-          to={buildLocation + "/profile"}
           gap={2}
           sx={{
             textDecoration: "none",
@@ -98,9 +106,16 @@ function OverviewMain({ data }) {
         >
           <CircularProgressWithLabel value={data.profileProgress} />
           <Stack>
-            <Typography variant="h6" fontWeight={700}>
+            <Link
+              variant="h6"
+              underline="hover"
+              color="textPrimary"
+              fontWeight={700}
+              component={RouterLink}
+              to={buildLocation + "/profile"}
+            >
               Profil
-            </Typography>
+            </Link>
             <Typography variant="body2">
               Edit profil yang akan ditampilkan di halaman proyek.
             </Typography>
@@ -149,9 +164,9 @@ function OverviewMain({ data }) {
             <Button
               variant="contained"
               disabled={
-                data.basicProgress !== 100 &&
-                data.storyProgress !== 100 &&
-                data.profileProgress !== 100 &&
+                data.basicProgress !== 100 ||
+                data.storyProgress !== 100 ||
+                data.profileProgress !== 100 ||
                 data.paymentProgress !== 100
               }
             >
