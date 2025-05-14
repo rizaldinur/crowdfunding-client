@@ -17,7 +17,7 @@ function CreatedProjectsPanel() {
             }
           }, [data]);
           if (data.error || !data.data?.authorized) {
-            return <Navigate to="../about" />;
+            return <Navigate to=".." />;
           }
           return (
             <Container maxWidth="md">
