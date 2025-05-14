@@ -1,4 +1,4 @@
-import { RemoveRedEye, Save, SaveAlt } from "@mui/icons-material";
+import { RemoveRedEye, Save } from "@mui/icons-material";
 import { Box, Button, Container, Stack, Tab, Tabs } from "@mui/material";
 import { useLocation, Link as RouterLink } from "react-router";
 import { useFormSubmitContext } from "../../hooks/useFormSubmitContext";
@@ -11,8 +11,8 @@ function a11yProps(index) {
   };
 }
 
-function BuildTabs({ authorized }) {
-  const submitFnRef = useFormSubmitContext();
+function BuildTabs({}) {
+  const { submitFnRef, loading } = useFormSubmitContext();
   const handleClick = () => {
     if (submitFnRef?.current) {
       submitFnRef.current();
@@ -86,6 +86,7 @@ function BuildTabs({ authorized }) {
             </Button>
             <Button
               startIcon={<Save />}
+              loading={loading}
               variant="contained"
               color="secondary"
               onClick={handleClick}
