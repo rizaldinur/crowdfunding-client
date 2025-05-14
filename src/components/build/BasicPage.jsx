@@ -1,8 +1,11 @@
 import {
+  Alert,
   Box,
+  Button,
   Container,
   Grid,
   InputAdornment,
+  Snackbar,
   Stack,
   TextField,
   Typography,
@@ -20,13 +23,21 @@ import "dayjs/locale/en-gb";
 import "dayjs/locale/id";
 import { useEffect, useState } from "react";
 import { useFormSubmitContext } from "../../hooks/useFormSubmitContext";
+import { useFetcher, useNavigate, useParams } from "react-router";
+import { getToken } from "../../utils/utils";
+import { Link as RouterLink } from "react-router";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 function BasicPage() {
-  const submitFnRef = useFormSubmitContext();
+  const navigate = useNavigate();
+  const { projectId: currentSlug, profileId } = useParams();
+  const { submitFnRef, setLoading, setNewSlug } = useFormSubmitContext();
+  let fetcher = useFetcher();
+  let busy = fetcher.state !== "idle";
 
+  const [alertOpen, setAlertOpen] = useState(false);
   const [form, setForm] = useState({
     title: "",
     subtitle: "",
@@ -39,6 +50,31 @@ function BasicPage() {
   });
 
   useEffect(() => {
+    if (fetcher.data) {
+      console.log(fetcher.data);
+      if (!fetcher.data.error) {
+        setAlertOpen(true);
+        if (fetcher.data.data.projectSlug !== currentSlug) {
+          navigate(
+            `/${profileId}/${fetcher.data.data.projectSlug}/build/basic`,
+            {
+              replace: true,
+            }
+          );
+        }
+      }
+    }
+  }, [fetcher.data]);
+
+  useEffect(() => {
+    if (fetcher.state === "idle") {
+      setLoading(false);
+    } else {
+      setLoading(true);
+    }
+  }, [fetcher.state]);
+
+  useEffect(() => {
     if (submitFnRef) {
       submitFnRef.current = handleSubmit;
     }
@@ -46,10 +82,23 @@ function BasicPage() {
 
   const handleSubmit = () => {
     console.log("Form submitted!");
-    console.log(new Date(form.launchDate).toISOString());
-    console.log(form.launchDate.format());
+    // console.log(new Date(form.launchDate).toISOString());
+    // console.log(form.launchDate.format());
 
-    // your actual form submission logic here
+    const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("subtitle", form.subtitle);
+    formData.append("category", form.category);
+    formData.append("location", form.location);
+    formData.append("imageUrl", form.imageUrl);
+    formData.append("fundTarget", form.fundTarget ? form.fundTarget : "");
+    formData.append(
+      "launchDate",
+      form.launchDate == null ? "" : form.launchDate.format()
+    );
+    formData.append("duration", form.duration ? form.fundTarget : "");
+
+    fetcher.submit(formData, { method: "POST" });
   };
   function handleChange(e) {
     const { name, value } = e.target;
@@ -60,6 +109,33 @@ function BasicPage() {
 
   return (
     <Container maxWidth="lg">
+      <Snackbar
+        open={alertOpen}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        onClose={() => {
+          setAlertOpen(false);
+        }}
+      >
+        <Alert
+          sx={{ width: 300 }}
+          variant="filled"
+          severity={fetcher.data?.error ? "error" : "success"}
+          action={
+            !fetcher.data?.error && (
+              <Button
+                component={RouterLink}
+                to="../story"
+                color="inherit"
+                size="small"
+              >
+                Lanjut
+              </Button>
+            )
+          }
+        >
+          {fetcher.data?.message}
+        </Alert>
+      </Snackbar>
       <Box sx={{ py: 6, color: "text.primary" }}>
         <Stack sx={{ mb: 6 }} gap={1}>
           <Typography variant="h4" fontWeight={500}>
@@ -389,5 +465,28 @@ function BasicPage() {
     </Container>
   );
 }
+
+export const basicBuildAction = async ({ request, params }) => {
+  await new Promise((resolve, reject) => setTimeout(() => resolve(), 2000));
+  let baseurl = "http://localhost:8000";
+  const pathname = new URL(request.url).pathname;
+  let url = baseurl + pathname;
+  let token = getToken();
+
+  const formData = await request.formData();
+
+  const postData = Object.fromEntries(formData);
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(postData),
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data = await response.json();
+  return data;
+};
 
 export default BasicPage;

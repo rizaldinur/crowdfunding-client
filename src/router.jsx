@@ -34,7 +34,7 @@ import CreatedProjectsPanel, {
   createdProjectsPanelLoader,
 } from "./components/profile/CreatedProjectsPanel.jsx";
 import BuildProjectLayout from "./routes/layouts/BuildProjectLayout.jsx";
-import BasicPage from "./components/build/BasicPage.jsx";
+import BasicPage, { basicBuildAction } from "./components/build/BasicPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -117,7 +117,12 @@ const router = createBrowserRouter([
         path: "/:profileId/:projectId/build",
         element: <BuildProjectLayout />,
         children: [
-          { index: true, path: "basic", element: <BasicPage /> },
+          {
+            index: true,
+            path: "basic",
+            element: <BasicPage />,
+            action: basicBuildAction,
+          },
           // { path: "story", element: <StoryPage /> },
           // { path: "payment", element: <PaymentPage /> },
           // { path: "preview", element: <PreviewPage /> },
