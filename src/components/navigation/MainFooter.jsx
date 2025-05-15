@@ -1,9 +1,17 @@
 import { Facebook, Instagram, Twitter, X, YouTube } from "@mui/icons-material";
 import { Box, Container, Link, Stack, Typography } from "@mui/material";
 
-function MainFooter({ full = false }) {
+function MainFooter({ full = false, borderTop = false }) {
   return (
-    <Box sx={{ py: 5, mt: "auto" }} component="footer">
+    <Box
+      sx={{
+        py: 5,
+        mt: "auto",
+        borderTop: borderTop ? "1px solid" : null,
+        borderColor: borderTop ? "divider" : null,
+      }}
+      component="footer"
+    >
       {full && (
         <Container maxWidth="md">
           <Box
