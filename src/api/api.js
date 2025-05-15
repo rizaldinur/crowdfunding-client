@@ -24,13 +24,13 @@ export async function postLogin(postData) {
   return data;
 }
 
-export async function postBuildBasicForm(postData, pathname) {
+export async function putBuildForm(postData, pathname) {
   let baseurl = "http://localhost:8000";
   let url = baseurl + pathname;
 
   let token = getToken();
   const response = await fetch(url, {
-    method: "POST",
+    method: "PUT",
     body: JSON.stringify(postData),
     headers: {
       Authorization: "Bearer " + token,

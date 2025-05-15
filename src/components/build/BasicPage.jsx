@@ -26,7 +26,7 @@ import { useEffect, useState } from "react";
 import { useFormSubmitContext } from "../../hooks/useFormSubmitContext";
 import { useFetcher, useOutletContext, useParams } from "react-router";
 import { Link as RouterLink } from "react-router";
-import { postBuildBasicForm } from "../../api/api";
+import { putBuildForm } from "../../api/api";
 import validator from "validator";
 import { getError, setToken } from "../../utils/utils";
 
@@ -162,7 +162,7 @@ function BasicPage() {
       );
       formData.append("duration", form.duration ? form.duration : "");
 
-      fetcher.submit(formData, { method: "POST" });
+      fetcher.submit(formData, { method: "PUT" });
     } else {
       setAlertOpen(true);
       setAlertMsg("Input tidak sesuai.");
@@ -717,7 +717,7 @@ export const basicBuildAction = async ({ request, params }) => {
   const formData = await request.formData();
   const postData = Object.fromEntries(formData);
 
-  return postBuildBasicForm(postData, pathname);
+  return putBuildForm(postData, pathname);
 };
 
 export default BasicPage;
