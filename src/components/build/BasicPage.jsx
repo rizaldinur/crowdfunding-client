@@ -51,28 +51,28 @@ function BasicPage() {
   );
 
   const [initialForm, setInitialForm] = useState({
-    title: filledData.data.basic.title || "",
-    subtitle: filledData.data.basic.subTitle || "",
-    category: filledData.data.basic.category || "",
-    location: filledData.data.basic.location || "",
-    imageUrl: filledData.data.basic.imageUrl || "",
-    fundTarget: filledData.data.basic.fundTarget || null,
-    launchDate: filledData.data.basic.launchDate
-      ? dayjs(filledData.data.basic.launchDate)
+    title: filledData.data?.basic?.title || "",
+    subtitle: filledData.data?.basic?.subTitle || "",
+    category: filledData.data?.basic?.category || "",
+    location: filledData.data?.basic?.location || "",
+    imageUrl: filledData.data?.basic?.imageUrl || "",
+    fundTarget: filledData.data?.basic?.fundTarget || null,
+    launchDate: filledData.data?.basic?.launchDate
+      ? dayjs(filledData.data?.basic?.launchDate)
       : null,
-    duration: filledData.data.basic.duration || null,
+    duration: filledData.data?.basic?.duration || null,
   });
   const [form, setForm] = useState({
-    title: filledData.data.basic.title || "",
-    subtitle: filledData.data.basic.subTitle || "",
-    category: filledData.data.basic.category || "",
-    location: filledData.data.basic.location || "",
-    imageUrl: filledData.data.basic.imageUrl || "",
-    fundTarget: filledData.data.basic.fundTarget || null,
-    launchDate: filledData.data.basic.launchDate
-      ? dayjs(filledData.data.basic.launchDate)
+    title: filledData.data?.basic?.title || "",
+    subtitle: filledData.data?.basic?.subTitle || "",
+    category: filledData.data?.basic?.category || "",
+    location: filledData.data?.basic?.location || "",
+    imageUrl: filledData.data?.basic?.imageUrl || "",
+    fundTarget: filledData.data?.basic?.fundTarget || null,
+    launchDate: filledData.data?.basic?.launchDate
+      ? dayjs(filledData.data?.basic?.launchDate)
       : null,
-    duration: filledData.data.basic.duration || null,
+    duration: filledData.data?.basic?.duration || null,
   });
 
   useEffect(() => {
@@ -102,28 +102,28 @@ function BasicPage() {
         }
 
         setForm({
-          title: fetcher.data.data.basic.title || "",
-          subtitle: fetcher.data.data.basic.subTitle || "",
-          category: fetcher.data.data.basic.category || "",
-          location: fetcher.data.data.basic.location || "",
-          imageUrl: fetcher.data.data.basic.imageUrl || "",
-          fundTarget: fetcher.data.data.basic.fundTarget || null,
-          launchDate: fetcher.data.data.basic.launchDate
-            ? dayjs(fetcher.data.data.basic.launchDate)
+          title: fetcher.data?.data?.basic?.title || "",
+          subtitle: fetcher.data?.data?.basic?.subTitle || "",
+          category: fetcher.data?.data?.basic?.category || "",
+          location: fetcher.data?.data?.basic?.location || "",
+          imageUrl: fetcher.data?.data?.basic?.imageUrl || "",
+          fundTarget: fetcher.data?.data?.basic?.fundTarget || null,
+          launchDate: fetcher.data?.data?.basic?.launchDate
+            ? dayjs(fetcher.data?.data?.basic?.launchDate)
             : null,
-          duration: fetcher.data.data.basic.duration || null,
+          duration: fetcher.data?.data?.basic?.duration || null,
         });
         setInitialForm({
-          title: fetcher.data.data.basic.title || "",
-          subtitle: fetcher.data.data.basic.subTitle || "",
-          category: fetcher.data.data.basic.category || "",
-          location: fetcher.data.data.basic.location || "",
-          imageUrl: fetcher.data.data.basic.imageUrl || "",
-          fundTarget: fetcher.data.data.basic.fundTarget || null,
-          launchDate: fetcher.data.data.basic.launchDate
-            ? dayjs(fetcher.data.data.basic.launchDate)
+          title: fetcher.data?.data?.basic?.title || "",
+          subtitle: fetcher.data?.data?.basic?.subTitle || "",
+          category: fetcher.data?.data?.basic?.category || "",
+          location: fetcher.data?.data?.basic?.location || "",
+          imageUrl: fetcher.data?.data?.basic?.imageUrl || "",
+          fundTarget: fetcher.data?.data?.basic?.fundTarget || null,
+          launchDate: fetcher.data?.data?.basic?.launchDate
+            ? dayjs(fetcher.data?.data?.basic?.launchDate)
             : null,
-          duration: fetcher.data.data.basic.duration || null,
+          duration: fetcher.data?.data?.basic?.duration || null,
         });
       }
     }
