@@ -298,11 +298,7 @@ function StoryPage() {
               </Stack>
             </Grid>
           </Grid>
-          <Grid
-            container
-            spacing={3}
-            sx={{ pb: 5, borderBottom: "1px solid", borderColor: "divider" }}
-          >
+          <Grid container spacing={3} sx={{ pb: 5 }}>
             <Grid size={{ xs: 12, sm: 4 }}>
               <Typography variant="h5" fontWeight={500} mb={1}>
                 Pertanyaan yang sering diajukan (FAQs)

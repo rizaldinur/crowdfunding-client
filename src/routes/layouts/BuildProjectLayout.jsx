@@ -68,8 +68,7 @@ function BuildProjectLayout() {
       ) : (
         <LoadingPage />
       )}
-      <Divider />
-      <MainFooter />
+      <MainFooter borderTop />
     </FormSubmitContext.Provider>
   );
 }
