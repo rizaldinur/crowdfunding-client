@@ -40,7 +40,7 @@ function MainLayout() {
                 authenticated={authenticated}
               />
               <Outlet />
-              <MainFooter full />
+              <MainFooter full borderTop />
             </>
           );
         }}
