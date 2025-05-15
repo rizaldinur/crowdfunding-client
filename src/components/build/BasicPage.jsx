@@ -712,7 +712,7 @@ function BasicPage() {
 export const basicBuildAction = async ({ request, params }) => {
   await new Promise((resolve, reject) => setTimeout(() => resolve(), 2000));
   const pathname = window.location.pathname;
-  console.log(window.location.pathname);
+  console.log(pathname);
 
   const formData = await request.formData();
   const postData = Object.fromEntries(formData);
