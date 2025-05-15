@@ -48,7 +48,7 @@ function BuildProjectLayout() {
     return <Navigate to="/" />;
   }
 
-  return filledData && !loadingData ? (
+  return (
     <FormSubmitContext.Provider
       value={{
         submitFnRef,
@@ -62,12 +62,15 @@ function BuildProjectLayout() {
     >
       <BuildPageNav />
       <BuildTabs />
-      <Outlet context={filledData} />
+
+      {filledData && !loadingData ? (
+        <Outlet context={filledData} />
+      ) : (
+        <LoadingPage />
+      )}
       <Divider />
       <MainFooter />
     </FormSubmitContext.Provider>
-  ) : (
-    <LoadingPage />
   );
 }
 
