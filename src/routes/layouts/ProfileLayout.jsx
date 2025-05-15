@@ -43,11 +43,9 @@ function ProfileLayout() {
               />
               ;
               <ProfileTabs authorized={profileHeader.data?.authorized} />
-              <Box sx={{ borderBottom: "1px solid", borderColor: "divider" }}>
-                <Outlet
-                  context={{ authorized: profileHeader.data?.authorized }}
-                />
-              </Box>
+              <Outlet
+                context={{ authorized: profileHeader.data?.authorized }}
+              />
             </>
           );
         }}
