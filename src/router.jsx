@@ -35,6 +35,7 @@ import CreatedProjectsPanel, {
 } from "./components/profile/CreatedProjectsPanel.jsx";
 import BuildProjectLayout from "./routes/layouts/BuildProjectLayout.jsx";
 import BasicPage, { basicBuildAction } from "./components/build/BasicPage.jsx";
+import StoryPage, { storyBuildAction } from "./components/build/StoryPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -123,7 +124,7 @@ const router = createBrowserRouter([
             element: <BasicPage />,
             action: basicBuildAction,
           },
-          // { path: "story", element: <StoryPage /> },
+          { path: "story", element: <StoryPage />, action: storyBuildAction },
           // { path: "payment", element: <PaymentPage /> },
           // { path: "preview", element: <PreviewPage /> },
         ],
