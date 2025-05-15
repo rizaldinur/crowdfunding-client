@@ -1,6 +1,11 @@
 import { RemoveRedEye, Save } from "@mui/icons-material";
 import { Box, Button, Container, Stack, Tab, Tabs } from "@mui/material";
-import { useLocation, Link as RouterLink } from "react-router";
+import {
+  useLocation,
+  Link as RouterLink,
+  useNavigation,
+  useParams,
+} from "react-router";
 import { useFormSubmitContext } from "../../hooks/useFormSubmitContext";
 
 function a11yProps(index) {
@@ -12,7 +17,12 @@ function a11yProps(index) {
 }
 
 function BuildTabs({}) {
-  const { submitFnRef, loading } = useFormSubmitContext();
+  const { submitFnRef, loading, isDirty, newSlug } = useFormSubmitContext();
+  const params = useParams();
+  const pathParam = `/${params.profileId}/${
+    newSlug ? newSlug : params.projectId
+  }/build`;
+
   const handleClick = () => {
     if (submitFnRef?.current) {
       submitFnRef.current();
@@ -21,8 +31,14 @@ function BuildTabs({}) {
     }
   };
 
+  const formIdMap = {
+    basic: "basic-form",
+    story: "story-form",
+    profile: "profile-form",
+    payment: "payment-form",
+  };
   const location = useLocation();
-  const tabSegment = location.pathname.split("/")[3];
+  const tabSegment = location.pathname.split("/")[4];
   const tabMap = {
     basic: 0,
     story: 1,
@@ -50,28 +66,28 @@ function BuildTabs({}) {
             <Tab
               label="Dasar"
               component={RouterLink}
-              to="basic"
+              to={pathParam + "/basic"}
               state={{ tabValue: 0 }}
               {...a11yProps(0)}
             />
             <Tab
               label="Cerita"
               component={RouterLink}
-              to="story"
+              to={pathParam + "/story"}
               state={{ tabValue: 1 }}
               {...a11yProps(1)}
             />
             <Tab
               label="Profil"
               component={RouterLink}
-              to="profile"
+              to={pathParam + "/profile"}
               state={{ tabValue: 2 }}
               {...a11yProps(2)}
             />
             <Tab
               label="Pembayaran"
               component={RouterLink}
-              to="payment"
+              to={pathParam + "payment"}
               state={{ tabValue: 3 }}
               {...a11yProps(3)}
             />
@@ -86,7 +102,9 @@ function BuildTabs({}) {
             </Button>
             <Button
               startIcon={<Save />}
+              disabled={!isDirty}
               loading={loading}
+              type="submit"
               variant="contained"
               color="secondary"
               onClick={handleClick}

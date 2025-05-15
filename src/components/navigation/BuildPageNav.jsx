@@ -1,10 +1,14 @@
 import { ArrowBack } from "@mui/icons-material";
 import { Box, Button, Container, Link, Typography } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router";
+import { useFormSubmitContext } from "../../hooks/useFormSubmitContext";
 
 function BuildPageNav() {
-  const { profileId, projectId } = useParams();
-  const backUrl = `/${profileId}/${projectId}/build-overview`;
+  const { newSlug } = useFormSubmitContext();
+  const params = useParams();
+  const backUrl = `/${params.profileId}/${
+    newSlug ? newSlug : params.projectId
+  }/build-overview`;
 
   return (
     <Box
