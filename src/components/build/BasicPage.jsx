@@ -4,6 +4,7 @@ import {
   Button,
   Container,
   Grid,
+  IconButton,
   InputAdornment,
   Snackbar,
   Stack,
@@ -12,7 +13,7 @@ import {
 } from "@mui/material";
 import LocationAutocomplete from "../input/LocationAutocomplete";
 import CategoryAutocomplete from "../input/CategoryAutoComplete";
-import { Link } from "@mui/icons-material";
+import { Close, Link } from "@mui/icons-material";
 import { NumericFormat } from "react-number-format";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -23,45 +24,107 @@ import "dayjs/locale/en-gb";
 import "dayjs/locale/id";
 import { useEffect, useState } from "react";
 import { useFormSubmitContext } from "../../hooks/useFormSubmitContext";
-import { useFetcher, useNavigate, useParams } from "react-router";
-import { getToken } from "../../utils/utils";
+import { useFetcher, useOutletContext, useParams } from "react-router";
 import { Link as RouterLink } from "react-router";
+import { postBuildBasicForm } from "../../api/api";
+import validator from "validator";
+import { getError, setToken } from "../../utils/utils";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 function BasicPage() {
-  const navigate = useNavigate();
-  const { projectId: currentSlug, profileId } = useParams();
-  const { submitFnRef, setLoading, setNewSlug } = useFormSubmitContext();
-  let fetcher = useFetcher();
-  let busy = fetcher.state !== "idle";
+  const filledData = useOutletContext();
 
+  const { projectId: currentSlug, profileId } = useParams();
+  const { submitFnRef, setLoading, setIsDirty, setNewSlug } =
+    useFormSubmitContext();
+
+  let fetcher = useFetcher();
+
+  const [success, setSuccess] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMsg, setAlertMsg] = useState("");
+  const [formErrorData, setFormErrorData] = useState([]);
+  const [pathname, setPathname] = useState(
+    `/${profileId}/${currentSlug}/build`
+  );
+
+  const [initialForm, setInitialForm] = useState({
+    title: filledData.data.basic.title || "",
+    subtitle: filledData.data.basic.subTitle || "",
+    category: filledData.data.basic.category || "",
+    location: filledData.data.basic.location || "",
+    imageUrl: filledData.data.basic.imageUrl || "",
+    fundTarget: filledData.data.basic.fundTarget || null,
+    launchDate: filledData.data.basic.launchDate
+      ? dayjs(filledData.data.basic.launchDate)
+      : null,
+    duration: filledData.data.basic.duration || null,
+  });
   const [form, setForm] = useState({
-    title: "",
-    subtitle: "",
-    category: "",
-    location: "",
-    imageUrl: "",
-    fundTarget: null,
-    launchDate: null,
-    duration: null,
+    title: filledData.data.basic.title || "",
+    subtitle: filledData.data.basic.subTitle || "",
+    category: filledData.data.basic.category || "",
+    location: filledData.data.basic.location || "",
+    imageUrl: filledData.data.basic.imageUrl || "",
+    fundTarget: filledData.data.basic.fundTarget || null,
+    launchDate: filledData.data.basic.launchDate
+      ? dayjs(filledData.data.basic.launchDate)
+      : null,
+    duration: filledData.data.basic.duration || null,
   });
 
   useEffect(() => {
-    if (fetcher.data) {
+    const changed = JSON.stringify(form) !== JSON.stringify(initialForm);
+    setIsDirty(changed);
+  }, [form, initialForm]);
+
+  useEffect(() => {
+    if (fetcher.data && fetcher.state === "idle") {
       console.log(fetcher.data);
+      if (fetcher.data?.refreshToken) {
+        setToken(fetcher.data?.refreshToken);
+      }
       if (!fetcher.data.error) {
         setAlertOpen(true);
-        if (fetcher.data.data.projectSlug !== currentSlug) {
-          navigate(
-            `/${profileId}/${fetcher.data.data.projectSlug}/build/basic`,
-            {
-              replace: true,
-            }
+        setAlertMsg(fetcher.data.message);
+        setSuccess(true);
+        const slug = fetcher.data?.data?.projectSlug;
+        if (slug && slug !== currentSlug) {
+          window.history.replaceState(
+            null,
+            "",
+            `/${profileId}/${slug}/build/basic`
           );
+          setPathname(`/${profileId}/${slug}/build`);
+          setNewSlug(slug);
         }
+
+        setForm({
+          title: fetcher.data.data.basic.title || "",
+          subtitle: fetcher.data.data.basic.subTitle || "",
+          category: fetcher.data.data.basic.category || "",
+          location: fetcher.data.data.basic.location || "",
+          imageUrl: fetcher.data.data.basic.imageUrl || "",
+          fundTarget: fetcher.data.data.basic.fundTarget || null,
+          launchDate: fetcher.data.data.basic.launchDate
+            ? dayjs(fetcher.data.data.basic.launchDate)
+            : null,
+          duration: fetcher.data.data.basic.duration || null,
+        });
+        setInitialForm({
+          title: fetcher.data.data.basic.title || "",
+          subtitle: fetcher.data.data.basic.subTitle || "",
+          category: fetcher.data.data.basic.category || "",
+          location: fetcher.data.data.basic.location || "",
+          imageUrl: fetcher.data.data.basic.imageUrl || "",
+          fundTarget: fetcher.data.data.basic.fundTarget || null,
+          launchDate: fetcher.data.data.basic.launchDate
+            ? dayjs(fetcher.data.data.basic.launchDate)
+            : null,
+          duration: fetcher.data.data.basic.duration || null,
+        });
       }
     }
   }, [fetcher.data]);
@@ -81,59 +144,175 @@ function BasicPage() {
   }, [form]);
 
   const handleSubmit = () => {
-    console.log("Form submitted!");
-    // console.log(new Date(form.launchDate).toISOString());
-    // console.log(form.launchDate.format());
+    validateForm();
+    const isValidated = validateForm() && Boolean(formErrorData.length === 0);
 
-    const formData = new FormData();
-    formData.append("title", form.title);
-    formData.append("subtitle", form.subtitle);
-    formData.append("category", form.category);
-    formData.append("location", form.location);
-    formData.append("imageUrl", form.imageUrl);
-    formData.append("fundTarget", form.fundTarget ? form.fundTarget : "");
-    formData.append(
-      "launchDate",
-      form.launchDate == null ? "" : form.launchDate.format()
-    );
-    formData.append("duration", form.duration ? form.fundTarget : "");
+    if (isValidated) {
+      console.log("Form submitted!");
+      const formData = new FormData();
+      formData.append("title", form.title);
+      formData.append("subtitle", form.subtitle);
+      formData.append("category", form.category);
+      formData.append("location", form.location);
+      formData.append("imageUrl", form.imageUrl);
+      formData.append("fundTarget", form.fundTarget ? form.fundTarget : "");
+      formData.append(
+        "launchDate",
+        form.launchDate == null ? "" : form.launchDate.format()
+      );
+      formData.append("duration", form.duration ? form.duration : "");
 
-    fetcher.submit(formData, { method: "POST" });
+      fetcher.submit(formData, { method: "POST" });
+    } else {
+      setAlertOpen(true);
+      setAlertMsg("Input tidak sesuai.");
+      setSuccess(false);
+    }
   };
+
+  function validateForm() {
+    let error = [];
+
+    let title = form.title;
+    let subtitle = form.subtitle;
+    let imageUrl = form.imageUrl;
+    let fundTarget = form.fundTarget;
+    let duration = form.duration;
+
+    if (title.length > 0 && !validator.matches(title, /^[a-zA-Z0-9 .'-]+$/)) {
+      error.push({
+        body: "title",
+        message:
+          "Hanya boleh huruf (A-Z, a-z), angka (0-9), spasi, karakter (-, ', .).",
+      });
+    }
+
+    if (
+      subtitle.length > 0 &&
+      !validator.matches(subtitle, /^[a-zA-Z0-9 .'-,]+$/)
+    ) {
+      error.push({
+        body: "subtitle",
+        message:
+          "Hanya boleh huruf (A-Z, a-z), angka (0-9), spasi, karakter (-, ', .).",
+      });
+    }
+
+    if (!validator.isURL(imageUrl)) {
+      error.push({
+        body: "imageUrl",
+        message: "Invalid URL.",
+      });
+    }
+    if ((fundTarget >= 0 && fundTarget < 1000000) || fundTarget > 100000000) {
+      error.push({
+        body: "fundTarget",
+        message: "Minimal Rp1.000.000, maksimal Rp100.000.000",
+      });
+    }
+
+    if ((duration >= 0 && duration < 1) || duration > 60) {
+      error.push({
+        body: "duration",
+        message: "Minimal 1 hari, maksimal 60 hari",
+      });
+    }
+
+    if (error.length > 0) {
+      setFormErrorData((data) => [...data, ...error]);
+      return false;
+    }
+    setFormErrorData((data) => [...data, ...error]);
+    return true;
+  }
+
   function handleChange(e) {
     const { name, value } = e.target;
     setForm((form) => {
       return { ...form, [name]: value };
     });
+
+    if (name === "title") {
+      if (value.length > 60) {
+        let error = [{ body: "title", message: "Maksimal 60 karakter." }];
+        setFormErrorData((prev) => {
+          const filtered = prev.filter((error) => {
+            return (
+              error.body !== "title" &&
+              error.message !== "Maksimal 60 karakter."
+            );
+          });
+          return [...filtered, ...error];
+        });
+      } else if (value.length < 60) {
+        setFormErrorData((prevData) => {
+          return prevData.filter((error) => {
+            return error.body !== "title";
+          });
+        });
+      }
+    } else if (name === "subtitle") {
+      if (value && value.length > 150) {
+        let error = [{ body: "subtitle", message: "Maksimal 150 karakter." }];
+        setFormErrorData((prev) => {
+          const filtered = prev.filter((error) => {
+            return (
+              error.body !== "subtitle" &&
+              error.message !== "Maksimal 150 karakter."
+            );
+          });
+          return [...filtered, ...error];
+        });
+      } else if (value && value.length < 150) {
+        setFormErrorData((prevData) => {
+          return prevData.filter((error) => {
+            return error.body !== "subtitle";
+          });
+        });
+      }
+    } else {
+      setFormErrorData((prevData) => {
+        return prevData.filter((error) => {
+          return error.body !== name;
+        });
+      });
+    }
   }
 
   return (
     <Container maxWidth="lg">
       <Snackbar
         open={alertOpen}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
         onClose={() => {
           setAlertOpen(false);
         }}
       >
         <Alert
-          sx={{ width: 300 }}
           variant="filled"
-          severity={fetcher.data?.error ? "error" : "success"}
+          severity={!success ? "error" : "success"}
           action={
-            !fetcher.data?.error && (
+            success ? (
               <Button
                 component={RouterLink}
-                to="../story"
+                to={pathname + "/story"}
                 color="inherit"
                 size="small"
               >
                 Lanjut
               </Button>
+            ) : (
+              <IconButton
+                color="inherit"
+                size="small"
+                onClick={() => setAlertOpen(false)}
+              >
+                <Close fontSize="small" />
+              </IconButton>
             )
           }
         >
-          {fetcher.data?.message}
+          {alertMsg || "Sukses."}
         </Alert>
       </Snackbar>
       <Box sx={{ py: 6, color: "text.primary" }}>
@@ -174,16 +353,54 @@ function BasicPage() {
                 <TextField
                   label="Judul"
                   name="title"
+                  error={Boolean(getError("title", formErrorData))}
+                  value={form.title}
                   onChange={handleChange}
-                  helperText="0/60"
-                  slotProps={{ formHelperText: { sx: { textAlign: "end" } } }}
+                  helperText={
+                    <>
+                      {Boolean(getError("title", formErrorData)) && (
+                        <Typography variant="caption">
+                          {getError("title", formErrorData).message}
+                        </Typography>
+                      )}
+                      <Typography
+                        variant="caption"
+                        sx={{ ml: "auto" }}
+                      >{`${form.title.length}/60`}</Typography>
+                    </>
+                  }
+                  slotProps={{
+                    formHelperText: {
+                      sx: { display: "flex" },
+                      component: Box,
+                    },
+                  }}
                 />
                 <TextField
                   label="Subjudul"
                   name="subtitle"
+                  error={Boolean(getError("subtitle", formErrorData))}
+                  value={form.subtitle}
                   onChange={handleChange}
-                  helperText="0/150"
-                  slotProps={{ formHelperText: { sx: { textAlign: "end" } } }}
+                  helperText={
+                    <>
+                      {Boolean(getError("subtitle", formErrorData)) && (
+                        <Typography variant="caption">
+                          {getError("subtitle", formErrorData).message}
+                        </Typography>
+                      )}
+                      <Typography
+                        variant="caption"
+                        sx={{ ml: "auto" }}
+                      >{`${form.subtitle.length}/150`}</Typography>
+                    </>
+                  }
+                  slotProps={{
+                    formHelperText: {
+                      sx: { display: "flex", justifyContent: "space-between" },
+                      component: Box,
+                    },
+                  }}
                 />
               </Stack>
             </Grid>
@@ -291,6 +508,11 @@ function BasicPage() {
                 <TextField
                   label="Link gambar"
                   name="imageUrl"
+                  error={Boolean(getError("imageUrl", formErrorData))}
+                  helperText={
+                    Boolean(getError("imageUrl", formErrorData)) &&
+                    getError("imageUrl", formErrorData).message
+                  }
                   value={form.imageUrl}
                   onChange={handleChange}
                   slotProps={{
@@ -337,11 +559,21 @@ function BasicPage() {
                   customInput={TextField}
                   label="Jumlah target"
                   name="fundTarget"
+                  error={Boolean(getError("fundTarget", formErrorData))}
+                  helperText={
+                    Boolean(getError("fundTarget", formErrorData)) &&
+                    getError("fundTarget", formErrorData).message
+                  }
                   value={form.fundTarget}
                   onValueChange={(values, sourceInfo) => {
                     const { floatValue } = values;
                     setForm((form) => {
                       return { ...form, fundTarget: floatValue };
+                    });
+                    setFormErrorData((prevData) => {
+                      return prevData.filter((error) => {
+                        return error.body !== "fundTarget";
+                      });
                     });
                   }}
                   slotProps={{
@@ -446,10 +678,21 @@ function BasicPage() {
                   customInput={TextField}
                   label="Durasi"
                   name="duration"
+                  error={Boolean(getError("duration", formErrorData))}
+                  helperText={
+                    Boolean(getError("duration", formErrorData)) &&
+                    getError("duration", formErrorData).message
+                  }
+                  value={form.duration}
                   onValueChange={(values, sourceInfo) => {
                     const { floatValue } = values;
                     setForm((form) => {
                       return { ...form, duration: floatValue };
+                    });
+                    setFormErrorData((prevData) => {
+                      return prevData.filter((error) => {
+                        return error.body !== "duration";
+                      });
                     });
                   }}
                   placeholder="Ketik 1-60 (hari)"
@@ -468,25 +711,13 @@ function BasicPage() {
 
 export const basicBuildAction = async ({ request, params }) => {
   await new Promise((resolve, reject) => setTimeout(() => resolve(), 2000));
-  let baseurl = "http://localhost:8000";
-  const pathname = new URL(request.url).pathname;
-  let url = baseurl + pathname;
-  let token = getToken();
+  const pathname = window.location.pathname;
+  console.log(window.location.pathname);
 
   const formData = await request.formData();
-
   const postData = Object.fromEntries(formData);
-  const response = await fetch(url, {
-    method: "POST",
-    body: JSON.stringify(postData),
-    headers: {
-      Authorization: "Bearer " + token,
-      "Content-Type": "application/json",
-    },
-  });
 
-  const data = await response.json();
-  return data;
+  return postBuildBasicForm(postData, pathname);
 };
 
 export default BasicPage;
