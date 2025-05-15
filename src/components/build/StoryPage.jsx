@@ -69,8 +69,8 @@ function StoryPage() {
   useEffect(() => {
     if (fetcher.data && fetcher.state === "idle") {
       console.log(fetcher.data);
-      if (fetcher.data?.refreshToken) {
-        setToken(fetcher.data?.refreshToken);
+      if (fetcher.data?.data?.refreshToken) {
+        setToken(fetcher.data?.data?.refreshToken);
       }
       if (!fetcher.data.error) {
         setAlertOpen(true);
