@@ -17,9 +17,10 @@ function a11yProps(index) {
 }
 
 function BuildTabs({}) {
-  const { submitFnRef, loading, isDirty, newSlug } = useFormSubmitContext();
+  const { submitFnRef, loading, isDirty, newSlug, newUserSlug } =
+    useFormSubmitContext();
   const params = useParams();
-  const pathParam = `/${params.profileId}/${
+  const pathParam = `/${newUserSlug ? newUserSlug : params.profileId}/${
     newSlug ? newSlug : params.projectId
   }/build`;
 

@@ -15,6 +15,7 @@ function BuildProjectLayout() {
   const [loading, setLoading] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [newSlug, setNewSlug] = useState("");
+  const [newUserSlug, setNewUserSlug] = useState("");
 
   const [filledData, setFilledData] = useState(null);
   const [loadingData, setLoadingData] = useState(false);
@@ -58,6 +59,8 @@ function BuildProjectLayout() {
         setIsDirty,
         newSlug,
         setNewSlug,
+        newUserSlug,
+        setNewUserSlug,
       }}
     >
       <BuildPageNav />
