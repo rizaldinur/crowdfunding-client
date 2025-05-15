@@ -144,7 +144,7 @@ function StoryPage() {
             success ? (
               <Button
                 component={RouterLink}
-                to={pathname + "/story"}
+                to={pathname + "/profile"}
                 color="inherit"
                 size="small"
               >
@@ -197,6 +197,9 @@ function StoryPage() {
                   color="inherit"
                   sx={{ placeSelf: "end" }}
                   startIcon={<Info />}
+                  component={RouterLink}
+                  to="https://www.markdownguide.org/cheat-sheet/"
+                  target="_blank"
                 >
                   pelajari tentang markdown
                 </Button>
