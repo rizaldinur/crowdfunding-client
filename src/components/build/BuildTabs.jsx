@@ -88,7 +88,7 @@ function BuildTabs({}) {
             <Tab
               label="Pembayaran"
               component={RouterLink}
-              to={pathParam + "payment"}
+              to={pathParam + "/payment"}
               state={{ tabValue: 3 }}
               {...a11yProps(3)}
             />
