@@ -39,6 +39,9 @@ import StoryPage, { storyBuildAction } from "./components/build/StoryPage.jsx";
 import ProfilePage, {
   profileBuildAction,
 } from "./components/build/ProfilePage.jsx";
+import PaymentPage, {
+  paymentBuildAction,
+} from "./components/build/PaymentPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -133,7 +136,11 @@ const router = createBrowserRouter([
             element: <ProfilePage />,
             action: profileBuildAction,
           },
-          // { path: "payment", element: <PaymentPage /> },
+          {
+            path: "payment",
+            element: <PaymentPage />,
+            action: paymentBuildAction,
+          },
           // { path: "preview", element: <PreviewPage /> },
         ],
       },
