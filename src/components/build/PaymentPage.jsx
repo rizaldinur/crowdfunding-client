@@ -281,12 +281,13 @@ function PaymentPage() {
                   type="text"
                   name="bankAccountNumber"
                   value={form.bankAccountNumber}
-                  valueIsNumericString={true}
-                  onValueChange={(values, source) =>
+                  valueIsNumericString
+                  allowLeadingZeros
+                  onValueChange={(values, source) => {
                     setForm((prev) => {
                       return { ...prev, bankAccountNumber: values.value };
-                    })
-                  }
+                    });
+                  }}
                 />
               </Stack>
             </Grid>
