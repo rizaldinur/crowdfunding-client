@@ -42,9 +42,41 @@ export async function putBuildForm(postData, pathname) {
   return data;
 }
 
+export const deleteProject = async (path) => {
+  const baseUrl = "http://localhost:8000";
+  const url = baseUrl + path;
+
+  const token = getToken();
+  const response = await fetch(url, {
+    method: "delete",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+
+  const data = await response.json();
+  return data;
+};
+
 export const authenticateJWT = async (token) => {
   const response = await fetch("http://localhost:8000/authenticate", {
     method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+
+  const data = await response.json();
+  return data;
+};
+
+export const getBuildOverviewData = async (path) => {
+  const baseUrl = "http://localhost:8000";
+  const url = baseUrl + path;
+
+  let token = getToken();
+  const response = await fetch(url, {
+    method: "get",
     headers: {
       Authorization: "Bearer " + token,
     },
