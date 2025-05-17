@@ -4,9 +4,10 @@ import {
   Outlet,
   useLoaderData,
   useLocation,
+  useSearchParams,
 } from "react-router";
 import ProfileTabs from "../../components/profile/ProfileTabs";
-import { Box } from "@mui/material";
+import { Alert, Box, Button, IconButton, Snackbar } from "@mui/material";
 import { Suspense, useEffect, useState } from "react";
 import ProfileHead from "../../components/profile/ProfileHead";
 import LoadingPage from "../../components/LoadingPage";
@@ -14,6 +15,12 @@ import Cookies from "js-cookie";
 
 function ProfileLayout() {
   const location = useLocation();
+  const [search, setSearchParams] = useSearchParams();
+  const [alertOpen, setAlertOpen] = useState(
+    search.get("success") === "1" || false
+  );
+
+  let message = search.get("message");
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Profil";
@@ -33,6 +40,23 @@ function ProfileLayout() {
           }
           return (
             <>
+              <Snackbar
+                open={alertOpen}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                onClose={() => {
+                  setAlertOpen(false);
+                }}
+              >
+                <Alert
+                  variant="filled"
+                  severity={"success"}
+                  onClose={() => {
+                    setAlertOpen(false);
+                  }}
+                >
+                  {message || "Sukses."}
+                </Alert>
+              </Snackbar>
               <ProfileHead
                 avatar={profileHeader.data?.avatar}
                 userName={profileHeader.data?.userName}
