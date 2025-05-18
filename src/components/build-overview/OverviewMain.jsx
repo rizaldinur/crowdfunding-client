@@ -229,7 +229,7 @@ function OverviewMain({ data }) {
                 data.projectStatus === "onreview" ||
                 data.projectStatus === "accept"
                   ? "primary.main"
-                  : "inherit",
+                  : null,
             }}
           >
             {data.projectStatus === "accept" ? <Check /> : <Timer />}
