@@ -22,7 +22,7 @@ function BuildTabs({}) {
   const params = useParams();
   const pathParam = `/${newUserSlug ? newUserSlug : params.profileId}/${
     newSlug ? newSlug : params.projectId
-  }/build`;
+  }`;
 
   const handleClick = () => {
     if (submitFnRef?.current) {
@@ -67,28 +67,28 @@ function BuildTabs({}) {
             <Tab
               label="Dasar"
               component={RouterLink}
-              to={pathParam + "/basic"}
+              to={pathParam + "/build/basic"}
               state={{ tabValue: 0 }}
               {...a11yProps(0)}
             />
             <Tab
               label="Cerita"
               component={RouterLink}
-              to={pathParam + "/story"}
+              to={pathParam + "/build/story"}
               state={{ tabValue: 1 }}
               {...a11yProps(1)}
             />
             <Tab
               label="Profil"
               component={RouterLink}
-              to={pathParam + "/profile"}
+              to={pathParam + "/build/profile"}
               state={{ tabValue: 2 }}
               {...a11yProps(2)}
             />
             <Tab
               label="Pembayaran"
               component={RouterLink}
-              to={pathParam + "/payment"}
+              to={pathParam + "/build/payment"}
               state={{ tabValue: 3 }}
               {...a11yProps(3)}
             />
@@ -98,6 +98,9 @@ function BuildTabs({}) {
               startIcon={<RemoveRedEye />}
               color="inherit"
               variant="outlined"
+              component={RouterLink}
+              to={pathParam + "/build-overview/preview"}
+              state={{ from: location }}
             >
               Pratinjau
             </Button>

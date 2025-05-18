@@ -1,10 +1,11 @@
 import { ArrowBack } from "@mui/icons-material";
 import { Box, Button, Container, Link, Typography } from "@mui/material";
-import { Link as RouterLink, useParams } from "react-router";
+import { Link as RouterLink, useLocation, useParams } from "react-router";
 import { useFormSubmitContext } from "../../hooks/useFormSubmitContext";
 
 function BuildPageNav() {
   const { newSlug, newUserSlug } = useFormSubmitContext() || {};
+  const location = useLocation();
   const params = useParams();
   const backUrl = `/${newUserSlug ? newUserSlug : params.profileId}/${
     newSlug ? newSlug : params.projectId
@@ -33,7 +34,7 @@ function BuildPageNav() {
           </Link>
           <Button
             component={RouterLink}
-            to={backUrl}
+            to={location.state?.from || backUrl}
             startIcon={<ArrowBack />}
             color="inherit"
           >
