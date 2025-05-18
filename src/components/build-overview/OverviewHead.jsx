@@ -13,10 +13,15 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { Form, useNavigation, useParams } from "react-router";
-import { getToken } from "../../utils/utils";
+import {
+  Form,
+  useLocation,
+  useNavigation,
+  Link as RouterLink,
+} from "react-router";
 
 function OverviewHead({ projectName, creatorName }) {
+  const location = useLocation();
   const navigation = useNavigation();
   let busy = navigation.state !== "idle";
   const [open, setOpen] = useState(false);
@@ -82,7 +87,12 @@ function OverviewHead({ projectName, creatorName }) {
           oleh {creatorName || "Kreator"}
         </Typography>
         <Stack direction="row" gap={2} sx={{ mt: 4 }}>
-          <Button startIcon={<RemoveRedEye />} color="inherit">
+          <Button
+            startIcon={<RemoveRedEye />}
+            color="inherit"
+            component={RouterLink}
+            to={location.pathname + "/preview"}
+          >
             pratinjau
           </Button>
           <Button startIcon={<Delete />} color="error" onClick={handleOpen}>
