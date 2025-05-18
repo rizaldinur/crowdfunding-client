@@ -70,6 +70,22 @@ export const authenticateJWT = async (token) => {
   return data;
 };
 
+export const getPreviewData = async (path) => {
+  let baseurl = "http://localhost:8000";
+  let url = baseurl + path;
+  let token = getToken();
+
+  const response = await fetch(url, {
+    method: "get",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+
+  const data = await response.json();
+  return data;
+};
+
 export const getBuildOverviewData = async (path) => {
   const baseUrl = "http://localhost:8000";
   const url = baseUrl + path;
