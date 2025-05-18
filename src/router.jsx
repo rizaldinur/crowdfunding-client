@@ -37,14 +37,19 @@ import CreatedProjectsPanel, {
   createdProjectsPanelLoader,
 } from "./components/profile/CreatedProjectsPanel.jsx";
 import BuildProjectLayout from "./routes/layouts/BuildProjectLayout.jsx";
-import BasicPage, { basicBuildAction } from "./components/build/BasicPage.jsx";
-import StoryPage, { storyBuildAction } from "./components/build/StoryPage.jsx";
+import BasicPage, {
+  basicBuildAction,
+} from "./components/build-page/BasicPage.jsx";
+import StoryPage, {
+  storyBuildAction,
+} from "./components/build-page/StoryPage.jsx";
 import ProfilePage, {
   profileBuildAction,
-} from "./components/build/ProfilePage.jsx";
+} from "./components/build-page/ProfilePage.jsx";
 import PaymentPage, {
   paymentBuildAction,
-} from "./components/build/PaymentPage.jsx";
+} from "./components/build-page/PaymentPage.jsx";
+import PreviewPageLayout from "./routes/layouts/PreviewPageLayout.jsx";
 
 const router = createBrowserRouter([
   {
