@@ -9,26 +9,56 @@ import {
 } from "@mui/material";
 import {
   Link as RouterLink,
+  useFetcher,
   useLocation,
   useNavigate,
   useParams,
 } from "react-router";
 import CircularProgressWithLabel from "../progress/CircularProgressWithLabel";
-import { DoneAll, Timer } from "@mui/icons-material";
-import { useMemo } from "react";
+import { Check, DoneAll, Timer } from "@mui/icons-material";
+import { useEffect, useMemo, useState } from "react";
+import { useFormSubmitContext } from "../../hooks/useFormSubmitContext";
 
 function OverviewMain({ data }) {
+  const { setAlertMsg, setSuccess, setAlertOpen } = useFormSubmitContext();
   const location = useLocation();
   const params = useParams();
   const navigate = useNavigate();
+  let fetcher = useFetcher();
+  let busy = fetcher.state !== "idle";
+  const [loadingReview, setLoadingReview] = useState(false);
+  const [loadingLaunch, setLoadingLaunch] = useState(false);
 
   const buildLocation = useMemo(() => {
     let basePath = `/${params.profileId}/${params.projectId}/build`;
     return basePath;
   }, [location]);
 
+  useEffect(() => {
+    if (fetcher.data) {
+      setLoadingReview(false);
+      setLoadingLaunch(false);
+      if (!fetcher.data?.error) {
+        setAlertOpen(true);
+        setAlertMsg(fetcher.data?.message);
+        setSuccess(true);
+      } else {
+        setAlertOpen(true);
+        setAlertMsg(fetcher.data?.message);
+        setSuccess(false);
+      }
+    }
+  }, [fetcher.data]);
+
   return (
     <Container maxWidth="md" sx={{ color: "text.primary", mt: 4 }}>
+      <fetcher.Form
+        id="formSubmitReview"
+        method="put"
+        onSubmitCapture={(e) => setLoadingReview(true)}
+      >
+        <input type="hidden" name="_action" value="review" />
+      </fetcher.Form>
       <Typography variant="h5">Ringkasan Draf Proyek</Typography>
       <Box sx={{ mt: 3 }}>
         <Stack
@@ -160,9 +190,12 @@ function OverviewMain({ data }) {
             Jika sudah melengkapi semua detail informasi tentang proyekmu,
             submit proyekmu untuk ditinjau.
           </Typography>
-          {data.buildStatus === "draft" && (
+          {data.projectStatus === "draft" && (
             <Button
+              type="submit"
+              form="formSubmitReview"
               variant="contained"
+              loading={busy && loadingReview}
               disabled={
                 data.basicProgress !== 100 ||
                 data.storyProgress !== 100 ||
@@ -173,14 +206,14 @@ function OverviewMain({ data }) {
               Submit proyek
             </Button>
           )}
-          {data.buildStatus === "onreview" && (
+          {data.projectStatus === "onreview" && (
             <Button disabled variant="text" startIcon={<DoneAll />}>
               Sudah dikirim
             </Button>
           )}
-          {data.buildStatus === "accept" && (
+          {data.projectStatus === "accept" && (
             <Button disabled variant="text" startIcon={<DoneAll />}>
-              Sudah dikirim
+              Review diterima
             </Button>
           )}
         </Stack>
@@ -190,8 +223,16 @@ function OverviewMain({ data }) {
           gap={2}
           sx={{ p: 3, border: "1px solid", borderColor: "divider" }}
         >
-          <Avatar>
-            <Timer />
+          <Avatar
+            sx={{
+              bgcolor:
+                data.projectStatus === "onreview" ||
+                data.projectStatus === "accept"
+                  ? "primary.main"
+                  : "inherit",
+            }}
+          >
+            {data.projectStatus === "accept" ? <Check /> : <Timer />}
           </Avatar>
           <Stack>
             <Typography variant="h6" fontWeight={700}>
@@ -209,7 +250,10 @@ function OverviewMain({ data }) {
         </Stack>
         <Stack alignItems="start" gap={1} sx={{ p: 3 }}>
           <Typography variant="body2">Luncurkan proyekmu!</Typography>
-          <Button variant="contained" disabled={data.buildStatus !== "accept"}>
+          <Button
+            variant="contained"
+            disabled={data.projectStatus !== "accept"}
+          >
             luncurkan
           </Button>
         </Stack>

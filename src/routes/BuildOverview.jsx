@@ -9,6 +9,7 @@ import {
   Navigate,
   redirect,
   useActionData,
+  useFetcher,
   useLoaderData,
   useLocation,
 } from "react-router";
@@ -63,7 +64,9 @@ function BuildOverview() {
           }
 
           return (
-            <FormSubmitContext.Provider value={null}>
+            <FormSubmitContext.Provider
+              value={{ setAlertMsg, setSuccess, setAlertOpen }}
+            >
               <AuthNav />
               <Snackbar
                 open={alertOpen}
@@ -75,26 +78,7 @@ function BuildOverview() {
                 <Alert
                   variant="filled"
                   severity={!success ? "error" : "success"}
-                  action={
-                    success ? (
-                      <Button
-                        component={RouterLink}
-                        to={pathname + "/payment"}
-                        color="inherit"
-                        size="small"
-                      >
-                        Lanjut
-                      </Button>
-                    ) : (
-                      <IconButton
-                        color="inherit"
-                        size="small"
-                        onClick={() => setAlertOpen(false)}
-                      >
-                        <Close fontSize="small" />
-                      </IconButton>
-                    )
-                  }
+                  onClose={() => setAlertOpen(false)}
                 >
                   {alertMsg || "Sukses."}
                 </Alert>
@@ -122,8 +106,25 @@ export const buildOverviewLoader = ({ request, params }) => {
   };
 };
 
+export const putReviewProject = async (path) => {
+  const baseUrl = "http://localhost:8000";
+  const url = baseUrl + path;
+
+  const token = getToken();
+  const response = await fetch(url, {
+    method: "put",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+
+  const data = await response.json();
+  return data;
+};
+
 export const buildOverviewAction = async ({ request, params }) => {
   let deletePath = `/${params.profileId}/${params.projectId}/delete`;
+  let reviewPath = `${new URL(request.url).pathname}/review`;
   let formData = await request.formData();
   let { _action } = Object.fromEntries(formData);
 
@@ -135,6 +136,10 @@ export const buildOverviewAction = async ({ request, params }) => {
     return redirect(
       `/profile/${params.profileId}/projects?success=1&message=${data.message}`
     );
+  } else if (_action === "review") {
+    // console.log(reviewPath);
+    const data = await putReviewProject(reviewPath);
+    return data;
   }
 };
 
