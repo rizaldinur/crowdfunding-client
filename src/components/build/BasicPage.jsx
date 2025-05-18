@@ -353,6 +353,7 @@ function BasicPage() {
                 <TextField
                   label="Judul"
                   name="title"
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   error={Boolean(getError("title", formErrorData))}
                   value={form.title}
                   onChange={handleChange}
@@ -379,6 +380,7 @@ function BasicPage() {
                 <TextField
                   label="Subjudul"
                   name="subtitle"
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   error={Boolean(getError("subtitle", formErrorData))}
                   value={form.subtitle}
                   onChange={handleChange}
@@ -434,6 +436,7 @@ function BasicPage() {
               >
                 <CategoryAutocomplete
                   value={form.category}
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   onChange={(e, value) => {
                     setForm((form) => {
                       return { ...form, category: value };
@@ -468,6 +471,7 @@ function BasicPage() {
               >
                 <LocationAutocomplete
                   value={form.location}
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   onChange={(e, value) => {
                     setForm((form) => {
                       return { ...form, location: value };
@@ -508,6 +512,7 @@ function BasicPage() {
                 <TextField
                   label="Link gambar"
                   name="imageUrl"
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   error={Boolean(getError("imageUrl", formErrorData))}
                   helperText={
                     Boolean(getError("imageUrl", formErrorData)) &&
@@ -557,6 +562,7 @@ function BasicPage() {
               >
                 <NumericFormat
                   customInput={TextField}
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   label="Jumlah target"
                   name="fundTarget"
                   error={Boolean(getError("fundTarget", formErrorData))}
@@ -621,6 +627,10 @@ function BasicPage() {
                 >
                   <DateTimePicker
                     label="Tanggal peluncuran"
+                    disabled={
+                      filledData.data?.projectStatus === "launching" ||
+                      filledData.data?.projectStatus === "oncampaign"
+                    }
                     value={form.launchDate}
                     onChange={(newValue) =>
                       setForm((form) => {
@@ -676,6 +686,7 @@ function BasicPage() {
               >
                 <NumericFormat
                   customInput={TextField}
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   label="Durasi"
                   name="duration"
                   error={Boolean(getError("duration", formErrorData))}

@@ -228,6 +228,7 @@ function PaymentPage() {
               >
                 <Autocomplete
                   options={["Individu", "Bisnis"]}
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   value={form.businessType}
                   onChange={(e, val) =>
                     setForm((prev) => {
@@ -268,6 +269,7 @@ function PaymentPage() {
                 <TextField
                   label="Nama bank"
                   name="bankName"
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   value={form.bankName}
                   onChange={(e) =>
                     setForm((prev) => {
@@ -280,6 +282,7 @@ function PaymentPage() {
                   label="Nomor rekening"
                   type="text"
                   name="bankAccountNumber"
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   value={form.bankAccountNumber}
                   valueIsNumericString
                   allowLeadingZeros

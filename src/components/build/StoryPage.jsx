@@ -208,6 +208,7 @@ function StoryPage() {
                   multiline
                   autoFocus
                   name="detail"
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   placeholder="Gunakan format markdown untuk membuat cerita yang menarik."
                   minRows={20}
                   style={{ backgroundColor: "background.default" }}
@@ -253,6 +254,7 @@ function StoryPage() {
                   label="Keuntungan"
                   multiline
                   name="benefits"
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   value={benefits}
                   onChange={(e) => setBenefit(e.target.value)}
                   rows={3}
@@ -290,6 +292,7 @@ function StoryPage() {
                   label="Risiko dan tantangan"
                   multiline
                   name="challenges"
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   value={challenges}
                   onChange={(e) => setChallenges(e.target.value)}
                   rows={3}
@@ -333,6 +336,7 @@ function StoryPage() {
                         <TextField
                           label="Pertanyaan"
                           name={"question"}
+                          disabled={filledData.data?.projectStatus !== "draft"}
                           value={faq.question}
                           onChange={(e) =>
                             handleFaqChange(
@@ -345,6 +349,7 @@ function StoryPage() {
                         <TextField
                           label="Jawaban"
                           name={"answer"}
+                          disabled={filledData.data?.projectStatus !== "draft"}
                           value={faq.answer}
                           onChange={(e) =>
                             handleFaqChange(
@@ -358,6 +363,7 @@ function StoryPage() {
                           variant="outlined"
                           color="error"
                           startIcon={<Delete />}
+                          disabled={filledData.data?.projectStatus !== "draft"}
                           sx={{ placeSelf: "end" }}
                           onClick={() => handleRemoveFaq(index)}
                         >
@@ -370,6 +376,7 @@ function StoryPage() {
                   variant="outlined"
                   color="inherit"
                   sx={{ placeSelf: "center" }}
+                  disabled={filledData.data?.projectStatus !== "draft"}
                   onClick={handleAddFaq}
                 >
                   tambahkan pertanyaan dan jawaban
