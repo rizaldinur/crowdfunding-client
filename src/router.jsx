@@ -49,7 +49,9 @@ import ProfilePage, {
 import PaymentPage, {
   paymentBuildAction,
 } from "./components/build-page/PaymentPage.jsx";
-import PreviewPageLayout from "./routes/layouts/PreviewPageLayout.jsx";
+import PreviewPageLayout, {
+  previewLoader,
+} from "./routes/layouts/PreviewPageLayout.jsx";
 
 const router = createBrowserRouter([
   {
@@ -124,6 +126,11 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "/:profileId/:projectId/build-overview/preview",
+        element: <PreviewPageLayout />,
+        loader: previewLoader,
+      },
+      {
         path: "/:profileId/:projectId/build-overview",
         element: <BuildOverview />,
         loader: buildOverviewLoader,
@@ -150,7 +157,6 @@ const router = createBrowserRouter([
             element: <PaymentPage />,
             action: paymentBuildAction,
           },
-          // { path: "preview", element: <PreviewPage /> },
         ],
       },
       {
