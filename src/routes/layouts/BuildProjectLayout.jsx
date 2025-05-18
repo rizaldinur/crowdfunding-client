@@ -2,7 +2,7 @@ import { Divider } from "@mui/material";
 import { Navigate, Outlet, useLocation } from "react-router";
 import MainFooter from "../../components/navigation/MainFooter";
 import BuildPageNav from "../../components/navigation/BuildPageNav";
-import BuildTabs from "../../components/build/BuildTabs";
+import BuildTabs from "../../components/build-page/BuildTabs";
 import { FormSubmitContext } from "../../hooks/useFormSubmitContext";
 import { useEffect, useRef, useState } from "react";
 import { setToken } from "../../utils/utils";

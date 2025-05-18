@@ -4,7 +4,7 @@ import { Link as RouterLink, useParams } from "react-router";
 import { useFormSubmitContext } from "../../hooks/useFormSubmitContext";
 
 function BuildPageNav() {
-  const { newSlug, newUserSlug } = useFormSubmitContext();
+  const { newSlug, newUserSlug } = useFormSubmitContext() || {};
   const params = useParams();
   const backUrl = `/${newUserSlug ? newUserSlug : params.profileId}/${
     newSlug ? newSlug : params.projectId
