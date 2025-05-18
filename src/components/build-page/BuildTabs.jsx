@@ -100,7 +100,7 @@ function BuildTabs({}) {
               variant="outlined"
               component={RouterLink}
               to={pathParam + "/build-overview/preview"}
-              state={{ from: location }}
+              state={{ from: window.location.pathname }}
             >
               Pratinjau
             </Button>
