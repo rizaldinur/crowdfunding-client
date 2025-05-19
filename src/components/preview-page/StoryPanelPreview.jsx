@@ -142,7 +142,7 @@ function StoryPanelPreview({ story, creator, open, setOpen }) {
                 return (
                   <Tab
                     key={"sidetab-" + heading.id}
-                    label={heading.innerHTML}
+                    label={heading.innerText}
                     component="a"
                     href={"#" + heading.id}
                     onClick={(e) => handleTabClick(e, heading.id)}
@@ -173,7 +173,7 @@ function StoryPanelPreview({ story, creator, open, setOpen }) {
               return (
                 <Tab
                   key={"sidetab-" + heading.id}
-                  label={heading.innerHTML}
+                  label={heading.innerText}
                   component="a"
                   href={"#" + heading.id}
                   onClick={(e) => handleTabClick(e, heading.id)}
