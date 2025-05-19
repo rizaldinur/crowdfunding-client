@@ -76,7 +76,7 @@ const router = createBrowserRouter([
             element: <DiscoverProjects />,
           },
           {
-            path: "project/details/:projectId",
+            path: "project/details/:profileId/:projectId",
             element: <ProjectDetailsLayout />,
             children: [
               { index: true, element: <Navigate to="story" /> },
