@@ -18,6 +18,7 @@ import {
   authenticateJWT,
   deleteProject,
   getBuildOverviewData,
+  putLaunchProject,
   putReviewProject,
 } from "../api/api";
 import LoadingPage from "../components/LoadingPage";
@@ -106,24 +107,6 @@ export const buildOverviewLoader = ({ request, params }) => {
   return {
     data: getBuildOverviewData(pathname),
   };
-};
-
-export const putLaunchProject = async (path, postData) => {
-  const baseUrl = "http://localhost:8000";
-  const url = baseUrl + path;
-
-  const token = getToken();
-  const response = await fetch(url, {
-    method: "put",
-    body: JSON.stringify(postData),
-    headers: {
-      Authorization: "Bearer " + token,
-      "Content-Type": "application/json",
-    },
-  });
-
-  const data = await response.json();
-  return data;
 };
 
 export const buildOverviewAction = async ({ request, params }) => {
