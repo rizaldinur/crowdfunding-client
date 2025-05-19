@@ -27,15 +27,8 @@ function CreatedProjectsPanel() {
                     return (
                       <MinimalCard
                         key={"project-" + index}
-                        profileId={project.profileId}
-                        projectId={project.projectId}
-                        projectImage={project.projectImage}
-                        projectName={project.projectName}
-                        creatorAvatar={project.creatorAvatar}
-                        creatorName={project.creatorName}
-                        school={project.school}
-                        status={project.status}
-                        createdAt={project.createdAt}
+                        data={project}
+                        variant="created"
                       />
                     );
                   })

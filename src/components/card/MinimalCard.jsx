@@ -10,20 +10,10 @@ import {
 } from "@mui/material";
 import { Link as RouterLink } from "react-router";
 import useThemeContext from "../../hooks/useThemeContext";
+import PropTypes from "prop-types";
 
-function MinimalCard({
-  profileId,
-  projectId,
-  projectImage,
-  projectName,
-  creatorAvatar,
-  creatorName,
-  school,
-  status,
-  createdAt,
-}) {
+function MinimalCard({ variant = "basic", data = {} }) {
   const { currentTheme } = useThemeContext();
-  console.log(currentTheme);
 
   return (
     <Card
@@ -51,10 +41,10 @@ function MinimalCard({
           aspectRatio: "16/9",
         }}
         image={
-          projectImage ||
+          data.projectImage ||
           "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
         }
-        title="green iguana"
+        title={`Gambar proyek ${data.projectName || ""}`}
       />
       <CardContent
         sx={{ placeSelf: { xs: "start", sm: "center" }, minWidth: 0 }}
@@ -66,43 +56,97 @@ function MinimalCard({
             color="textPrimary"
             noWrap
             component={RouterLink}
-            to={`/${profileId}/${projectId}/build-overview`}
+            to={
+              variant === "created"
+                ? `/${data.profileId}/${data.projectId}/build-overview`
+                : `/project/details/${data.profileId}/${data.projectId}`
+            }
           >
-            {projectName || "Proyek tanpa nama"}
+            {data.projectName || "Proyek tanpa nama"}
           </Link>
-          <Typography variant="caption">{`Dibuat pada ${createdAt}`}</Typography>
+          <Typography variant="caption">
+            {variant === "created"
+              ? `Dibuat pada ${data.createdAt}`
+              : variant === "backed"
+              ? `Didukung pada ${data.createdAt}`
+              : variant === "saved"
+              ? `Disimpan pada ${data.createdAt}`
+              : null}
+          </Typography>
+          {variant === "created" &&
+            (data.status === "oncampaign" || data.status === "finished") && (
+              <Typography variant="caption" color="textSecondary">
+                {`Berlangsung pada ${new Date(data.launchDate).toLocaleString(
+                  "id-ID",
+                  { dateStyle: "full" }
+                )} - ${new Date(data.endDate).toLocaleString("id-ID", {
+                  dateStyle: "full",
+                })}`}
+              </Typography>
+            )}
         </Stack>
         <Stack direction="row" alignItems="center" gap={1} sx={{ mt: 1 }}>
-          <Avatar sx={{ width: 50, height: 50 }} src={creatorAvatar} />
+          <Avatar sx={{ width: 50, height: 50 }} src={data.creatorAvatar} />
           <Stack>
             <Link variant="subtitle2" underline="hover" color="textPrimary">
-              {creatorName || "Kreator"}
+              {data.creatorName || "Kreator"}
             </Link>
             <Typography variant="caption" color="textSecondary">
-              {school || "Asal sekolah"}
+              {data.school || "Asal sekolah"}
             </Typography>
           </Stack>
         </Stack>
       </CardContent>
-      <Chip
-        label={typeof status === "string" ? status.toUpperCase() : "Label"}
-        sx={{
-          ml: "auto",
-          mt: 1,
-          mr: 1,
-        }}
-        color={
-          status === "onreview"
-            ? "info"
-            : status === "accept"
-            ? "success"
-            : status === "campaign"
-            ? "primary"
-            : "default"
-        }
-      />
+      {variant === "created" ? (
+        <Chip
+          label={
+            typeof data.status === "string"
+              ? data.status.toUpperCase()
+              : "Label"
+          }
+          sx={{
+            ml: "auto",
+            mt: 1,
+            mr: 1,
+          }}
+          color={
+            data.status === "onreview"
+              ? "warning"
+              : data.status === "accept"
+              ? "info"
+              : data.status === "oncampaign"
+              ? "primary"
+              : "default"
+          }
+        />
+      ) : variant === "backed" ? (
+        <Chip
+          label={
+            typeof data.transactionStatus === "string"
+              ? data.transactionStatus.toUpperCase()
+              : "Label"
+          }
+          sx={{
+            ml: "auto",
+            mt: 1,
+            mr: 1,
+          }}
+          color={
+            data.transactionStatus === "pending"
+              ? "info"
+              : data.transactionStatus === "settlement"
+              ? "success"
+              : "default"
+          }
+        />
+      ) : null}
     </Card>
   );
 }
+
+MinimalCard.propTypes = {
+  variant: PropTypes.oneOf(["created", "saved", "backed", "basic"]),
+  data: PropTypes.object,
+};
 
 export default MinimalCard;

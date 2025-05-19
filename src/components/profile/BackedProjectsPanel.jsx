@@ -5,7 +5,7 @@ function BackedProjectsPanel() {
   return (
     <Container maxWidth="md">
       <Stack sx={{ py: 4 }} gap={4}>
-        <MinimalCard />
+        <MinimalCard variant="backed" />
       </Stack>
     </Container>
   );
