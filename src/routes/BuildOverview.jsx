@@ -85,6 +85,7 @@ function BuildOverview() {
                 </Alert>
               </Snackbar>
               <OverviewHead
+                status={data.data.projectStatus}
                 projectName={data.data.projectName}
                 creatorName={data.data.creatorName}
               />
@@ -107,9 +108,28 @@ export const buildOverviewLoader = ({ request, params }) => {
   };
 };
 
+export const putLaunchProject = async (path, postData) => {
+  const baseUrl = "http://localhost:8000";
+  const url = baseUrl + path;
+
+  const token = getToken();
+  const response = await fetch(url, {
+    method: "put",
+    body: JSON.stringify(postData),
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data = await response.json();
+  return data;
+};
+
 export const buildOverviewAction = async ({ request, params }) => {
   let deletePath = `/${params.profileId}/${params.projectId}/delete`;
   let reviewPath = `${new URL(request.url).pathname}/review`;
+  let launchPath = `${new URL(request.url).pathname}/launch`;
   let formData = await request.formData();
   let { _action } = Object.fromEntries(formData);
 
@@ -124,6 +144,10 @@ export const buildOverviewAction = async ({ request, params }) => {
   } else if (_action === "review") {
     // console.log(reviewPath);
     const data = await putReviewProject(reviewPath);
+    return data;
+  } else if (_action === "launch") {
+    let postData = Object.fromEntries(formData);
+    const data = await putLaunchProject(launchPath, postData);
     return data;
   }
 };

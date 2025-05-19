@@ -1,4 +1,9 @@
-import { Delete, RemoveRedEye } from "@mui/icons-material";
+import {
+  ArrowOutward,
+  Dashboard,
+  Delete,
+  RemoveRedEye,
+} from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -20,7 +25,7 @@ import {
   Link as RouterLink,
 } from "react-router";
 
-function OverviewHead({ projectName, creatorName }) {
+function OverviewHead({ projectName, creatorName, status }) {
   const location = useLocation();
   const navigation = useNavigation();
   let busy = navigation.state !== "idle";
@@ -87,17 +92,40 @@ function OverviewHead({ projectName, creatorName }) {
           oleh {creatorName || "Kreator"}
         </Typography>
         <Stack direction="row" gap={2} sx={{ mt: 4 }}>
-          <Button
-            startIcon={<RemoveRedEye />}
-            color="inherit"
-            component={RouterLink}
-            to={location.pathname + "/preview"}
-          >
-            pratinjau
-          </Button>
-          <Button startIcon={<Delete />} color="error" onClick={handleOpen}>
-            hapus proyek
-          </Button>
+          {status !== "oncampaign" && status !== "finished" ? (
+            <>
+              <Button
+                startIcon={<RemoveRedEye />}
+                color="inherit"
+                component={RouterLink}
+                to={location.pathname + "/preview"}
+              >
+                pratinjau
+              </Button>
+              <Button startIcon={<Delete />} color="error" onClick={handleOpen}>
+                hapus proyek
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                startIcon={<ArrowOutward />}
+                color="inherit"
+                // component={RouterLink}
+                // to={location.pathname + "/preview"}
+              >
+                Ke halaman proyek
+              </Button>
+              <Button
+                startIcon={<Dashboard />}
+                color="primary"
+                variant="contained"
+                // onClick={handleOpen}
+              >
+                dashboard proyek
+              </Button>
+            </>
+          )}
         </Stack>
         <Divider />
       </Box>

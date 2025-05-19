@@ -28,6 +28,15 @@ function OverviewMain({ data }) {
   let busy = fetcher.state !== "idle";
   const [loadingReview, setLoadingReview] = useState(false);
   const [loadingLaunch, setLoadingLaunch] = useState(false);
+  const [launchDate, setLaunchDate] = useState(() => {
+    if (
+      !data.projectLaunchDate ||
+      new Date(data.projectLaunchDate) <= new Date()
+    ) {
+      return new Date().toISOString();
+    }
+    return data.projectLaunchDate;
+  });
 
   const buildLocation = useMemo(() => {
     let basePath = `/${params.profileId}/${params.projectId}/build`;
@@ -52,6 +61,14 @@ function OverviewMain({ data }) {
 
   return (
     <Container maxWidth="md" sx={{ color: "text.primary", mt: 4 }}>
+      <fetcher.Form
+        id="formLaunchProject"
+        method="put"
+        onSubmitCapture={(e) => setLoadingLaunch(true)}
+      >
+        <input type="hidden" name="_action" value="launch" />
+        <input type="hidden" name="launchDate" value={launchDate} />
+      </fetcher.Form>
       <fetcher.Form
         id="formSubmitReview"
         method="put"
@@ -211,11 +228,12 @@ function OverviewMain({ data }) {
               Sudah dikirim
             </Button>
           )}
-          {data.projectStatus === "accept" && (
-            <Button disabled variant="text" startIcon={<DoneAll />}>
-              Review diterima
-            </Button>
-          )}
+          {data.projectStatus !== "draft" &&
+            data.projectStatus !== "onreview" && (
+              <Button disabled variant="text" startIcon={<DoneAll />}>
+                Review diterima
+              </Button>
+            )}
         </Stack>
         <Stack
           direction="row"
@@ -225,14 +243,15 @@ function OverviewMain({ data }) {
         >
           <Avatar
             sx={{
-              bgcolor:
-                data.projectStatus === "onreview" ||
-                data.projectStatus === "accept"
-                  ? "primary.main"
-                  : null,
+              bgcolor: data.projectStatus !== "draft" ? "primary.main" : null,
             }}
           >
-            {data.projectStatus === "accept" ? <Check /> : <Timer />}
+            {data.projectStatus !== "draft" &&
+            data.projectStatus !== "onreview" ? (
+              <Check />
+            ) : (
+              <Timer />
+            )}
           </Avatar>
           <Stack>
             <Typography variant="h6" fontWeight={700}>
@@ -249,13 +268,59 @@ function OverviewMain({ data }) {
           </Stack>
         </Stack>
         <Stack alignItems="start" gap={1} sx={{ p: 3 }}>
-          <Typography variant="body2">Luncurkan proyekmu!</Typography>
-          <Button
-            variant="contained"
-            disabled={data.projectStatus !== "accept"}
-          >
-            luncurkan
-          </Button>
+          {(data.projectStatus === "draft" ||
+            data.projectStatus === "onreview" ||
+            data.projectStatus === "accept") && (
+            <>
+              <Typography variant="body2">Luncurkan proyekmu!</Typography>
+              {data.projectStatus === "accept" && (
+                <Typography variant="caption" color="textSecondary">
+                  Tanggal peluncuran:{" "}
+                  {launchDate
+                    ? new Date(launchDate).toLocaleDateString("id-ID", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                        timeZoneName: "shortGeneric",
+                      })
+                    : "X"}
+                  . Tanggal ini diambil dari informasi dasar yang kamu kirim.
+                  Jika tanggal peluncuran tidak ada atau kurang dari hari ini,
+                  kami akan mengatur tanggal peluncuran pada hari ini. Ubah
+                  tanggal peluncuran sekarang di halaman dasar selagi masih ada
+                  kesempatan.
+                </Typography>
+              )}
+              <Button
+                variant="contained"
+                type="submit"
+                form="formLaunchProject"
+                loading={busy && loadingLaunch}
+                disabled={data.projectStatus !== "accept"}
+              >
+                luncurkan
+              </Button>
+            </>
+          )}
+          {data.projectStatus === "launching" && (
+            <Button color="disabled" disabled startIcon={<DoneAll />}>
+              Proyek akan diluncurkan
+            </Button>
+          )}
+          {data.projectStatus === "oncampaign" && (
+            <Button color="disabled" disabled startIcon={<DoneAll />}>
+              Proyek sedang berjalan
+            </Button>
+          )}
+          {data.projectStatus === "finished" && (
+            <Button color="disabled" disabled startIcon={<DoneAll />}>
+              Proyek sudah selesai
+            </Button>
+          )}
         </Stack>
       </Box>
     </Container>
