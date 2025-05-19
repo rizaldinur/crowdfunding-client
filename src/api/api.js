@@ -42,6 +42,22 @@ export async function putBuildForm(postData, pathname) {
   return data;
 }
 
+export const putReviewProject = async (path) => {
+  const baseUrl = "http://localhost:8000";
+  const url = baseUrl + path;
+
+  const token = getToken();
+  const response = await fetch(url, {
+    method: "put",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+
+  const data = await response.json();
+  return data;
+};
+
 export const deleteProject = async (path) => {
   const baseUrl = "http://localhost:8000";
   const url = baseUrl + path;
