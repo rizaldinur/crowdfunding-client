@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  Container,
   Divider,
   IconButton,
   Link,
@@ -16,7 +17,7 @@ import { Link as RouterLink } from "react-router";
 import { accountMenuItems } from "../../data/staticData";
 import { useState } from "react";
 import { assignMenuPath } from "../../utils/utils";
-
+import Cookies from "js-cookie";
 function AuthNav({ accountMenu }) {
   const [anchorElUser, setAnchorElUser] = useState(null); // For authenticated menu anchor
 
@@ -36,66 +37,78 @@ function AuthNav({ accountMenu }) {
   return (
     <Box
       sx={{
-        display: "flex",
         py: 1,
         px: 2,
-        justifyContent: "end",
-        alignItems: "center",
         borderBottom: "solid 1px",
         borderBottomColor: "divider",
       }}
     >
-      <Link component={RouterLink} to="/" underline="none" sx={{ mx: "auto" }}>
-        <Typography variant="h5" fontWeight={700} display="inline">
-          RUANG MODAL
-        </Typography>
-      </Link>
-      {accountMenu && (
-        <Tooltip title="Open settings">
-          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar alt="Remy Sharp" src={accountMenu.avatar} />
-          </IconButton>
-        </Tooltip>
-      )}
-      {accountMenu && (
-        <Menu
-          id="menu-appbar"
-          elevation={2}
-          anchorEl={anchorElUser}
-          keepMounted
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          transformOrigin={{ vertical: "top", horizontal: "right" }}
-          open={Boolean(anchorElUser)}
-          onClose={handleCloseUserMenu}
+      <Container
+        maxWidth="lg"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Link
+          component={RouterLink}
+          to="/"
+          underline="none"
+          sx={{ mx: "auto" }}
         >
-          <MenuList key="MenuListAccount">
-            {accountMenuItems.map((item, index) => (
-              <Box key={item.name + "-wrapper"}>
-                {item.name === "Keluar" && <Divider key={`divider-${index}`} />}
-                <MenuItem
-                  key={item.name + "-menuItem"}
-                  onClick={() => {
-                    handleCloseUserMenu();
-                    if (item.name === "Keluar") handleLogout();
-                  }}
-                  component={RouterLink}
-                  to={"/" + assignMenuPath(item.path, accountMenu.slug || "")}
-                  sx={{ py: 1 }}
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText>
-                    <Typography
-                      color={item.name === "Keluar" ? "error" : "inherit"}
-                    >
-                      {item.name}
-                    </Typography>
-                  </ListItemText>
-                </MenuItem>
-              </Box>
-            ))}
-          </MenuList>
-        </Menu>
-      )}
+          <Typography variant="h5" fontWeight={700} display="inline">
+            RUANG MODAL
+          </Typography>
+        </Link>
+        {accountMenu && (
+          <Tooltip title="Open settings">
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Avatar alt="Remy Sharp" src={accountMenu.avatar} />
+            </IconButton>
+          </Tooltip>
+        )}
+        {accountMenu && (
+          <Menu
+            id="menu-appbar"
+            elevation={2}
+            anchorEl={anchorElUser}
+            keepMounted
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            transformOrigin={{ vertical: "top", horizontal: "right" }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+            <MenuList key="MenuListAccount">
+              {accountMenuItems.map((item, index) => (
+                <Box key={item.name + "-wrapper"}>
+                  {item.name === "Keluar" && (
+                    <Divider key={`divider-${index}`} />
+                  )}
+                  <MenuItem
+                    key={item.name + "-menuItem"}
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      if (item.name === "Keluar") handleLogout();
+                    }}
+                    component={RouterLink}
+                    to={"/" + assignMenuPath(item.path, accountMenu.slug || "")}
+                    sx={{ py: 1 }}
+                  >
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText>
+                      <Typography
+                        color={item.name === "Keluar" ? "error" : "inherit"}
+                      >
+                        {item.name}
+                      </Typography>
+                    </ListItemText>
+                  </MenuItem>
+                </Box>
+              ))}
+            </MenuList>
+          </Menu>
+        )}
+      </Container>
     </Box>
   );
 }
