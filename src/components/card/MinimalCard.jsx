@@ -112,7 +112,7 @@ function MinimalCard({ variant = "basic", data = {} }) {
           color={
             data.status === "onreview"
               ? "warning"
-              : data.status === "accept"
+              : data.status === "accept" || data.status === "launching"
               ? "info"
               : data.status === "oncampaign"
               ? "primary"
