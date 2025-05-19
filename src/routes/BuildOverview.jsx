@@ -69,7 +69,12 @@ function BuildOverview() {
             <FormSubmitContext.Provider
               value={{ setAlertMsg, setSuccess, setAlertOpen }}
             >
-              <AuthNav />
+              <AuthNav
+                accountMenu={{
+                  slug: data.data.creatorSlug,
+                  avatar: data.data.creatorAvatar,
+                }}
+              />
               <Snackbar
                 open={alertOpen}
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
