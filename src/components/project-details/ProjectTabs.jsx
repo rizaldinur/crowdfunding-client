@@ -1,8 +1,17 @@
-import { Box, Container, Tab, Tabs, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  IconButton,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
 import PropTypes from "prop-types";
-import { useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { useLocation, Link as RouterLink } from "react-router";
 import StoryPanel from "./StoryPanel";
+import { ProjectDetailsLayoutContext } from "../../routes/layouts/ProjectDetailsLayout";
+import { Menu } from "@mui/icons-material";
 
 function a11yProps(index) {
   return {
@@ -35,8 +44,8 @@ CustomTabPanel.propTypes = {
 };
 
 function ProjectTabs() {
+  const { setOpen } = useContext(ProjectDetailsLayoutContext);
   const location = useLocation();
-  console.log(location);
   const tabSegment = location.pathname.split("/")[5];
   const tabMap = {
     story: 0,
@@ -45,8 +54,6 @@ function ProjectTabs() {
     comments: 3,
   };
   const tabValue = location.state?.tabValue ?? tabMap[tabSegment] ?? null;
-
-  console.log(tabValue);
 
   return (
     <Box
@@ -59,8 +66,24 @@ function ProjectTabs() {
         bgcolor: "inherit",
       }}
     >
-      <Container maxWidth="xl">
-        <Tabs value={tabValue || 0} aria-label="nav tabs" role="navigation">
+      <Container maxWidth="xl" sx={{ display: "flex", alignItems: "center" }}>
+        <IconButton
+          sx={{
+            display: { xs: "flex", sm: "none" },
+            color: "text.secondary",
+          }}
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          <Menu />
+        </IconButton>
+        <Tabs
+          value={tabValue || 0}
+          aria-label="nav tabs"
+          role="navigation"
+          variant="scrollable"
+        >
           <Tab
             label="Cerita"
             component={RouterLink}

@@ -2,19 +2,22 @@ import { Await, Outlet, useLoaderData, useLocation } from "react-router";
 import ProjectTabs from "../../components/project-details/ProjectTabs";
 import ProjectHead from "../../components/project-details/ProjectHead";
 import { Box } from "@mui/material";
-import { Suspense, useEffect } from "react";
+import { createContext, Suspense, useEffect, useState } from "react";
 import BasicSectionLoading from "../../components/loading-template/BasicSectionLoading";
 import { getProjectHeader } from "../../api/feed";
 
+export const ProjectDetailsLayoutContext = createContext();
+
 function ProjectDetailsLayout() {
   const location = useLocation();
+  const [open, setOpen] = useState(false);
   const { headerData } = useLoaderData();
 
   useEffect(() => {
     document.title = "Detail proyek";
   }, [location]);
   return (
-    <>
+    <ProjectDetailsLayoutContext.Provider value={{ open, setOpen }}>
       <Suspense fallback={<BasicSectionLoading sx={{ height: 400 }} />}>
         <Await resolve={headerData}>
           {(headerData) => {
@@ -24,7 +27,7 @@ function ProjectDetailsLayout() {
       </Suspense>
       <ProjectTabs />
       <Outlet value={"someData"} />
-    </>
+    </ProjectDetailsLayoutContext.Provider>
   );
 }
 

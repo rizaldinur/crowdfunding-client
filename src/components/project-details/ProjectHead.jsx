@@ -89,7 +89,7 @@ function ProjectHead({ data = {} }) {
             <Grid size={{ xs: 12, md: 5 }}>
               <Box>
                 <LinearProgress
-                  value={70}
+                  value={data.fundingProgress >= 0 ? data.fundingProgress : 70}
                   variant="determinate"
                   color="primary"
                 />
