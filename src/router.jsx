@@ -12,7 +12,9 @@ import StartProject, { startProjectLoader } from "./routes/StartProject.jsx";
 import ProjectDetailsLayout, {
   projectDetailLayoutLoader,
 } from "./routes/layouts/ProjectDetailsLayout.jsx";
-import StoryPanel from "./components/project-details/StoryPanel.jsx";
+import StoryPanel, {
+  storyPanelLoader,
+} from "./components/project-details/StoryPanel.jsx";
 import { Typography } from "@mui/material";
 import UpdatePanel from "./components/project-details/UpdatePanel.jsx";
 import FaqsPanel from "./components/project-details/FaqsPanel.jsx";
@@ -82,7 +84,11 @@ const router = createBrowserRouter([
             element: <ProjectDetailsLayout />,
             loader: projectDetailLayoutLoader,
             children: [
-              { index: true, element: <StoryPanel /> },
+              {
+                index: true,
+                element: <StoryPanel />,
+                loader: storyPanelLoader,
+              },
               {
                 path: "updates",
                 element: <UpdatePanel />,
