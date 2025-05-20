@@ -37,21 +37,14 @@ CustomTabPanel.propTypes = {
 function ProjectTabs() {
   const location = useLocation();
   console.log(location);
-  const tabSegment = location.pathname.split("/")[4];
-
-  console.log(tabSegment);
-
-  const tabValue =
-    location.state?.tabValue ||
-    (tabSegment === "story"
-      ? 0
-      : tabSegment === "updates"
-      ? 1
-      : tabSegment === "faqs"
-      ? 2
-      : tabSegment === "comments"
-      ? 3
-      : null);
+  const tabSegment = location.pathname.split("/")[5];
+  const tabMap = {
+    story: 0,
+    updates: 1,
+    faqs: 2,
+    comments: 3,
+  };
+  const tabValue = location.state?.tabValue ?? tabMap[tabSegment] ?? null;
 
   console.log(tabValue);
 
@@ -71,7 +64,7 @@ function ProjectTabs() {
           <Tab
             label="Cerita"
             component={RouterLink}
-            to="story"
+            to="."
             state={{ tabValue: 0 }}
             {...a11yProps(0)}
           />

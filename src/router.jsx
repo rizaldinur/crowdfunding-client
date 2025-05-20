@@ -9,7 +9,9 @@ import MainLayout, { mainLayoutLoader } from "./routes/layouts/MainLayout.jsx";
 import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
 import Cookies from "js-cookie";
 import StartProject, { startProjectLoader } from "./routes/StartProject.jsx";
-import ProjectDetailsLayout from "./routes/layouts/ProjectDetailsLayout.jsx";
+import ProjectDetailsLayout, {
+  projectDetailLayoutLoader,
+} from "./routes/layouts/ProjectDetailsLayout.jsx";
 import StoryPanel from "./components/project-details/StoryPanel.jsx";
 import { Typography } from "@mui/material";
 import UpdatePanel from "./components/project-details/UpdatePanel.jsx";
@@ -78,9 +80,9 @@ const router = createBrowserRouter([
           {
             path: "project/details/:profileId/:projectId",
             element: <ProjectDetailsLayout />,
+            loader: projectDetailLayoutLoader,
             children: [
-              { index: true, element: <Navigate to="story" /> },
-              { path: "story", element: <StoryPanel /> },
+              { index: true, element: <StoryPanel /> },
               {
                 path: "updates",
                 element: <UpdatePanel />,

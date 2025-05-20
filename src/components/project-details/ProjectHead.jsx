@@ -21,8 +21,9 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { numericFormatter } from "react-number-format";
 
-function ProjectHead() {
+function ProjectHead({ data = {} }) {
   return (
     <Box>
       <Container maxWidth="xl">
@@ -33,21 +34,24 @@ function ProjectHead() {
             color="textPrimary"
             fontWeight="700"
           >
-            Judul Proyek
+            {data.title || "Judul Proyek"}
           </Typography>
           <Typography
             sx={{ placeSelf: "center" }}
             variant="subtitle1"
             color="textSecondary"
           >
-            Subjudul konten yang menjelaskan proyek secara singkat, padat, dan
-            jelas.
+            {data.subtitle ||
+              "Subjudul konten yang menjelaskan proyek secara singkat, padat, dan jelas."}
           </Typography>
           <Grid container spacing={5} sx={{ mt: 5 }}>
             <Grid size={{ xs: 12, md: 6.5 }}>
               <Box sx={{ aspectRatio: "16/9" }}>
                 <img
-                  src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+                  src={
+                    data.imageUrl ||
+                    "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+                  }
                   alt="project main image"
                   width={640}
                   height={360}
@@ -68,7 +72,7 @@ function ProjectHead() {
                   sx={{ display: "flex", gap: 1, alignItems: "center" }}
                 >
                   <Category />
-                  Kategori
+                  {data.category || "Kategori"}
                 </Link>
                 <Link
                   color="textPrimary"
@@ -78,7 +82,7 @@ function ProjectHead() {
                   sx={{ display: "flex", gap: 1, alignItems: "center" }}
                 >
                   <LocationOn />
-                  Surabaya
+                  {data.location || "Surabaya"}
                 </Link>
               </Stack>
             </Grid>
@@ -90,10 +94,15 @@ function ProjectHead() {
                   color="primary"
                 />
                 <Typography variant="h4" color="primary" sx={{ mt: 3 }}>
-                  Rp X,xxx,xxx
+                  Rp {data.funding >= 0 ? data.funding : "X,xxx,xxx"}
                 </Typography>
                 <Typography variant="subtitle1" color="textSecondary">
-                  dana terkumpul dari target Rp X,xxx,xxx
+                  dana terkumpul dari target Rp{" "}
+                  {data.fundTarget
+                    ? numericFormatter(data.fundTarget?.toString(), {
+                        thousandSeparator: ".",
+                      })
+                    : "X,xxx,xxx"}
                 </Typography>
                 <Typography variant="h4" color="textPrimary" sx={{ mt: 3 }}>
                   100
@@ -102,7 +111,7 @@ function ProjectHead() {
                   pendukung
                 </Typography>
                 <Typography variant="h4" color="textPrimary" sx={{ mt: 3 }}>
-                  5
+                  {data.daysLeft || "5"}
                 </Typography>
                 <Typography variant="subtitle1" color="textSecondary">
                   hari
