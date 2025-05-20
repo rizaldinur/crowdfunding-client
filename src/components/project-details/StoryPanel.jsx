@@ -122,10 +122,10 @@ function StoryPanel() {
 
   const handleTabClick = (e, heading) => {
     e.preventDefault();
-    ignoreScroll.current = true;
 
     const newHeading = document.getElementById(heading);
     if (newHeading) {
+      ignoreScroll.current = true;
       const subTabValue = headings.findIndex(
         (heading) => heading.id === newHeading.id
       );
@@ -139,7 +139,17 @@ function StoryPanel() {
         behavior: "smooth", // Smooth scrolling effect
       });
 
-      if (window.scrollY === topPosition - offset) ignoreScroll.current = false;
+      //check scroll animation end
+      let checkScrollEnd = () => {
+        const atTarget = Math.abs(window.scrollY - (topPosition - offset)) < 1;
+        if (atTarget) {
+          ignoreScroll.current = false;
+        } else {
+          requestAnimationFrame(checkScrollEnd);
+        }
+      };
+
+      requestAnimationFrame(checkScrollEnd);
     }
 
     window.history.pushState({ value: 1 }, "", `#${heading}`);
