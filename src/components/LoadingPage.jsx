@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import themes from "../styles/themes";
 import useThemeContext from "../hooks/useThemeContext";
 
-function LoadingPage() {
+function LoadingPage({ withLabel = true }) {
   // const [currentTheme] = useState(localStorage.getItem("theme") || "light");
   const { currentTheme } = useThemeContext();
 
@@ -17,10 +17,12 @@ function LoadingPage() {
     >
       <Stack sx={{ alignItems: "center" }} gap={2}>
         <CircularProgress />
-        <Typography variant="h5" color="textPrimary">
-          {" "}
-          Sedang memuat halaman...
-        </Typography>
+        {withLabel && (
+          <Typography variant="h5" color="textPrimary">
+            {" "}
+            Sedang memuat halaman...
+          </Typography>
+        )}
       </Stack>
     </ThemeContainer>
   );
