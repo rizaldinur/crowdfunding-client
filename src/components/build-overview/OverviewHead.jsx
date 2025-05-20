@@ -23,9 +23,11 @@ import {
   useLocation,
   useNavigation,
   Link as RouterLink,
+  useParams,
 } from "react-router";
 
 function OverviewHead({ projectName, creatorName, status }) {
+  const params = useParams();
   const location = useLocation();
   const navigation = useNavigation();
   let busy = navigation.state !== "idle";
@@ -111,8 +113,9 @@ function OverviewHead({ projectName, creatorName, status }) {
               <Button
                 startIcon={<ArrowOutward />}
                 color="inherit"
-                // component={RouterLink}
-                // to={location.pathname + "/preview"}
+                component={RouterLink}
+                to={`/project/details/${params.profileId}/${params.projectId}`}
+                target="blank"
               >
                 Ke halaman proyek
               </Button>

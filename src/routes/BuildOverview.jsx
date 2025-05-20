@@ -53,6 +53,7 @@ function BuildOverview() {
             if (data.data?.refreshToken) {
               setToken(data.data?.refreshToken);
             }
+            document.title = `Ringkasan ` + data.data?.projectName;
           }, [data]);
 
           if (data.error) {
