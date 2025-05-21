@@ -111,10 +111,10 @@ function ProjectHead({ data = {} }) {
                   pendukung
                 </Typography>
                 <Typography variant="h4" color="textPrimary" sx={{ mt: 3 }}>
-                  {data.daysLeft || "5"}
+                  {data.timeLeft || "5"}
                 </Typography>
                 <Typography variant="subtitle1" color="textSecondary">
-                  hari
+                  {data.timeFormat || "hari"}
                 </Typography>
                 <Stack sx={{ mt: 3 }} spacing={2}>
                   <Button variant="contained" color="primary">
