@@ -14,17 +14,16 @@ import {
   useLocation,
 } from "react-router";
 import Cookies from "js-cookie";
-import {
-  authenticateJWT,
-  deleteProject,
-  getBuildOverviewData,
-  putLaunchProject,
-  putReviewProject,
-} from "../api/api";
 import LoadingPage from "../components/LoadingPage";
 import { getToken, setToken } from "../utils/utils";
 import { FormSubmitContext } from "../hooks/useFormSubmitContext";
 import { Close } from "@mui/icons-material";
+import {
+  deleteProject,
+  getBuildOverviewData,
+  putLaunchProject,
+  putReviewProject,
+} from "../api/build";
 
 function BuildOverview() {
   const actionData = useActionData();

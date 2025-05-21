@@ -2,9 +2,9 @@ import { Await, Outlet, useLoaderData, useLocation } from "react-router";
 import MainHeader from "../../components/navigation/MainHeader";
 import MainFooter from "../../components/navigation/MainFooter";
 import { Suspense, useEffect, useState } from "react";
-import { authenticateJWT } from "../../api/api";
 import Cookies from "js-cookie";
 import LoadingPage from "../../components/LoadingPage";
+import { authenticateJWT } from "../../api/auth";
 
 function MainLayout() {
   const [authenticated, setAuthenticated] = useState(false);

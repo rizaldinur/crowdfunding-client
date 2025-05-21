@@ -30,8 +30,8 @@ import validator from "validator";
 import CustomPasswordTextField from "../components/input/CustomPasswordTextField";
 import { getError } from "../utils/utils";
 import LoadingPage from "../components/LoadingPage";
-import { authenticateJWT, postSignup } from "../api/api";
 import Cookies from "js-cookie";
+import { authenticateJWT, postSignup } from "../api/auth";
 
 function Signup() {
   useEffect(() => {

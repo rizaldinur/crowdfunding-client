@@ -15,9 +15,9 @@ import { useEffect, useState } from "react";
 import { useFormSubmitContext } from "../../hooks/useFormSubmitContext";
 import { useFetcher, useOutletContext, useParams } from "react-router";
 import { Link as RouterLink } from "react-router";
-import { putBuildForm } from "../../api/api";
 import validator from "validator";
 import { getError, setToken } from "../../utils/utils";
+import { putBuildForm } from "../../api/build";
 
 function StoryPage() {
   const filledData = useOutletContext();

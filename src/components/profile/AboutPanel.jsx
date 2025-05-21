@@ -9,6 +9,7 @@ import {
 } from "react-router";
 import { Suspense } from "react";
 import { Link as RouterLink } from "react-router";
+import { getProfileAbout } from "../../api/account";
 
 function AboutPanel() {
   const { authorized } = useOutletContext();
@@ -60,21 +61,6 @@ function AboutPanel() {
     </Suspense>
   );
 }
-
-const getProfileAbout = async (path) => {
-  let baseUrl = "http://localhost:8000";
-  let url = `${baseUrl}${path}`;
-
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Response("Not Found", {
-      status: response.status,
-      statusText: response.statusText,
-    });
-  }
-  const data = await response.json();
-  return data;
-};
 
 export const profileAboutLoader = ({ params, request }) => {
   const url = new URL(request.url);

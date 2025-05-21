@@ -1,5 +1,4 @@
 import { Suspense, useEffect, useState } from "react";
-import { authenticateJWT } from "../api/api";
 import AuthNav from "../components/navigation/AuthNav";
 import StartProjectMain from "../components/start-project/StartProjectMain";
 import Cookies from "js-cookie";
@@ -14,6 +13,7 @@ import {
 } from "react-router";
 import LoadingPage from "../components/LoadingPage";
 import { setToken } from "../utils/utils";
+import { authenticateJWT } from "../api/auth";
 
 function StartProject() {
   const location = useLocation();

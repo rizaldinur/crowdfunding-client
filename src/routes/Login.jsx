@@ -30,7 +30,7 @@ import CustomPasswordTextField from "../components/input/CustomPasswordTextField
 import { getError } from "../utils/utils";
 import LoadingPage from "../components/LoadingPage";
 import validator from "validator";
-import { postLogin, authenticateJWT } from "../api/api";
+import { authenticateJWT, postLogin } from "../api/auth";
 
 function Login() {
   const location = useLocation();

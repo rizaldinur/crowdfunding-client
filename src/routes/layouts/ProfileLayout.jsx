@@ -12,6 +12,7 @@ import { Suspense, useEffect, useState } from "react";
 import ProfileHead from "../../components/profile/ProfileHead";
 import LoadingPage from "../../components/LoadingPage";
 import Cookies from "js-cookie";
+import { getProfileHeader } from "../../api/account";
 
 function ProfileLayout() {
   const location = useLocation();
@@ -77,22 +78,6 @@ function ProfileLayout() {
     </Suspense>
   );
 }
-
-const getProfileHeader = async (profileId) => {
-  await new Promise((resolve, reject) => setTimeout(() => resolve(), 2000));
-  let baseUrl = "http://localhost:8000";
-  let endpoint = `${baseUrl}/${profileId}/profile-header`;
-  let token = Cookies.get("jwt") || "";
-  const response = await fetch(endpoint, {
-    method: "get",
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  });
-
-  const data = await response.json();
-  return data;
-};
 
 export const loaderProfileLayout = ({ params }) => {
   const { profileId } = params;

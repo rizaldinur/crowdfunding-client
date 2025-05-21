@@ -1,5 +1,4 @@
 import { Await, Navigate, useLoaderData, useLocation } from "react-router";
-import { getPreviewData } from "../../api/api";
 import BuildPageNav from "../../components/navigation/BuildPageNav";
 import ProjectHeadPreview from "../../components/preview-page/ProjectHeadPreview";
 import ProjectTabsPreview from "../../components/preview-page/ProjectTabsPreview";
@@ -7,6 +6,7 @@ import { Suspense, useEffect } from "react";
 import LoadingPage from "../../components/LoadingPage";
 import { setToken } from "../../utils/utils";
 import MainFooter from "../../components/navigation/MainFooter";
+import { getPreviewData } from "../../api/build";
 
 function PreviewPageLayout() {
   const { previewData } = useLoaderData();

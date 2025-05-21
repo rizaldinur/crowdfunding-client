@@ -4,6 +4,7 @@ import { getToken, setToken } from "../../utils/utils";
 import { Suspense, useEffect } from "react";
 import { Await, Navigate, useLoaderData } from "react-router";
 import ProfilePanelLoading from "./skeleton/ProfilePanelLoading";
+import { getProfileCreatedProjects } from "../../api/account";
 
 function CreatedProjectsPanel() {
   const { data } = useLoaderData();
@@ -48,18 +49,6 @@ function CreatedProjectsPanel() {
     </Suspense>
   );
 }
-
-const getProfileCreatedProjects = async (path) => {
-  let baseUrl = "http://localhost:8000";
-  let url = `${baseUrl}${path}`;
-  let token = getToken();
-  const response = await fetch(url, {
-    headers: { Authorization: "Bearer " + token },
-  });
-  const data = await response.json();
-
-  return data;
-};
 
 export const createdProjectsPanelLoader = ({ request }) => {
   const url = new URL(request.url);

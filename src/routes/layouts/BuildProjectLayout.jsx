@@ -7,7 +7,7 @@ import { FormSubmitContext } from "../../hooks/useFormSubmitContext";
 import { useEffect, useRef, useState } from "react";
 import { setToken } from "../../utils/utils";
 import LoadingPage from "../../components/LoadingPage";
-import { getFilledForm } from "../../api/api";
+import { getFilledForm } from "../../api/build";
 
 function BuildProjectLayout() {
   const location = useLocation();
