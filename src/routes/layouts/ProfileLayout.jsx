@@ -10,8 +10,7 @@ import ProfileTabs from "../../components/profile/ProfileTabs";
 import { Alert, Box, Button, IconButton, Snackbar } from "@mui/material";
 import { Suspense, useEffect, useState } from "react";
 import ProfileHead from "../../components/profile/ProfileHead";
-import LoadingPage from "../../components/LoadingPage";
-import Cookies from "js-cookie";
+import LoadingPage from "../../components/fallback-component/LoadingPage";
 import { getProfileHeader } from "../../api/account";
 
 function ProfileLayout() {
