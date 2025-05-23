@@ -29,7 +29,7 @@ import { Suspense, useEffect, useState } from "react";
 import validator from "validator";
 import CustomPasswordTextField from "../components/input/CustomPasswordTextField";
 import { getError } from "../utils/utils";
-import LoadingPage from "../components/LoadingPage";
+import LoadingPage from "../components/fallback-component/LoadingPage";
 import Cookies from "js-cookie";
 import { authenticateJWT, postSignup } from "../api/auth";
 

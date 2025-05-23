@@ -10,7 +10,7 @@ import {
 import { Suspense, useEffect, useState } from "react";
 import { getProjectDetails } from "../../api/feed";
 import { Await, useLoaderData } from "react-router";
-import BasicSectionLoading from "../loading-template/BasicSectionLoading";
+import BasicSectionLoading from "../fallback-component/BasicSectionLoading";
 
 function FaqsPanel() {
   const { faqsData } = useLoaderData();

@@ -3,7 +3,7 @@ import MainHeader from "../../components/navigation/MainHeader";
 import MainFooter from "../../components/navigation/MainFooter";
 import { Suspense, useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import LoadingPage from "../../components/LoadingPage";
+import LoadingPage from "../../components/fallback-component/LoadingPage";
 import { authenticateJWT } from "../../api/auth";
 
 function MainLayout() {

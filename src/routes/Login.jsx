@@ -28,7 +28,7 @@ import { Suspense, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import CustomPasswordTextField from "../components/input/CustomPasswordTextField";
 import { getError } from "../utils/utils";
-import LoadingPage from "../components/LoadingPage";
+import LoadingPage from "../components/fallback-component/LoadingPage";
 import validator from "validator";
 import { authenticateJWT, postLogin } from "../api/auth";
 

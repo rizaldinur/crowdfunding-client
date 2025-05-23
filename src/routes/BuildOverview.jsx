@@ -14,7 +14,7 @@ import {
   useLocation,
 } from "react-router";
 import Cookies from "js-cookie";
-import LoadingPage from "../components/LoadingPage";
+import LoadingPage from "../components/fallback-component/LoadingPage";
 import { getToken, setToken } from "../utils/utils";
 import { FormSubmitContext } from "../hooks/useFormSubmitContext";
 import { Close } from "@mui/icons-material";

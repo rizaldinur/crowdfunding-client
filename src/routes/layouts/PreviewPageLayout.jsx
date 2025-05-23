@@ -3,7 +3,7 @@ import BuildPageNav from "../../components/navigation/BuildPageNav";
 import ProjectHeadPreview from "../../components/preview-page/ProjectHeadPreview";
 import ProjectTabsPreview from "../../components/preview-page/ProjectTabsPreview";
 import { Suspense, useEffect } from "react";
-import LoadingPage from "../../components/LoadingPage";
+import LoadingPage from "../../components/fallback-component/LoadingPage";
 import { setToken } from "../../utils/utils";
 import MainFooter from "../../components/navigation/MainFooter";
 import { getPreviewData } from "../../api/build";

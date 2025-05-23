@@ -6,7 +6,7 @@ import BuildTabs from "../../components/build-page/BuildTabs";
 import { FormSubmitContext } from "../../hooks/useFormSubmitContext";
 import { useEffect, useRef, useState } from "react";
 import { setToken } from "../../utils/utils";
-import LoadingPage from "../../components/LoadingPage";
+import LoadingPage from "../../components/fallback-component/LoadingPage";
 import { getFilledForm } from "../../api/build";
 
 function BuildProjectLayout() {

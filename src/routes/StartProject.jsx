@@ -11,7 +11,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router";
-import LoadingPage from "../components/LoadingPage";
+import LoadingPage from "../components/fallback-component/LoadingPage";
 import { setToken } from "../utils/utils";
 import { authenticateJWT } from "../api/auth";
 
