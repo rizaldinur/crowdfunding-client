@@ -24,7 +24,7 @@ import {
   useState,
 } from "react";
 import { Await, useLoaderData, useLocation } from "react-router";
-import BasicSectionLoading from "../loading-template/BasicSectionLoading";
+import BasicSectionLoading from "../fallback-component/BasicSectionLoading";
 import MuiMarkdown, { defaultOverrides } from "mui-markdown";
 import { getProjectDetails } from "../../api/feed";
 import { ProjectDetailsLayoutContext } from "../../routes/layouts/ProjectDetailsLayout";

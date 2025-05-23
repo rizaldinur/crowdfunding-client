@@ -1,8 +1,8 @@
 import { CircularProgress, Stack, Typography } from "@mui/material";
-import ThemeContainer from "./ThemeContainer";
+import ThemeContainer from "../ThemeContainer";
 import { useMemo, useState } from "react";
-import themes from "../styles/themes";
-import useThemeContext from "../hooks/useThemeContext";
+import themes from "../../styles/themes";
+import useThemeContext from "../../hooks/useThemeContext";
 
 function LoadingPage({ withLabel = true }) {
   // const [currentTheme] = useState(localStorage.getItem("theme") || "light");

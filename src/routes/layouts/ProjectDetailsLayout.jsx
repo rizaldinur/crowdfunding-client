@@ -3,7 +3,7 @@ import ProjectTabs from "../../components/project-details/ProjectTabs";
 import ProjectHead from "../../components/project-details/ProjectHead";
 import { Box } from "@mui/material";
 import { createContext, Suspense, useEffect, useState } from "react";
-import BasicSectionLoading from "../../components/loading-template/BasicSectionLoading";
+import BasicSectionLoading from "../../components/fallback-component/BasicSectionLoading";
 import { getProjectHeader } from "../../api/feed";
 
 export const ProjectDetailsLayoutContext = createContext();
