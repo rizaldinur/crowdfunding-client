@@ -13,14 +13,17 @@ function ProjectDetailsLayout() {
   const [open, setOpen] = useState(false);
   const { headerData } = useLoaderData();
 
-  useEffect(() => {
-    document.title = "Detail proyek";
-  }, [location]);
   return (
     <ProjectDetailsLayoutContext.Provider value={{ open, setOpen }}>
       <Suspense fallback={<BasicSectionLoading sx={{ height: 400 }} />}>
         <Await resolve={headerData}>
           {(headerData) => {
+            useEffect(() => {
+              if (headerData && !headerData.error) {
+                document.title = `${headerData.data.title} ` || "Detail Proyek";
+              }
+            }, []);
+
             return <ProjectHead data={headerData.data} />;
           }}
         </Await>
