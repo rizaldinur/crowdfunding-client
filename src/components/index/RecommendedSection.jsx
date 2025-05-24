@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import { Box, Container } from "@mui/system";
 import MediaCard from "../card/MediaCard";
 
-function RecommendedSection() {
+function RecommendedSection({ data = [] }) {
   return (
     <Box
       id="recommended"
@@ -21,7 +21,15 @@ function RecommendedSection() {
           >
             REKOMENDASI
           </Typography>
-          <MediaCard />
+          {data.length > 0 ? (
+            data.map((project, index) => {
+              return <MediaCard key={index} data={project} />;
+            })
+          ) : (
+            <Typography color="textSecondary" sx={{ placeSelf: "center" }}>
+              Tidak ada data.
+            </Typography>
+          )}
         </Box>
       </Container>
     </Box>

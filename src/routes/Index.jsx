@@ -6,7 +6,7 @@ import { Await, useLoaderData } from "react-router";
 import BasicSectionLoading from "../components/fallback-component/BasicSectionLoading";
 
 function Index() {
-  const { featured } = useLoaderData();
+  const { featured, recommended } = useLoaderData();
   useEffect(() => {
     document.title = "Ruang Modal";
   }, []);
@@ -16,11 +16,21 @@ function Index() {
       <Suspense fallback={<BasicSectionLoading />}>
         <Await resolve={featured}>
           {(featured) => {
-            return <FeaturedSection data={featured} />;
+            return <FeaturedSection data={featured.data?.featuredProject} />;
           }}
         </Await>
       </Suspense>
-      <RecommendedSection />
+      <Suspense fallback={<BasicSectionLoading />}>
+        <Await resolve={recommended}>
+          {(recommended) => {
+            return (
+              <RecommendedSection
+                data={recommended.data?.recommendedProjects}
+              />
+            );
+          }}
+        </Await>
+      </Suspense>
     </>
   );
 }
@@ -35,9 +45,20 @@ export const getFeaturedProject = async () => {
   return data;
 };
 
+export const getRecommendedProjects = async () => {
+  let baseurl = "http://localhost:8000";
+  let url = baseurl + "/index/recommended-projects";
+
+  const response = await fetch(url);
+  const data = await response.json();
+
+  return data;
+};
+
 export const indexLoader = ({ request, params }) => {
   return {
     featured: getFeaturedProject(),
+    recommended: getRecommendedProjects(),
   };
 };
 

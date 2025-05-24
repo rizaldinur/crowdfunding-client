@@ -17,7 +17,7 @@ import { useContext } from "react";
 import { AccessTime, AccessTimeFilled, Person2 } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router";
 
-function FeatureCard() {
+function FeatureCard({ data }) {
   const { currentTheme } = useContext(ThemeContext);
   console.log(typeof currentTheme);
 
@@ -49,8 +49,11 @@ function FeatureCard() {
           height: { xs: 300, sm: "auto" },
           aspectRatio: "16/9",
         }}
-        image="https://images2.alphacoders.com/247/247360.jpg"
-        title="green iguana"
+        image={
+          data.imageUrl ||
+          "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+        }
+        title={data.title || "placeholder"}
       />
 
       <Box
@@ -60,7 +63,7 @@ function FeatureCard() {
           flexDirection: "column",
         }}
       >
-        <Tooltip title="title here">
+        <Tooltip title={data.title || "title here"}>
           <Typography
             variant="h4"
             sx={{
@@ -74,15 +77,16 @@ function FeatureCard() {
             }}
             component={Link}
             underline="hover"
-            href="#"
+            href={`/project/details/${data.creatorSlug}/${data.projectSlug}`}
+            target="_blank"
           >
-            Kadal Gaming: Your Ultimate Gaming AI Companion Hardware
+            {data.title || "Proyek tanpa nama"}
           </Typography>
         </Tooltip>
         <CardHeader
           sx={{ p: 0, mb: 4 }}
           avatar={
-            <Avatar sx={{ width: 50, height: 50 }}>
+            <Avatar sx={{ width: 50, height: 50 }} src={data.avatarUrl}>
               <Person2 />
             </Avatar>
           }
@@ -92,7 +96,7 @@ function FeatureCard() {
               color="textSecondary"
               component={Link}
               underline="hover"
-              href="login"
+              href="#"
               sx={{
                 display: "-webkit-box", // Enables the use of line-clamp
                 WebkitBoxOrient: "vertical", // Required for multi-line truncation
@@ -100,7 +104,7 @@ function FeatureCard() {
                 WebkitLineClamp: 1, // Limits the text to 3 lines
               }}
             >
-              Team Xperience Kadal Gaming
+              {data.creator || "Kreator Proyek"}
             </Typography>
           }
           subheader={
@@ -121,7 +125,8 @@ function FeatureCard() {
                   WebkitLineClamp: 1, // Limits the text to 3 lines
                 }}
               >
-                Tersisa H hari • X% tercapai
+                Tersisa {data.timeLeft || "X"} {data.timeFormat || "hari"} •{" "}
+                {data.fundingProgress}% tercapai
               </Typography>
             </Box>
           }
@@ -138,31 +143,14 @@ function FeatureCard() {
               // lineHeight: "normal", // Adjust this to match your design
             }}
           >
-            Lizards are a widespread group of squamate reptiles, with over
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica 6,000
-            species, ranging across all continents except Antarctica
+            {data.subtitle
+              ? data.subtitle
+              : "Subtitle proyek yang mendeskripsikan proyek secara singkat, padat, dan jelas"}
           </Typography>
         </CardContent>
         <CardActions sx={{ padding: 0 }}>
           <Chip
-            label="Share"
+            label={data.location || "Lokasi"}
             component="a"
             href="#"
             size="medium"
@@ -171,7 +159,7 @@ function FeatureCard() {
             color="inherit"
           />
           <Chip
-            label="Share"
+            label={data.category || "Kategori"}
             component="a"
             href="#"
             size="medium"

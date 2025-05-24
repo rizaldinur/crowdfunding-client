@@ -3,7 +3,7 @@ import RootLayout from "./routes/layouts/RootLayout.jsx";
 import ErrorBoundary from "./routes/ErrorBoundary.jsx";
 import Login, { loginAction, loginLoader } from "./routes/Login.jsx";
 import Signup, { signupLoader, signupAction } from "./routes/Signup.jsx";
-import Index from "./routes/Index.jsx";
+import Index, { indexLoader } from "./routes/Index.jsx";
 import DiscoverProjects from "./routes/DiscoverProjects.jsx";
 import MainLayout, { mainLayoutLoader } from "./routes/layouts/MainLayout.jsx";
 import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
@@ -35,7 +35,7 @@ import BuildOverview, {
   buildOverviewAction,
   buildOverviewLoader,
 } from "./routes/BuildOverview.jsx";
-import LoadingPage from "./components/LoadingPage.jsx";
+import LoadingPage from "./components/fallback-component/LoadingPage.jsx";
 import StartProjectMain, {
   startProjectMainAction,
 } from "./components/start-project/StartProjectMain.jsx";
@@ -76,6 +76,7 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Index />,
+            loader: indexLoader,
           },
           {
             path: "discover",

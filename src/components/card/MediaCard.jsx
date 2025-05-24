@@ -43,7 +43,7 @@ const CustomSubheader = (props) => (
     </Stack>
   </Box>
 );
-function MediaCard() {
+function MediaCard({ data = {} }) {
   const { currentTheme } = useContext(ThemeContext);
   return (
     <Card
@@ -69,18 +69,22 @@ function MediaCard() {
           aspectRatio: "16/9",
           borderRadius: 1,
         }}
-        image="https://images2.alphacoders.com/247/247360.jpg"
-        title="green iguana"
+        image={
+          data.imageUrl ||
+          "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+        }
+        title={data.title || "image here"}
       />
       <Box sx={{ p: 2 }}>
-        <Tooltip title="title here" placement="right-end">
+        <Tooltip title={data.title || "title here"} placement="right-end">
           <Stack sx={{ minWidth: 0, mb: 1 }}>
             <Typography
               variant="h5"
               component={Link}
               underline="hover"
               color="textPrimary"
-              href="#"
+              href={`/project/details/${data.creatorSlug}/${data.projectSlug}`}
+              target="_blank"
               noWrap
               // sx={{
               //   mb: 1,
@@ -90,7 +94,7 @@ function MediaCard() {
               //   WebkitLineClamp: 1, // Limits the text to 3 lines
               // }}
             >
-              Lizard Antarctica Antarctica Antarctica Antarctica
+              {data.title || "Proyek tanpa nama"}
             </Typography>
           </Stack>
         </Tooltip>
@@ -98,7 +102,7 @@ function MediaCard() {
           disableTypography
           sx={{ p: 0, mb: 3, maxWidth: 1 }}
           avatar={
-            <Avatar sx={{ width: 50, height: 50 }}>
+            <Avatar sx={{ width: 50, height: 50 }} src={data.avatar}>
               <Person2 />
             </Avatar>
           }
@@ -108,7 +112,7 @@ function MediaCard() {
               color="textSecondary"
               component={Link}
               underline="hover"
-              href="login"
+              href="#"
               sx={{
                 display: "-webkit-box", // Enables the use of line-clamp
                 WebkitBoxOrient: "vertical", // Required for multi-line truncation
@@ -116,7 +120,7 @@ function MediaCard() {
                 WebkitLineClamp: 1, // Limits the text to 3 lines
               }}
             >
-              Team Xperience Kadal Gaming
+              {data.creator || "Kreator proyek"}
             </Typography>
           }
           subheader={
@@ -138,7 +142,9 @@ function MediaCard() {
                     WebkitLineClamp: 1, // Limits the text to 3 lines
                   }}
                 >
-                  Tersisa 60 hari • 100% tercapai
+                  Tersisa {data.timeLeft || "X"} {data.timeFormat || "hari"} •{" "}
+                  {data.fundingProgress >= 0 ? data.fundingProgress : "100"}%
+                  tercapai
                 </Typography>
               </Stack>
             </Box>
@@ -155,14 +161,13 @@ function MediaCard() {
               WebkitLineClamp: 3, // Limits the text to 3 lines
             }}
           >
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica Antarctica
-            Antarctica AntarcticaAntarctica Antarctica
+            {data.subtitle ||
+              "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia nobis repudiandae sed perspiciatis, ducimus aliquam fugiat quo ipsum consectetur, possimus cum blanditiis, exercitationem corporis ut dignissimos deserunt alias similique sit?"}
           </Typography>
         </CardContent>
         <CardActions sx={{ p: 0 }}>
           <Chip
-            label="Share"
+            label={data.location || "Lokasi"}
             component="a"
             href="#"
             size="medium"
@@ -171,7 +176,7 @@ function MediaCard() {
             color="inherit"
           />
           <Chip
-            label="Share"
+            label={data.category || "Kategori"}
             component="a"
             href="#"
             size="medium"

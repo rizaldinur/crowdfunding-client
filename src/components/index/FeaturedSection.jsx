@@ -1,7 +1,7 @@
 import { Box, Container, Typography } from "@mui/material";
 import FeatureCard from "../card/FeatureCard";
 
-function FeaturedSection() {
+function FeaturedSection({ data = {} }) {
   return (
     <Box
       id="featured"
@@ -20,7 +20,13 @@ function FeaturedSection() {
           >
             UNGGULAN
           </Typography>
-          <FeatureCard />
+          {data ? (
+            <FeatureCard data={data} />
+          ) : (
+            <Typography color="textSecondary" sx={{ placeSelf: "center" }}>
+              Tidak ada data.
+            </Typography>
+          )}
         </Box>
       </Container>
     </Box>
