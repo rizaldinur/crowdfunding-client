@@ -31,7 +31,7 @@ function SupportProjectOverview() {
       <AuthNav />
       <Container maxWidth="md">
         <Stack gap={2} sx={{ color: "text.primary", py: 10 }}>
-          <Stack>
+          <Stack gap={1}>
             <Stack
               direction="row"
               justifyContent="space-between"
