@@ -21,6 +21,7 @@ function SupportProject() {
   const [alertMsg, setAlertMsg] = useState("");
 
   useEffect(() => {
+    document.title = "Dukung Proyek";
     if (location.state?.alert) {
       setOpen(true);
       setAlertMsg(location.state?.alert?.message);
@@ -52,10 +53,8 @@ function SupportProject() {
         <Await resolve={authData}>
           {(authData) => {
             useEffect(() => {
-              if (authData) {
-                if (!authData.error) {
-                  setToken(authData.data?.refreshToken);
-                }
+              if (authData && authData.data?.refreshToken) {
+                setToken(authData.data?.refreshToken);
               }
             }, []);
             if (authData && authData.error) {
@@ -71,7 +70,8 @@ function SupportProject() {
 }
 
 export const supportProjectPageLoader = () => {
-  return { authData: authenticateJWT(getToken()) };
+  const token = getToken();
+  return { authData: authenticateJWT(token) };
 };
 
 export default SupportProject;
