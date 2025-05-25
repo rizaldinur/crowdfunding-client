@@ -51,7 +51,13 @@ function SupportProjectMain() {
                 fullWidth
                 disabled={!amount || amount < 10000}
                 onClick={() => {
-                  let to = location.pathname + "/overview";
+                  let mappedPath = location.pathname
+                    .split("/")
+                    .filter((path) => {
+                      return path.length > 0;
+                    })
+                    .join("/");
+                  let to = "/" + mappedPath + "/overview";
                   navigate(to, {
                     state: {
                       amount,
