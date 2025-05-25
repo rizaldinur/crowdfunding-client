@@ -124,6 +124,7 @@ function ProjectHead({ data = {} }) {
                     color="primary"
                     component={Link}
                     href={`/support/${params.profileId}/${params.projectId}`}
+                    target="_blank"
                   >
                     dukung proyek
                   </Button>
