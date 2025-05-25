@@ -58,7 +58,9 @@ import PaymentPage, {
 import PreviewPageLayout, {
   previewLoader,
 } from "./routes/layouts/PreviewPageLayout.jsx";
-import SupportProject from "./routes/SupportProject.jsx";
+import SupportProject, {
+  supportProjectPageLoader,
+} from "./routes/SupportProject.jsx";
 import SupportProjectOverview from "./routes/SupportProjectOverview.jsx";
 
 const router = createBrowserRouter([
@@ -142,6 +144,7 @@ const router = createBrowserRouter([
       {
         path: "support/:profileId/:projectId",
         element: <SupportProject />,
+        loader: supportProjectPageLoader,
       },
       {
         path: "support/:profileId/:projectId/overview",
