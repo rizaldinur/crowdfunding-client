@@ -22,8 +22,10 @@ import {
   Typography,
 } from "@mui/material";
 import { numericFormatter } from "react-number-format";
+import { useParams } from "react-router";
 
 function ProjectHead({ data = {} }) {
+  const params = useParams();
   return (
     <Box>
       <Container maxWidth="xl">
@@ -117,7 +119,12 @@ function ProjectHead({ data = {} }) {
                   {data.timeFormat || "hari"}
                 </Typography>
                 <Stack sx={{ mt: 3 }} spacing={2}>
-                  <Button variant="contained" color="primary">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    component={Link}
+                    href={`/support/${params.profileId}/${params.projectId}`}
+                  >
                     dukung proyek
                   </Button>
                   <Stack
