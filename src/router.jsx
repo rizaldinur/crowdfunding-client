@@ -61,7 +61,9 @@ import PreviewPageLayout, {
 import SupportProject, {
   supportProjectPageLoader,
 } from "./routes/SupportProject.jsx";
-import SupportProjectOverview from "./routes/SupportProjectOverview.jsx";
+import SupportProjectOverview, {
+  supportOverviewLoader,
+} from "./routes/SupportProjectOverview.jsx";
 
 const router = createBrowserRouter([
   {
@@ -149,6 +151,7 @@ const router = createBrowserRouter([
       {
         path: "support/:profileId/:projectId/overview",
         element: <SupportProjectOverview />,
+        loader: supportOverviewLoader,
       },
       {
         path: "/:profileId/:projectId/build-overview/preview",

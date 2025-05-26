@@ -1,15 +1,19 @@
-import { Link as RouterLink, useLocation } from "react-router";
+import {
+  Await,
+  Navigate,
+  Link as RouterLink,
+  useLoaderData,
+  useLocation,
+  useParams,
+} from "react-router";
 import AuthNav from "../components/navigation/AuthNav";
 import MainFooter from "../components/navigation/MainFooter";
 import {
-  Box,
   Button,
   Checkbox,
   Container,
   Divider,
-  FormControl,
   FormControlLabel,
-  FormLabel,
   Link,
   Stack,
   Typography,
@@ -17,102 +21,90 @@ import {
 import { ChevronLeft } from "@mui/icons-material";
 import { numericFormatter } from "react-number-format";
 import { yellow } from "@mui/material/colors";
-import { useEffect, useState } from "react";
+import { createContext, Suspense, useEffect, useState } from "react";
+import SupportProjectOverviewMain from "../components/support-project-overview/SupportProjectOverviewMain";
+import { authenticateJWT } from "../api/auth";
+import { getToken, setToken } from "../utils/utils";
+import LoadingPage from "../components/fallback-component/LoadingPage";
+
+export const SupportOverviewContext = createContext();
 
 function SupportProjectOverview() {
+  const { supportOverviewData } = useLoaderData();
   const location = useLocation();
-  const [checked, setChecked] = useState(false);
+  console.log(location);
+
+  const params = useParams();
+  const [amount, setAmount] = useState(location.state?.amount);
+  const backLink = `/support/${params.profileId}/${params.projectId}`;
+
   useEffect(() => {
     document.title = "Ringkasan dukungan";
   }, []);
 
+  if (!amount) {
+    return (
+      <Navigate
+        to={backLink}
+        state={{
+          alert: {
+            status: "error",
+            message: "Masukkan jumlah dukungan.",
+          },
+        }}
+      />
+    );
+  }
+
   return (
-    <>
-      <AuthNav />
-      <Container maxWidth="md">
-        <Stack gap={2} sx={{ color: "text.primary", py: 10 }}>
-          <Stack gap={1}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Typography variant="h3">Ringkasan</Typography>
-              <Button
-                startIcon={<ChevronLeft />}
-                variant="outlined"
-                color="inherit"
-                component={Link}
-                href="."
-              >
-                Kembali
-              </Button>
-            </Stack>
-            <Typography>
-              Kami akan mengirimkan email konfirmasi ke{" "}
-              <strong>johndoe@gmail.com</strong> saat proyek sukses mencapai
-              target pendanaan.
-            </Typography>
-          </Stack>
-          <img
-            src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
-            width="100%"
-            height="250px"
-            style={{ objectFit: "cover", objectPosition: "center" }}
-          />
-          <Stack gap={1}>
-            <Link variant="h5" underline="always" color="textPrimary">
-              Proyek Tanpa Nama
-            </Link>
-            <Typography color="primary" variant="body2">
-              70% dana terkumpul
-            </Typography>
-            <Typography variant="body2">Oleh Kreator Proyek</Typography>
-          </Stack>
-          <Stack gap={1}>
-            <Divider />
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Typography variant="body2" fontWeight={700}>
-                Jumlah Dukungan
-              </Typography>
-              <Typography variant="body2" fontWeight={700}>
-                {numericFormatter("10000", {
-                  decimalSeparator: ",",
-                  prefix: "Rp",
-                  thousandSeparator: ".",
-                })}
-              </Typography>
-            </Stack>
-          </Stack>
-          <Stack gap={1} sx={{ p: 2, color: "black", bgcolor: yellow["100"] }}>
-            <Typography variant="h6" fontWeight={700}>
-              Keuntungan tidak terjamin
-            </Typography>
-            <Typography variant="body2">
-              Kamu adalah <strong>investor</strong>. Potensi keuntungan yang
-              ditawarkan murni bergantung pada bagaimana kreator menjalankan dan
-              merealisasikan proyek kreatifnya.
-            </Typography>
-          </Stack>
-          <FormControlLabel
-            control={<Checkbox />}
-            checked={checked}
-            onChange={(event) => setChecked(event.target.checked)}
-            label="Saya memahami dan menerima seluruh risiko dalam memberikan dukungan"
-            labelPlacement="end"
-          />
-          <Button disabled={!checked} variant="contained">
-            Dukung sekarang
-          </Button>
-        </Stack>
-      </Container>
-      <MainFooter borderTop />
-    </>
+    <Suspense fallback={<LoadingPage />}>
+      <Await resolve={supportOverviewData}>
+        {(supportOverviewData) => {
+          useEffect(() => {
+            if (supportOverviewData && supportOverviewData.data?.refreshToken) {
+              setToken(supportOverviewData.data?.refreshToken);
+            }
+          }, []);
+
+          if (supportOverviewData && supportOverviewData.error) {
+            return <Navigate to="/login" state={{ from: location }} />;
+          }
+
+          return (
+            <SupportOverviewContext.Provider value={{ backLink, amount }}>
+              <AuthNav />
+              <SupportProjectOverviewMain
+                data={supportOverviewData.data?.overviewData}
+              />
+              <MainFooter borderTop />
+            </SupportOverviewContext.Provider>
+          );
+        }}
+      </Await>
+    </Suspense>
   );
 }
+
+export const getSupportOverviewData = async (path) => {
+  let baseurl = "http://localhost:8000";
+  let url = baseurl + path;
+
+  const token = getToken();
+  const response = await fetch(url, {
+    method: "get",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+
+  const data = await response.json();
+  return data;
+};
+
+export const supportOverviewLoader = ({ request }) => {
+  const pathname = new URL(request.url).pathname;
+
+  return { supportOverviewData: getSupportOverviewData(pathname) };
+};
 
 export default SupportProjectOverview;
