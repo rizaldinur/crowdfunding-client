@@ -26,6 +26,7 @@ import SupportProjectOverviewMain from "../components/support-project-overview/S
 import { authenticateJWT } from "../api/auth";
 import { getToken, setToken } from "../utils/utils";
 import LoadingPage from "../components/fallback-component/LoadingPage";
+import { getSupportOverviewData } from "../api/support";
 
 export const SupportOverviewContext = createContext();
 
@@ -84,22 +85,6 @@ function SupportProjectOverview() {
     </Suspense>
   );
 }
-
-export const getSupportOverviewData = async (path) => {
-  let baseurl = "http://localhost:8000";
-  let url = baseurl + path;
-
-  const token = getToken();
-  const response = await fetch(url, {
-    method: "get",
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  });
-
-  const data = await response.json();
-  return data;
-};
 
 export const supportOverviewLoader = ({ request }) => {
   const pathname = new URL(request.url).pathname;
