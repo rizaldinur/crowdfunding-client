@@ -194,7 +194,7 @@ function Login() {
                     <Stack width={1}>
                       <fetcher.Form
                         method="post"
-                        onSubmit={validateSubmit}
+                        onSubmitCapture={validateSubmit}
                         noValidate
                       >
                         <TextField
