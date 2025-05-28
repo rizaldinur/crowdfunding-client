@@ -62,6 +62,7 @@ import SupportProject, {
   supportProjectPageLoader,
 } from "./routes/SupportProject.jsx";
 import SupportProjectOverview, {
+  supportOverviewAction,
   supportOverviewLoader,
 } from "./routes/SupportProjectOverview.jsx";
 
@@ -152,6 +153,7 @@ const router = createBrowserRouter([
         path: "support/:profileId/:projectId/overview",
         element: <SupportProjectOverview />,
         loader: supportOverviewLoader,
+        action: supportOverviewAction,
       },
       {
         path: "/:profileId/:projectId/build-overview/preview",

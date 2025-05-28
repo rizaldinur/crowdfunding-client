@@ -2,46 +2,86 @@ import {
   Await,
   Navigate,
   Link as RouterLink,
+  useFetcher,
   useLoaderData,
   useLocation,
   useParams,
+  useSearchParams,
 } from "react-router";
 import AuthNav from "../components/navigation/AuthNav";
 import MainFooter from "../components/navigation/MainFooter";
-import {
-  Button,
-  Checkbox,
-  Container,
-  Divider,
-  FormControlLabel,
-  Link,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { ChevronLeft } from "@mui/icons-material";
-import { numericFormatter } from "react-number-format";
-import { yellow } from "@mui/material/colors";
 import { createContext, Suspense, useEffect, useState } from "react";
 import SupportProjectOverviewMain from "../components/support-project-overview/SupportProjectOverviewMain";
-import { authenticateJWT } from "../api/auth";
 import { getToken, setToken } from "../utils/utils";
 import LoadingPage from "../components/fallback-component/LoadingPage";
-import { getSupportOverviewData } from "../api/support";
+import {
+  deleteSupport,
+  getSupportOverviewData,
+  postSupportProject,
+  updateSupportStatus,
+} from "../api/support";
 
 export const SupportOverviewContext = createContext();
 
 function SupportProjectOverview() {
   const { supportOverviewData } = useLoaderData();
+  const fetcher = useFetcher();
   const location = useLocation();
-  console.log(location);
-
   const params = useParams();
+  const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState(location.state?.amount);
   const backLink = `/support/${params.profileId}/${params.projectId}`;
 
   useEffect(() => {
+    const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
+
+    let scriptTag = document.createElement("script");
+    scriptTag.src = midtransScriptUrl;
+
+    const myMidtransClientKey = import.meta.env.MIDTRANS_CLIENT_KEY;
+    scriptTag.setAttribute("data-client-key", myMidtransClientKey);
+
+    document.body.appendChild(scriptTag);
+
+    return () => {
+      document.body.removeChild(scriptTag);
+    };
+  }, []);
+
+  useEffect(() => {
     document.title = "Ringkasan dukungan";
   }, []);
+
+  useEffect(() => {
+    if (fetcher.data) {
+      console.log(fetcher.data);
+      if (!fetcher.data?.error) {
+        window.snap.pay(fetcher.data?.data?.transaction?.token, {
+          onSuccess: function (result) {
+            updateSupportStatus(fetcher.data?.data?.supportId);
+          },
+          onPending: function (result) {
+            updateSupportStatus(fetcher.data?.data?.supportId);
+          },
+          onError: function (result) {
+            updateSupportStatus(fetcher.data?.data?.supportId);
+          },
+          onClose: function () {
+            deleteSupport(fetcher.data?.data?.supportId);
+            alert("Pembayaran tidak selesai.");
+          },
+        });
+      }
+    }
+  }, [fetcher.data]);
+
+  useEffect(() => {
+    if (fetcher.state === "idle") {
+      setLoading(false);
+    } else {
+      setLoading(true);
+    }
+  }, [fetcher.state]);
 
   if (!amount) {
     return (
@@ -72,8 +112,13 @@ function SupportProjectOverview() {
           }
 
           return (
-            <SupportOverviewContext.Provider value={{ backLink, amount }}>
+            <SupportOverviewContext.Provider
+              value={{ backLink, amount, loading }}
+            >
               <AuthNav />
+              <fetcher.Form id="formSupportProject" method="post">
+                <input type="hidden" name="supportAmount" value={amount} />
+              </fetcher.Form>
               <SupportProjectOverviewMain
                 data={supportOverviewData.data?.overviewData}
               />
@@ -90,6 +135,16 @@ export const supportOverviewLoader = ({ request }) => {
   const pathname = new URL(request.url).pathname;
 
   return { supportOverviewData: getSupportOverviewData(pathname) };
+};
+
+export const supportOverviewAction = async ({ request, params }) => {
+  const pathname = `/support/${params.profileId}/${params.projectId}/checkout`;
+  const formData = await request.formData();
+  const postData = Object.fromEntries(formData);
+  console.log(postData);
+
+  const data = await postSupportProject(postData, pathname);
+  return data;
 };
 
 export default SupportProjectOverview;

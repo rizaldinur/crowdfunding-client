@@ -16,7 +16,7 @@ import { numericFormatter } from "react-number-format";
 import { SupportOverviewContext } from "../../routes/SupportProjectOverview";
 
 function SupportProjectOverviewMain({ data = {} }) {
-  const { backLink, amount } = useContext(SupportOverviewContext);
+  const { backLink, amount, loading } = useContext(SupportOverviewContext);
   const [checked, setChecked] = useState(false);
   const params = useParams();
   return (
@@ -41,7 +41,7 @@ function SupportProjectOverviewMain({ data = {} }) {
           </Stack>
           <Typography>
             Kami akan mengirimkan email konfirmasi ke{" "}
-            <strong>{data.creatorEmail || "johndoe@gmail.com"}</strong> saat
+            <strong>{data.supporterEmail || "johndoe@gmail.com"}</strong> saat
             proyek sukses mencapai target pendanaan.
           </Typography>
         </Stack>
@@ -107,7 +107,16 @@ function SupportProjectOverviewMain({ data = {} }) {
           label="Saya memahami dan menerima seluruh risiko dalam memberikan dukungan"
           labelPlacement="end"
         />
-        <Button disabled={!checked} variant="contained">
+        <Button
+          loading={loading}
+          disabled={!checked}
+          variant="contained"
+          type="submit"
+          form="formSupportProject"
+          // onClick={() => {
+          //   window.snap.pay("token");
+          // }}
+        >
           Dukung sekarang
         </Button>
       </Stack>
