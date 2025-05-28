@@ -1,6 +1,7 @@
 import {
   Bookmark,
   Category,
+  DataUsageSharp,
   Facebook,
   Instagram,
   LocationOn,
@@ -96,7 +97,12 @@ function ProjectHead({ data = {} }) {
                   color="primary"
                 />
                 <Typography variant="h4" color="primary" sx={{ mt: 3 }}>
-                  Rp {data.funding >= 0 ? data.funding : "X,xxx,xxx"}
+                  Rp{" "}
+                  {data.funding >= 0
+                    ? numericFormatter(data.funding?.toString(), {
+                        thousandSeparator: ".",
+                      })
+                    : "X,xxx,xxx"}
                 </Typography>
                 <Typography variant="subtitle1" color="textSecondary">
                   dana terkumpul dari target Rp{" "}
@@ -105,9 +111,14 @@ function ProjectHead({ data = {} }) {
                         thousandSeparator: ".",
                       })
                     : "X,xxx,xxx"}
+                  {data.fundingProgress >= 0
+                    ? data.fundingProgress > 100
+                      ? ` (+${data.fundingProgress}%)`
+                      : ` (${data.fundingProgress}%)`
+                    : "0%"}
                 </Typography>
                 <Typography variant="h4" color="textPrimary" sx={{ mt: 3 }}>
-                  100
+                  {data.countSupporters || "100"}
                 </Typography>
                 <Typography variant="subtitle1" color="textSecondary">
                   pendukung
@@ -121,12 +132,14 @@ function ProjectHead({ data = {} }) {
                 <Stack sx={{ mt: 3 }} spacing={2}>
                   <Button
                     variant="contained"
+                    disabled={data.projectStatus === "finished"}
                     color="primary"
                     component={Link}
                     href={`/support/${params.profileId}/${params.projectId}`}
-                    target="_blank"
                   >
-                    dukung proyek
+                    {data.projectStatus === "oncampaign"
+                      ? "dukung proyek"
+                      : "proyek telah selesai"}
                   </Button>
                   <Stack
                     direction="row"
