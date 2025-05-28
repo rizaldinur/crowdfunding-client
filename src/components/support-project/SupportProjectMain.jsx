@@ -29,44 +29,42 @@ function SupportProjectMain() {
               title={<Typography variant="h5">Dukung Proyek</Typography>}
             />
             <CardContent>
-              <NumericFormat
-                customInput={TextField}
-                label="Jumlah dukungan"
-                prefix="Rp"
-                value={amount}
-                autoFocus
-                error={!amount ? false : amount < 10000}
-                helperText="Minimal Rp10.000"
-                fullWidth
-                thousandSeparator="."
-                decimalSeparator=","
-                allowNegative={false}
-                onValueChange={(values) => {
-                  setAmount(values.floatValue);
-                }}
-              />
-              <Button
-                sx={{ mt: 4 }}
-                variant="contained"
-                fullWidth
-                disabled={!amount || amount < 10000}
-                onClick={() => {
-                  let mappedPath = location.pathname
-                    .split("/")
-                    .filter((path) => {
-                      return path.length > 0;
-                    })
-                    .join("/");
-                  let to = "/" + mappedPath + "/overview";
-                  navigate(to, {
+              <form
+                onSubmitCapture={(e) => {
+                  e.preventDefault();
+                  navigate("overview", {
                     state: {
                       amount,
                     },
                   });
                 }}
               >
-                Lanjutkan
-              </Button>
+                <NumericFormat
+                  customInput={TextField}
+                  label="Jumlah dukungan"
+                  prefix="Rp"
+                  value={amount}
+                  autoFocus
+                  error={!amount ? false : amount < 10000}
+                  helperText="Minimal Rp10.000"
+                  fullWidth
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  allowNegative={false}
+                  onValueChange={(values) => {
+                    setAmount(values.floatValue);
+                  }}
+                />
+                <Button
+                  sx={{ mt: 4 }}
+                  variant="contained"
+                  fullWidth
+                  disabled={!amount || amount < 10000}
+                  type="submit"
+                >
+                  Lanjutkan
+                </Button>
+              </form>
             </CardContent>
           </Card>
         </Grid>
