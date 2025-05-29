@@ -60,8 +60,8 @@ function ProfileLayout() {
               <ProfileHead
                 avatar={profileHeader.data?.avatar}
                 userName={profileHeader.data?.userName}
-                totalSupportedProjects={
-                  profileHeader.data?.totalSupportedProjects
+                countSupportedProjects={
+                  profileHeader.data?.countSupportedProjects
                 }
                 joinDate={profileHeader.data?.joinDate}
               />

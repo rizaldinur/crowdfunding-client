@@ -1,6 +1,6 @@
 import { Avatar, Container, Stack, Typography } from "@mui/material";
 
-function ProfileHead({ avatar, userName, totalSupportedProjects, joinDate }) {
+function ProfileHead({ avatar, userName, countSupportedProjects, joinDate }) {
   return (
     <Container maxWidth="md">
       <Stack sx={{ py: 5, placeSelf: "center", alignItems: "center" }} gap={2}>
@@ -9,7 +9,7 @@ function ProfileHead({ avatar, userName, totalSupportedProjects, joinDate }) {
           {userName || "Username"}
         </Typography>
         <Typography variant="subtitle1" color="textSecondary">
-          {totalSupportedProjects} proyek didukung • Bergabung{" "}
+          {countSupportedProjects || "0"} proyek didukung • Bergabung{" "}
           {joinDate || "(Date here)"}
         </Typography>
       </Stack>

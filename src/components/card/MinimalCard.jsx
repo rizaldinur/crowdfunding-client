@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -11,6 +12,7 @@ import {
 import { Link as RouterLink } from "react-router";
 import useThemeContext from "../../hooks/useThemeContext";
 import PropTypes from "prop-types";
+import { numericFormatter } from "react-number-format";
 
 function MinimalCard({ variant = "basic", data = {} }) {
   const { currentTheme } = useThemeContext();
@@ -59,7 +61,9 @@ function MinimalCard({ variant = "basic", data = {} }) {
             to={
               variant === "created"
                 ? `/${data.profileId}/${data.projectId}/build-overview`
-                : `/project/details/${data.profileId}/${data.projectId}`
+                : `/project/details/${data.creatorSlug || data.profileId}/${
+                    data.projectId
+                  }`
             }
           >
             {data.projectName || "Proyek tanpa nama"}
@@ -84,6 +88,19 @@ function MinimalCard({ variant = "basic", data = {} }) {
                 })}`}
               </Typography>
             )}
+          {variant === "backed" && data.supportAmount >= 0 && (
+            <Typography variant="caption">
+              Jumlah dukungan:{" "}
+              <strong>
+                {data.supportAmount >= 0
+                  ? numericFormatter(data.supportAmount.toString(), {
+                      thousandSeparator: ".",
+                      prefix: "Rp",
+                    })
+                  : "Rp0"}
+              </strong>
+            </Typography>
+          )}
         </Stack>
         <Stack direction="row" alignItems="center" gap={1} sx={{ mt: 1 }}>
           <Avatar sx={{ width: 50, height: 50 }} src={data.creatorAvatar} />
@@ -96,6 +113,15 @@ function MinimalCard({ variant = "basic", data = {} }) {
             </Typography>
           </Stack>
         </Stack>
+        <Button
+          size="small"
+          variant="outlined"
+          component={RouterLink}
+          to={`/support/status?order_id=${data.supportId}&status_code=${data.transactionStatusCode}&status=${data.transactionStatus}`}
+          sx={{ mt: 2 }}
+        >
+          Informasi pembayaran
+        </Button>
       </CardContent>
       {variant === "created" ? (
         <Chip
@@ -122,8 +148,14 @@ function MinimalCard({ variant = "basic", data = {} }) {
       ) : variant === "backed" ? (
         <Chip
           label={
-            typeof data.transactionStatus === "string"
-              ? data.transactionStatus.toUpperCase()
+            data.transactionStatus === "pending"
+              ? "Menunggu pembayaran"
+              : ["settlement", "capture"].includes(data.transactionStatus)
+              ? "Sudah dibayar"
+              : ["cancel", "failure", "expire", "deny"].includes(
+                  data.transactionStatus
+                )
+              ? "Gagal"
               : "Label"
           }
           sx={{
@@ -134,8 +166,12 @@ function MinimalCard({ variant = "basic", data = {} }) {
           color={
             data.transactionStatus === "pending"
               ? "info"
-              : data.transactionStatus === "settlement"
+              : ["settlement", "capture"].includes(data.transactionStatus)
               ? "success"
+              : ["cancel", "failure", "expire", "deny"].includes(
+                  data.transactionStatus
+                )
+              ? "error"
               : "default"
           }
         />

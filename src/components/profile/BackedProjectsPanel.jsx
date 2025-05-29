@@ -1,14 +1,52 @@
-import { Container, Stack } from "@mui/material";
+import { Container, Stack, Typography } from "@mui/material";
 import MinimalCard from "../card/MinimalCard";
+import { Await, useLoaderData } from "react-router";
+import { Suspense } from "react";
+import BasicSectionLoading from "../fallback-component/BasicSectionLoading";
+import { getProfileBackedProjects } from "../../api/account";
 
 function BackedProjectsPanel() {
+  const { backedProjects } = useLoaderData();
   return (
-    <Container maxWidth="md">
-      <Stack sx={{ py: 4 }} gap={4}>
-        <MinimalCard variant="backed" />
-      </Stack>
-    </Container>
+    <Suspense fallback={<BasicSectionLoading />}>
+      <Await resolve={backedProjects}>
+        {(backedProjects) => {
+          const backedArray = backedProjects.data?.mappedBacked || [];
+          console.log(backedArray);
+
+          return (
+            <Container maxWidth="md">
+              <Stack sx={{ py: 4 }} gap={4}>
+                {backedArray.length > 0 ? (
+                  backedArray.map((backed, index) => {
+                    return (
+                      <MinimalCard
+                        key={`backed-${index}`}
+                        variant="backed"
+                        data={backed}
+                      />
+                    );
+                  })
+                ) : (
+                  <Typography
+                    sx={{ placeSelf: "center" }}
+                    color="textSecondary"
+                  >
+                    Belum ada proyek yang didukung.
+                  </Typography>
+                )}
+              </Stack>
+            </Container>
+          );
+        }}
+      </Await>
+    </Suspense>
   );
 }
 
+export const backedProjectsLoader = ({ request, params }) => {
+  const pathname = new URL(request.url).pathname;
+
+  return { backedProjects: getProfileBackedProjects(pathname) };
+};
 export default BackedProjectsPanel;

@@ -42,3 +42,15 @@ export const getProfileCreatedProjects = async (path) => {
 
   return data;
 };
+
+export const getProfileBackedProjects = async (path) => {
+  let baseUrl = "http://localhost:8000";
+  let url = `${baseUrl}${path}`;
+  let token = getToken();
+  const response = await fetch(url, {
+    headers: { Authorization: "Bearer " + token },
+  });
+  const data = await response.json();
+
+  return data;
+};

@@ -27,7 +27,9 @@ import AboutPanel, {
 import ProfileLayout, {
   loaderProfileLayout,
 } from "./routes/layouts/ProfileLayout.jsx";
-import BackedProjectsPanel from "./components/profile/BackedProjectsPanel.jsx";
+import BackedProjectsPanel, {
+  backedProjectsLoader,
+} from "./components/profile/BackedProjectsPanel.jsx";
 import SettingsLayout from "./routes/layouts/SettingsLayout.jsx";
 import AccountSettings from "./components/settings-account/AccountSettings.jsx";
 import ProfileSettings from "./components/settings-account/ProfileSettings.jsx";
@@ -124,7 +126,11 @@ const router = createBrowserRouter([
                 element: <AboutPanel />,
                 loader: profileAboutLoader,
               },
-              { path: "backed", element: <BackedProjectsPanel /> },
+              {
+                path: "backed",
+                element: <BackedProjectsPanel />,
+                loader: backedProjectsLoader,
+              },
               // { path: "saved", element: <SavedProjects /> },
               {
                 path: "projects",
