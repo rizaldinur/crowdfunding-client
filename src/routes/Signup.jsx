@@ -239,7 +239,7 @@ function Signup() {
                         method="post"
                         noValidate
                         autoComplete="off"
-                        onSubmit={validateSubmit}
+                        onSubmitCapture={validateSubmit}
                       >
                         <TextField
                           type="text"
