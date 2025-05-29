@@ -117,7 +117,7 @@ function MinimalCard({ variant = "basic", data = {} }) {
           size="small"
           variant="outlined"
           component={RouterLink}
-          to={`/support/status?order_id=${data.supportId}&status_code=${data.transactionStatusCode}&status=${data.transactionStatus}`}
+          to={`/support/status?order_id=${data.supportId}&status_code=${data.transactionStatusCode}&transaction_status=${data.transactionStatus}`}
           sx={{ mt: 2 }}
         >
           Informasi pembayaran
