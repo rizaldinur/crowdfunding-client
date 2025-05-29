@@ -16,6 +16,22 @@ export const getSupportOverviewData = async (path) => {
   return data;
 };
 
+export const getSupportStatus = async (path) => {
+  let baseurl = "http://localhost:8000";
+  let url = baseurl + path;
+
+  const token = getToken();
+  const response = await fetch(url, {
+    method: "get",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+
+  const data = await response.json();
+  return data;
+};
+
 export const postSupportProject = async (postData, path) => {
   let baseurl = "http://localhost:8000";
   let url = baseurl + path;

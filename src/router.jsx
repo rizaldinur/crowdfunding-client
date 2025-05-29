@@ -67,6 +67,7 @@ import SupportProjectOverview, {
   supportOverviewAction,
   supportOverviewLoader,
 } from "./routes/SupportProjectOverview.jsx";
+import SupportStatus, { supportStatusLoader } from "./routes/SupportStatus.jsx";
 
 const router = createBrowserRouter([
   {
@@ -149,6 +150,11 @@ const router = createBrowserRouter([
             ],
           },
         ],
+      },
+      {
+        path: "support/status",
+        element: <SupportStatus />,
+        loader: supportStatusLoader,
       },
       {
         path: "support/:profileId/:projectId",
