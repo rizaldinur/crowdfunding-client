@@ -30,7 +30,9 @@ import ProfileLayout, {
 import BackedProjectsPanel, {
   backedProjectsLoader,
 } from "./components/profile/BackedProjectsPanel.jsx";
-import SettingsLayout from "./routes/layouts/SettingsLayout.jsx";
+import SettingsLayout, {
+  settingsLoader,
+} from "./routes/layouts/SettingsLayout.jsx";
 import AccountSettings from "./components/settings-account/AccountSettings.jsx";
 import ProfileSettings from "./components/settings-account/ProfileSettings.jsx";
 import BuildOverview, {
@@ -144,6 +146,7 @@ const router = createBrowserRouter([
           {
             path: "settings/:profileId",
             element: <SettingsLayout />,
+            loader: settingsLoader,
             children: [
               { index: true, element: <ProfileSettings /> },
               { path: "account", element: <AccountSettings /> },
