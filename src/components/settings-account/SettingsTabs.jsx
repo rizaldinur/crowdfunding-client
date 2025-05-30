@@ -34,16 +34,11 @@ CustomTabPanel.propTypes = {
 
 function SettingsTabs() {
   const location = useLocation();
-  console.log(location);
   const tabSegment = location.pathname.split("/")[3];
-
-  console.log(location.pathname.split("/"));
 
   const tabValue =
     location.state?.tabValue ||
     (tabSegment === "profile" ? 0 : tabSegment === "account" ? 1 : null);
-
-  console.log(tabValue);
 
   return (
     <Box
@@ -66,7 +61,7 @@ function SettingsTabs() {
           <Tab
             label="Edit Profil"
             component={RouterLink}
-            to="profile"
+            to="."
             state={{ tabValue: 0 }}
             {...a11yProps(0)}
           />
