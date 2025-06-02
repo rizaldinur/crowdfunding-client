@@ -1,7 +1,7 @@
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import { useState } from "react";
 
-function LocationAutocomplete({ onChange, label, ...props }) {
+function LocationAutocomplete({ onChange, label, name, ...props }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [locations, setLocations] = useState([]);
@@ -48,6 +48,7 @@ function LocationAutocomplete({ onChange, label, ...props }) {
         <TextField
           {...params}
           label={label || "Pilih lokasi"}
+          name={name}
           slotProps={{
             input: {
               ...params.InputProps,
