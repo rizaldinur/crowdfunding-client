@@ -56,12 +56,14 @@ function ProfileSettings() {
 
   const [initialForm, setInitialForm] = useState({
     name: "",
+    avatarUrl: "",
     biography: "",
     location: "",
     uniqueUrl: "",
   });
   const [form, setForm] = useState({
     name: "",
+    avatarUrl: "",
     biography: "",
     location: "",
     uniqueUrl: "",
@@ -69,12 +71,16 @@ function ProfileSettings() {
 
   useEffect(() => {
     if (profileTabData) {
-      const { name = "", biography = "" } = profileTabData || {};
+      const {
+        name = "",
+        biography = "",
+        avatarUrl = "",
+      } = profileTabData || {};
       setForm((form) => {
-        return { ...form, name, biography };
+        return { ...form, name, avatarUrl, biography };
       });
       setInitialForm((initialForm) => {
-        return { ...initialForm, name, biography };
+        return { ...initialForm, name, avatarUrl, biography };
       });
     }
   }, [profileTabData]);
@@ -113,6 +119,17 @@ function ProfileSettings() {
                 getError("name", formErrorData, "path").msg
               }
               value={form.name}
+              onChange={handleChange}
+            />
+            <TextField
+              label="Link foto profil"
+              name="avatarUrl"
+              error={Boolean(getError("avatarUrl", formErrorData, "path"))}
+              helperText={
+                Boolean(getError("avatarUrl", formErrorData, "path")) &&
+                getError("avatarUrl", formErrorData, "path").msg
+              }
+              value={form.avatarUrl}
               onChange={handleChange}
             />
             <TextField
