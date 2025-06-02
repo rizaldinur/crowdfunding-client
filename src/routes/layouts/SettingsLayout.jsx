@@ -4,6 +4,7 @@ import {
   Outlet,
   useLoaderData,
   useLocation,
+  useNavigate,
   useRevalidator,
 } from "react-router";
 import { Box } from "@mui/material";
@@ -19,10 +20,12 @@ import { getToken } from "../../utils/utils";
 export const SettingsLayoutContext = createContext();
 function SettingsLayout() {
   const location = useLocation();
-  const { authGuard } = useLoaderData();
+  // const { authGuard } = useLoaderData();
+  const { tabData } = useLoaderData();
   const revalidator = useRevalidator();
   const [profileTabData, setProfileTabData] = useState(null);
   const [accountTabData, setAccountTabData] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "Pengaturan akun";
@@ -33,39 +36,54 @@ function SettingsLayout() {
     if (!profileTabData || !accountTabData) {
       revalidator.revalidate();
     }
-  }, [location, profileTabData, accountTabData]);
+  }, [location]);
 
   return (
-    <Suspense fallback={<LoadingPage />}>
-      <Await resolve={authGuard}>
-        {(authGuard) => {
-          if (authGuard && authGuard.error) {
-            return <Navigate to="/login" state={{ from: location }} />;
-          }
-          return (
-            <SettingsLayoutContext.Provider
-              value={{
-                profileTabData,
-                setProfileTabData,
-                accountTabData,
-                setAccountTabData,
-              }}
-            >
-              <SettingsHead />
-              <SettingsTabs />
+    <>
+      <SettingsHead />
+      <SettingsTabs />
+      <Suspense fallback={<LoadingPage />}>
+        <Await resolve={tabData}>
+          {(tabData) => {
+            useEffect(() => {
+              if (tabData) {
+                if (!tabData.error) {
+                  if (tabData.data?.profileTab && !profileTabData) {
+                    setProfileTabData(tabData.data?.profileTab);
+                  }
+
+                  if (tabData.data?.accountTab && !accountTabData) {
+                    setAccountTabData(tabData.data?.accountTab);
+                  }
+                }
+              }
+            }, [tabData]);
+
+            if (tabData && tabData.error) {
+              if (tabData.data?.authenticated === false) {
+                return <Navigate to="/login" state={{ from: location }} />;
+              }
+              return <Navigate to="/" replace={true} />;
+            }
+
+            return (
               <Box sx={{ borderBottom: "1px solid", borderColor: "divider" }}>
-                <Outlet />;
+                <Outlet context={{ profileTabData, accountTabData }} />;
               </Box>
-            </SettingsLayoutContext.Provider>
-          );
-        }}
-      </Await>
-    </Suspense>
+            );
+          }}
+        </Await>
+      </Suspense>
+    </>
   );
 }
 
 export const settingsLoader = ({ request }) => {
-  return { authGuard: authenticateJWT(getToken()) };
+  const pathname = new URL(request.url).pathname;
+  return {
+    // authGuard: authenticateJWT(getToken()),
+    tabData: getSettingTabData(pathname),
+  };
 };
 
 export default SettingsLayout;

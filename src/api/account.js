@@ -54,3 +54,15 @@ export const getProfileBackedProjects = async (path) => {
 
   return data;
 };
+
+export const getSettingTabData = async (path) => {
+  let baseUrl = "http://localhost:8000";
+  let url = `${baseUrl}${path}`;
+  let token = getToken();
+  const response = await fetch(url, {
+    headers: { Authorization: "Bearer " + token },
+  });
+  const data = await response.json();
+
+  return data;
+};
