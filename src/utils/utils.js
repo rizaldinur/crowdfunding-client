@@ -1,8 +1,8 @@
 import Cookies from "js-cookie";
 
-export const getError = (body, errorData = []) => {
+export const getError = (path, errorData = [], pathKey = "body") => {
   const error = errorData.find((error) => {
-    return error.body === body;
+    return error[pathKey] === path;
   });
   return error;
 };
