@@ -33,7 +33,9 @@ import BackedProjectsPanel, {
 import SettingsLayout, {
   settingsLoader,
 } from "./routes/layouts/SettingsLayout.jsx";
-import AccountSettings from "./components/settings-account/AccountSettings.jsx";
+import AccountSettings, {
+  accountSettingsAction,
+} from "./components/settings-account/AccountSettings.jsx";
 import ProfileSettings, {
   profileSecttingsAction,
 } from "./components/settings-account/ProfileSettings.jsx";
@@ -155,7 +157,11 @@ const router = createBrowserRouter([
                 element: <ProfileSettings />,
                 action: profileSecttingsAction,
               },
-              { path: "account", element: <AccountSettings /> },
+              {
+                path: "account",
+                element: <AccountSettings />,
+                action: accountSettingsAction,
+              },
             ],
           },
         ],
