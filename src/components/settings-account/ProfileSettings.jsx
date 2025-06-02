@@ -36,6 +36,17 @@ function ProfileSettings() {
   const [formErrorData, setFormErrorData] = useState([]);
 
   useEffect(() => {
+    if (navigation.state === "idle") {
+      setForm((form) => {
+        return { ...form, location: "", uniqueUrl: "" };
+      });
+      setInitialForm((form) => {
+        return { ...form, location: "", uniqueUrl: "" };
+      });
+    }
+  }, [navigation.state]);
+
+  useEffect(() => {
     if (data) {
       if (data.error) {
         if (data.authorized === false) {
