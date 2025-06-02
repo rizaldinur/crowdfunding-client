@@ -322,7 +322,7 @@ function MainHeader({ user, slug, avatar, authenticated }) {
               <FormControl id="search__form-control" sx={{ width: 1 }}>
                 <OutlinedInput
                   fullWidth
-                  id="search"
+                  id="search__mobile-view"
                   name="search"
                   placeholder="Search"
                   color="inherit"
