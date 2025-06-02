@@ -66,3 +66,20 @@ export const getSettingTabData = async (path) => {
 
   return data;
 };
+
+export const putUpdateProfile = async (profileId, postData) => {
+  let baseUrl = "http://localhost:8000";
+  let url = `${baseUrl}/settings/${profileId}/profile`;
+  let token = getToken();
+  const response = await fetch(url, {
+    method: "put",
+    body: JSON.stringify(postData),
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await response.json();
+
+  return data;
+};

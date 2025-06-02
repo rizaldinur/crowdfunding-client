@@ -8,13 +8,43 @@ import {
   Typography,
 } from "@mui/material";
 import LocationAutocomplete from "../input/LocationAutocomplete";
-import { useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Link } from "@mui/icons-material";
-import { Form, useOutletContext } from "react-router";
+import {
+  Form,
+  Navigate,
+  redirect,
+  useActionData,
+  useNavigation,
+  useOutletContext,
+  useSearchParams,
+} from "react-router";
+import { putUpdateProfile } from "../../api/account";
+import { getError, setToken } from "../../utils/utils";
 
 function ProfileSettings() {
-  const { profileTabData } = useOutletContext();
-  const [locationValue, setLocationValue] = useState("");
+  const data = useActionData();
+  const { profileTabData, setAlertOpen, setAlertMsg, setAlertStatus } =
+    useOutletContext();
+  const navigation = useNavigation();
+  let busy = navigation.state !== "idle";
+  const [search, setSearch] = useSearchParams();
+  const [formErrorData, setFormErrorData] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      if (data.error) {
+        if (data.data?.errors?.length > 0) {
+          setFormErrorData(data.data?.errors);
+        }
+        setSearch({});
+        setAlertOpen(true);
+        setAlertStatus("error");
+        setAlertMsg(data.message);
+      }
+    }
+  }, [data]);
+
   const [isDirty, setIsDirty] = useState(false);
 
   const [initialForm, setInitialForm] = useState({
@@ -55,16 +85,26 @@ function ProfileSettings() {
     setForm((form) => {
       return { ...form, [name]: value };
     });
+    setFormErrorData((formErrors) => {
+      return formErrors.filter((error) => {
+        return error.path !== name;
+      });
+    });
   };
 
   return (
     <Container maxWidth="lg">
       <Box sx={{ p: 3 }}>
-        <Form noValidate>
+        <Form noValidate method="put">
           <Stack gap={3} sx={{ width: { xs: 1, md: 500 } }}>
             <TextField
               label="Nama tampilan"
               name="name"
+              error={Boolean(getError("name", formErrorData, "path"))}
+              helperText={
+                Boolean(getError("name", formErrorData, "path")) &&
+                getError("name", formErrorData, "path").msg
+              }
               value={form.name}
               onChange={handleChange}
             />
@@ -72,18 +112,33 @@ function ProfileSettings() {
               label="Biografi"
               multiline
               name="biography"
+              error={Boolean(getError("biography", formErrorData, "path"))}
               value={form.biography}
               onChange={handleChange}
               rows={3}
               slotProps={{
                 formHelperText: {
-                  sx: { textAlign: "end" },
+                  sx: { display: "flex" },
+                  component: Box,
                 },
               }}
-              helperText="0/300"
+              helperText={
+                <>
+                  {Boolean(getError("biography", formErrorData, "path")) && (
+                    <Box component="span">
+                      {getError("biography", formErrorData, "path").msg}
+                    </Box>
+                  )}
+                  <Box component="span" sx={{ ml: "auto" }}>
+                    {form.biography.length}/300
+                  </Box>
+                </>
+              }
             />
             <LocationAutocomplete
               label="Lokasi"
+              name="location"
+              value={form.location}
               onChange={(e, value) => {
                 setForm((form) => {
                   return { ...form, location: value || "" };
@@ -93,10 +148,13 @@ function ProfileSettings() {
             <TextField
               label="URL unik"
               name="uniqueUrl"
+              error={Boolean(getError("uniqueUrl", formErrorData, "path"))}
+              value={form.uniqueUrl}
               onChange={handleChange}
               slotProps={{
                 formHelperText: {
-                  sx: { textAlign: "end" },
+                  sx: { display: "flex" },
+                  component: Box,
                 },
                 input: {
                   startAdornment: (
@@ -113,10 +171,22 @@ function ProfileSettings() {
                   ),
                 },
               }}
-              helperText="0/15"
+              helperText={
+                <>
+                  {Boolean(getError("uniqueUrl", formErrorData, "path")) && (
+                    <Box component="span">
+                      {getError("uniqueUrl", formErrorData, "path").msg}
+                    </Box>
+                  )}
+                  <Box component="span" sx={{ ml: "auto" }}>
+                    {form.uniqueUrl.length}/20
+                  </Box>
+                </>
+              }
             />
             <Button
               type="submit"
+              loading={busy}
               disabled={!isDirty}
               variant="contained"
               sx={{ alignSelf: "start" }}
@@ -129,5 +199,28 @@ function ProfileSettings() {
     </Container>
   );
 }
+
+export const profileSecttingsAction = async ({ request, params }) => {
+  const { profileId } = params;
+  const url = new URL(request.url);
+  url.search = "";
+
+  const formData = await request.formData();
+  const postData = Object.fromEntries(formData);
+
+  const data = await putUpdateProfile(profileId, postData);
+
+  if (data.error) {
+    return data;
+  }
+
+  if (data && data.data?.refreshToken) {
+    setToken(data.data?.refreshToken);
+  }
+
+  return redirect(
+    `/settings/${data.data?.userSlug}?success=true&message=${data.message}`
+  );
+};
 
 export default ProfileSettings;

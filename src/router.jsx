@@ -34,7 +34,9 @@ import SettingsLayout, {
   settingsLoader,
 } from "./routes/layouts/SettingsLayout.jsx";
 import AccountSettings from "./components/settings-account/AccountSettings.jsx";
-import ProfileSettings from "./components/settings-account/ProfileSettings.jsx";
+import ProfileSettings, {
+  profileSecttingsAction,
+} from "./components/settings-account/ProfileSettings.jsx";
 import BuildOverview, {
   buildOverviewAction,
   buildOverviewLoader,
@@ -148,7 +150,11 @@ const router = createBrowserRouter([
             element: <SettingsLayout />,
             loader: settingsLoader,
             children: [
-              { index: true, element: <ProfileSettings /> },
+              {
+                index: true,
+                element: <ProfileSettings />,
+                action: profileSecttingsAction,
+              },
               { path: "account", element: <AccountSettings /> },
             ],
           },
