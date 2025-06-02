@@ -4,6 +4,7 @@ import {
   Outlet,
   useLoaderData,
   useLocation,
+  useMatches,
   useNavigate,
   useRevalidator,
   useSearchParams,
@@ -17,6 +18,7 @@ import BasicSectionLoading from "../../components/fallback-component/BasicSectio
 import LoadingPage from "../../components/fallback-component/LoadingPage";
 import { authenticateJWT } from "../../api/auth";
 import { getToken } from "../../utils/utils";
+import isEqual from "lodash.isequal";
 
 export const SettingsLayoutContext = createContext();
 function SettingsLayout() {
@@ -38,6 +40,12 @@ function SettingsLayout() {
       setAlertMsg(search.get("message") || "Sukses.");
       setAlertStatus("success");
       setSearch({});
+      if (!location.pathname.split("/")[3] && profileTabData) {
+        setProfileTabData(null);
+      }
+      if (location.pathname.split("/")[3] === "account" && accountTabData) {
+        setAccountTabData(null);
+      }
     }
   }, [search]);
 
@@ -81,24 +89,18 @@ function SettingsLayout() {
             useEffect(() => {
               if (tabData) {
                 if (!tabData.error) {
-                  if (tabData.data?.profileTab) {
-                    if (
-                      !profileTabData ||
-                      JSON.stringify(tabData.data?.profileTab) !==
-                        JSON.stringify(profileTabData)
-                    ) {
-                      setProfileTabData(tabData.data?.profileTab);
-                    }
+                  if (
+                    tabData.data?.profileTab &&
+                    !isEqual(tabData.data?.profileTab, profileTabData)
+                  ) {
+                    setProfileTabData(tabData.data?.profileTab);
                   }
 
-                  if (tabData.data?.accountTab) {
-                    if (
-                      !accountTabData ||
-                      JSON.stringify(tabData.data?.accountTab) !==
-                        JSON.stringify(accountTabData)
-                    ) {
-                      setAccountTabData(tabData.data?.accountTab);
-                    }
+                  if (
+                    tabData.data?.accountTab &&
+                    !isEqual(tabData.data?.accountTab, accountTabData)
+                  ) {
+                    setAccountTabData(tabData.data?.accountTab);
                   }
                 }
               }
