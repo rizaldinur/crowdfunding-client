@@ -6,8 +6,9 @@ import {
   useLocation,
   useNavigate,
   useRevalidator,
+  useSearchParams,
 } from "react-router";
-import { Box } from "@mui/material";
+import { Alert, Box, Snackbar } from "@mui/material";
 import { createContext, Suspense, useEffect, useState } from "react";
 import SettingsTabs from "../../components/settings-account/SettingsTabs";
 import SettingsHead from "../../components/settings-account/SettingsHead";
@@ -20,12 +21,25 @@ import { getToken } from "../../utils/utils";
 export const SettingsLayoutContext = createContext();
 function SettingsLayout() {
   const location = useLocation();
-  // const { authGuard } = useLoaderData();
   const { tabData } = useLoaderData();
   const revalidator = useRevalidator();
   const [profileTabData, setProfileTabData] = useState(null);
   const [accountTabData, setAccountTabData] = useState(null);
   const navigate = useNavigate();
+  let [search, setSearch] = useSearchParams();
+
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMsg, setAlertMsg] = useState("Sukses.");
+  const [alertStatus, setAlertStatus] = useState("success");
+
+  useEffect(() => {
+    if (search.get("success") === "true") {
+      setAlertOpen(true);
+      setAlertMsg(search.get("message") || "Sukses.");
+      setAlertStatus("success");
+      setSearch({});
+    }
+  }, [search]);
 
   useEffect(() => {
     document.title = "Pengaturan akun";
@@ -38,8 +52,27 @@ function SettingsLayout() {
     }
   }, [location]);
 
+  const handleClose = () => {
+    setAlertOpen(false);
+  };
+
   return (
     <>
+      <Snackbar
+        open={alertOpen}
+        onClose={handleClose}
+        autoHideDuration={5000}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          open={alertOpen}
+          onClose={handleClose}
+          variant="filled"
+          severity={alertStatus}
+        >
+          {alertMsg}
+        </Alert>
+      </Snackbar>
       <SettingsHead />
       <SettingsTabs />
       <Suspense fallback={<LoadingPage />}>
@@ -48,12 +81,24 @@ function SettingsLayout() {
             useEffect(() => {
               if (tabData) {
                 if (!tabData.error) {
-                  if (tabData.data?.profileTab && !profileTabData) {
-                    setProfileTabData(tabData.data?.profileTab);
+                  if (tabData.data?.profileTab) {
+                    if (
+                      !profileTabData ||
+                      JSON.stringify(tabData.data?.profileTab) !==
+                        JSON.stringify(profileTabData)
+                    ) {
+                      setProfileTabData(tabData.data?.profileTab);
+                    }
                   }
 
-                  if (tabData.data?.accountTab && !accountTabData) {
-                    setAccountTabData(tabData.data?.accountTab);
+                  if (tabData.data?.accountTab) {
+                    if (
+                      !accountTabData ||
+                      JSON.stringify(tabData.data?.accountTab) !==
+                        JSON.stringify(accountTabData)
+                    ) {
+                      setAccountTabData(tabData.data?.accountTab);
+                    }
                   }
                 }
               }
@@ -68,7 +113,16 @@ function SettingsLayout() {
 
             return (
               <Box sx={{ borderBottom: "1px solid", borderColor: "divider" }}>
-                <Outlet context={{ profileTabData, accountTabData }} />;
+                <Outlet
+                  context={{
+                    profileTabData,
+                    accountTabData,
+                    setAlertMsg,
+                    setAlertOpen,
+                    setAlertStatus,
+                  }}
+                />
+                ;
               </Box>
             );
           }}
