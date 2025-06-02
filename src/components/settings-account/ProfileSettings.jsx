@@ -15,6 +15,8 @@ import {
   Navigate,
   redirect,
   useActionData,
+  useLocation,
+  useNavigate,
   useNavigation,
   useOutletContext,
   useSearchParams,
@@ -27,6 +29,8 @@ function ProfileSettings() {
   const { profileTabData, setAlertOpen, setAlertMsg, setAlertStatus } =
     useOutletContext();
   const navigation = useNavigation();
+  const navigate = useNavigate();
+  const location = useLocation();
   let busy = navigation.state !== "idle";
   const [search, setSearch] = useSearchParams();
   const [formErrorData, setFormErrorData] = useState([]);
@@ -34,6 +38,9 @@ function ProfileSettings() {
   useEffect(() => {
     if (data) {
       if (data.error) {
+        if (data.authorized === false) {
+          navigate("/login", { state: { from: location } });
+        }
         if (data.data?.errors?.length > 0) {
           setFormErrorData(data.data?.errors);
         }
