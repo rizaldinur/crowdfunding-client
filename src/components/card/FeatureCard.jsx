@@ -86,7 +86,7 @@ function FeatureCard({ data }) {
         <CardHeader
           sx={{ p: 0, mb: 4 }}
           avatar={
-            <Avatar sx={{ width: 50, height: 50 }} src={data.avatarUrl}>
+            <Avatar sx={{ width: 50, height: 50 }} src={data.avatar}>
               <Person2 />
             </Avatar>
           }
