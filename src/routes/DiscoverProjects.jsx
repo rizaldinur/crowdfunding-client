@@ -1,18 +1,21 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
 import ProjectsGrid from "../components/discover/ProjectsGrid";
 import FilterTab from "../components/navigation/FilterTab";
 import { getDiscoverProjects } from "../api/feed";
-import { Await, Navigate, useLoaderData } from "react-router";
+import { Await, useLoaderData, useLocation } from "react-router";
 import LoadingPage from "../components/fallback-component/LoadingPage";
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
 function DiscoverProjects() {
   const { projects } = useLoaderData();
-  const [data, setData] = useState(null);
+  const location = useLocation();
+  let page = new URLSearchParams(location.search).get("page") || 1;
 
   useEffect(() => {
-    document.title = "Jelajahi";
-  }, []);
+    document.title = "Jelajahi, halaman-" + page;
+    window.scrollTo(0, 0);
+  }, [location]);
+
   return (
     <Suspense fallback={<LoadingPage />}>
       <Await resolve={projects}>
@@ -22,7 +25,7 @@ function DiscoverProjects() {
               <FilterTab />
               {!projects.error &&
               projects.data &&
-              projects.data?.totalItems > 0 ? (
+              projects.data?.projects?.length > 0 ? (
                 <ProjectsGrid
                   totalPages={projects.data?.totalPages}
                   projects={projects.data?.projects}

@@ -8,10 +8,10 @@ import {
 } from "@mui/material";
 import MediaCard from "../card/MediaCard";
 import { useSearchParams, Link as RouterLink } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function ProjectsGrid({ totalPages, projects = [] }) {
-  const [search, useSearch] = useSearchParams();
+  const [search, setSearch] = useSearchParams();
   let page = search.get("page") ? parseInt(search.get("page")) : 1;
 
   return (
@@ -48,7 +48,14 @@ function ProjectsGrid({ totalPages, projects = [] }) {
               return (
                 <PaginationItem
                   component={RouterLink}
-                  to={`/discover?page=${item.page}`}
+                  to={{
+                    pathname: "/discover",
+                    search: (() => {
+                      const params = new URLSearchParams(search);
+                      params.set("page", item.page); // update the page
+                      return `?${params.toString()}`;
+                    })(),
+                  }}
                   {...item}
                 />
               );
