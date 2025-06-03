@@ -17,7 +17,7 @@ import { useContext } from "react";
 import { ThemeContext } from "../../routes/layouts/RootLayout";
 import { AccessTimeFilled, Person2 } from "@mui/icons-material";
 
-function MediaCard({ data = {} }) {
+function MediaCard({ data = {}, sx }) {
   const { currentTheme } = useContext(ThemeContext);
   return (
     <Card
@@ -36,6 +36,7 @@ function MediaCard({ data = {} }) {
           padding: 2,
           margin: -2,
         },
+        ...sx,
       }}
     >
       <CardMedia
