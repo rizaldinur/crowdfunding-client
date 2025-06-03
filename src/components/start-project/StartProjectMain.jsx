@@ -20,6 +20,7 @@ import validator from "validator";
 import { Link, useFetcher, useNavigate } from "react-router";
 import { getError } from "../../utils/utils";
 import Cookies from "js-cookie";
+import { postStartProject } from "../../api/build";
 
 function StartProjectMain() {
   const { currentTheme } = useThemeContext();
@@ -384,26 +385,9 @@ function StartProjectMain() {
 }
 
 export const startProjectMainAction = async ({ request }) => {
-  await new Promise((resolve, reject) => setTimeout(() => resolve(), 2000));
   const formData = await request.formData();
 
-  let token = Cookies.get("jwt") || "";
-  const requestOptions = {
-    method: "POST",
-    body: formData,
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-    redirect: "follow",
-  };
-
-  const response = await fetch(
-    "http://localhost:8000/start-project",
-    requestOptions
-  );
-
-  const data = await response.json();
-
+  const data = await postStartProject(formData);
   return data;
 };
 export default StartProjectMain;

@@ -48,6 +48,26 @@ export const getPreviewData = async (path) => {
   return data;
 };
 
+export const postStartProject = async (formData) => {
+  const token = getToken();
+  const requestOptions = {
+    method: "POST",
+    body: formData,
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+    redirect: "follow",
+  };
+
+  const response = await fetch(
+    "http://localhost:8000/start-project",
+    requestOptions
+  );
+
+  const data = await response.json();
+  return data;
+};
+
 export async function putBuildForm(postData, pathname) {
   let baseurl = "http://localhost:8000";
   let url = baseurl + pathname;
