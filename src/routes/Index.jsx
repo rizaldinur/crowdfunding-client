@@ -4,6 +4,7 @@ import HeroSection from "../components/index/HeroSection";
 import RecommendedSection from "../components/index/RecommendedSection";
 import { Await, useLoaderData } from "react-router";
 import BasicSectionLoading from "../components/fallback-component/BasicSectionLoading";
+import { getFeaturedProject, getRecommendedProjects } from "../api/feed";
 
 function Index() {
   const { featured, recommended } = useLoaderData();
@@ -34,26 +35,6 @@ function Index() {
     </>
   );
 }
-
-export const getFeaturedProject = async () => {
-  let baseurl = "http://localhost:8000";
-  let url = baseurl + "/index/featured-project";
-
-  const response = await fetch(url);
-  const data = await response.json();
-
-  return data;
-};
-
-export const getRecommendedProjects = async () => {
-  let baseurl = "http://localhost:8000";
-  let url = baseurl + "/index/recommended-projects";
-
-  const response = await fetch(url);
-  const data = await response.json();
-
-  return data;
-};
 
 export const indexLoader = ({ request, params }) => {
   return {
