@@ -26,7 +26,7 @@ import {
   OutlinedInput,
   Select,
 } from "@mui/material";
-import { Link as RouterLink, useNavigate } from "react-router";
+import { Form, Link as RouterLink, useNavigate } from "react-router";
 import { DarkMode, LightMode, Search } from "@mui/icons-material";
 import { Fragment, useState } from "react";
 import { navItems, accountMenuItems } from "../../data/staticData";
@@ -190,11 +190,8 @@ function MainHeader({ user, slug, avatar, authenticated }) {
             {/* Search form (hidden on xs) */}
             <Box
               sx={{ flexGrow: 1, maxWidth: { xs: 1, md: 500 } }}
-              component="form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                navigate("login"); // Placeholder redirect on search submit
-              }}
+              component={Form}
+              action="/discover"
             >
               <FormControl
                 id="search__form-control"
@@ -205,7 +202,7 @@ function MainHeader({ user, slug, avatar, authenticated }) {
                   id="search"
                   aria-describedby="my-helper-text"
                   name="search"
-                  placeholder="Search"
+                  placeholder="Cari nama proyek, kreator, atau kategori..."
                   color="inherit"
                   size="small"
                   startAdornment={
@@ -311,20 +308,13 @@ function MainHeader({ user, slug, avatar, authenticated }) {
 
           {/* Collapsible search form for mobile */}
           <Collapse in={openSearchBar}>
-            <Box
-              sx={{ mb: 2 }}
-              component="form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                navigate("login");
-              }}
-            >
-              <FormControl id="search__form-control" sx={{ width: 1 }}>
+            <Box sx={{ mb: 2 }} component={Form} action="/discover">
+              <FormControl id="search__form-control-mobile" sx={{ width: 1 }}>
                 <OutlinedInput
                   fullWidth
                   id="search__mobile-view"
                   name="search"
-                  placeholder="Search"
+                  placeholder="Cari nama proyek, kreator, atau kategori..."
                   color="inherit"
                   size="small"
                   startAdornment={
