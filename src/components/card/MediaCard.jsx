@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  Button,
   Card,
   CardActions,
   CardContent,
@@ -16,11 +15,14 @@ import {
 import { useContext } from "react";
 import { ThemeContext } from "../../routes/layouts/RootLayout";
 import { AccessTimeFilled, Person2 } from "@mui/icons-material";
+import { forwardRef } from "react";
+import { Link as RouterLink } from "react-router";
 
-function MediaCard({ data = {}, sx }) {
+const MediaCard = forwardRef(function MediaCard({ data = {}, sx }, ref) {
   const { currentTheme } = useContext(ThemeContext);
   return (
     <Card
+      ref={ref}
       elevation={0}
       sx={{
         display: "flex",
@@ -54,9 +56,14 @@ function MediaCard({ data = {}, sx }) {
         }
         title={data.title || "image here"}
       />
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 2, flex: 1, display: "flex", flexDirection: "column" }}>
         {data.projectStatus && data.projectStatus === "finished" && (
-          <Chip variant="filled" label="Sudah selesai" size="small" />
+          <Chip
+            variant="filled"
+            label="Sudah selesai"
+            size="small"
+            sx={{ alignSelf: "start" }}
+          />
         )}
         <Tooltip title={data.title || "title here"} placement="right-end">
           <Stack sx={{ minWidth: 0, mb: 1 }}>
@@ -75,7 +82,7 @@ function MediaCard({ data = {}, sx }) {
         </Tooltip>
         <CardHeader
           disableTypography
-          sx={{ p: 0, mb: 3, maxWidth: 1 }}
+          sx={{ p: 0, mb: 3 }}
           avatar={
             <Avatar sx={{ width: 50, height: 50 }} src={data.avatar}>
               <Person2 />
@@ -89,6 +96,8 @@ function MediaCard({ data = {}, sx }) {
               underline="hover"
               href={`/profile/${data.creatorSlug}`}
               sx={{
+                whiteSpace: "normal",
+                wordBreak: "break-word",
                 display: "-webkit-box", // Enables the use of line-clamp
                 WebkitBoxOrient: "vertical", // Required for multi-line truncation
                 overflow: "hidden", // Prevents overflow
@@ -111,6 +120,8 @@ function MediaCard({ data = {}, sx }) {
                 <Typography
                   variant="body2"
                   sx={{
+                    whiteSpace: "normal",
+                    wordBreak: "break-word",
                     display: "-webkit-box", // Enables the use of line-clamp
                     WebkitBoxOrient: "vertical", // Required for multi-line truncation
                     overflow: "hidden", // Prevents overflow
@@ -130,6 +141,8 @@ function MediaCard({ data = {}, sx }) {
             variant="body2"
             sx={{
               color: "text.primary",
+              whiteSpace: "normal",
+              wordBreak: "break-word",
               display: "-webkit-box", // Enables the use of line-clamp
               WebkitBoxOrient: "vertical", // Required for multi-line truncation
               overflow: "hidden", // Prevents overflow
@@ -140,11 +153,14 @@ function MediaCard({ data = {}, sx }) {
               "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia nobis repudiandae sed perspiciatis, ducimus aliquam fugiat quo ipsum consectetur, possimus cum blanditiis, exercitationem corporis ut dignissimos deserunt alias similique sit?"}
           </Typography>
         </CardContent>
-        <CardActions sx={{ p: 0 }}>
+        <CardActions sx={{ p: 0, mt: "auto" }}>
           <Chip
             label={data.location || "Lokasi"}
-            component="a"
-            href="#"
+            component={RouterLink}
+            to={{
+              pathname: "/discover",
+              search: `?location=${data.location}`,
+            }}
             size="medium"
             variant="outlined"
             clickable
@@ -152,8 +168,11 @@ function MediaCard({ data = {}, sx }) {
           />
           <Chip
             label={data.category || "Kategori"}
-            component="a"
-            href="#"
+            component={RouterLink}
+            to={{
+              pathname: "/discover",
+              search: `?category=${data.category}`,
+            }}
             size="medium"
             variant="outlined"
             clickable
@@ -163,6 +182,6 @@ function MediaCard({ data = {}, sx }) {
       </Box>
     </Card>
   );
-}
+});
 
 export default MediaCard;
