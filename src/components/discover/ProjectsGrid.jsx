@@ -1,7 +1,19 @@
-import { Box, Container, Grid, Pagination, Stack } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  Pagination,
+  PaginationItem,
+  Stack,
+} from "@mui/material";
 import MediaCard from "../card/MediaCard";
+import { useSearchParams, Link as RouterLink } from "react-router";
+import { useEffect, useState } from "react";
 
 function ProjectsGrid({ totalPages, projects = [] }) {
+  const [search, useSearch] = useSearchParams();
+  let page = search.get("page") ? parseInt(search.get("page")) : 1;
+
   return (
     <Box
       sx={{
@@ -29,8 +41,18 @@ function ProjectsGrid({ totalPages, projects = [] }) {
         <Stack sx={{ mb: 5 }}>
           <Pagination
             count={totalPages || 10}
+            page={page}
             color="secondary"
             sx={{ placeSelf: "center" }}
+            renderItem={(item) => {
+              return (
+                <PaginationItem
+                  component={RouterLink}
+                  to={`/discover?page=${item.page}`}
+                  {...item}
+                />
+              );
+            }}
           />
         </Stack>
       </Container>
