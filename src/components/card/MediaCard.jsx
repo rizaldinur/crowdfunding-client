@@ -16,33 +16,7 @@ import {
 import { useContext } from "react";
 import { ThemeContext } from "../../routes/layouts/RootLayout";
 import { AccessTimeFilled, Person2 } from "@mui/icons-material";
-const CustomSubheader = (props) => (
-  <Box
-    sx={{
-      display: "flex",
-      alignItems: "center",
-      color: "text.primary",
-    }}
-  >
-    <Stack>
-      <AccessTimeFilled />
-    </Stack>
-    <Stack sx={{ minWidth: 0 }}>
-      <Typography
-        variant="body1"
-        noWrap
-        // sx={{
-        //   display: "-webkit-box", // Enables the use of line-clamp
-        //   WebkitBoxOrient: "vertical", // Required for multi-line truncation
-        //   overflow: "hidden", // Prevents overflow
-        //   WebkitLineClamp: 1, // Limits the text to 3 lines
-        // }}
-      >
-        {props.children}
-      </Typography>
-    </Stack>
-  </Box>
-);
+
 function MediaCard({ data = {} }) {
   const { currentTheme } = useContext(ThemeContext);
   return (
@@ -68,6 +42,10 @@ function MediaCard({ data = {} }) {
         sx={{
           aspectRatio: "16/9",
           borderRadius: 1,
+          filter:
+            data.projectStatus &&
+            data.projectStatus === "finished" &&
+            "grayscale(100%)",
         }}
         image={
           data.imageUrl ||
@@ -76,6 +54,9 @@ function MediaCard({ data = {} }) {
         title={data.title || "image here"}
       />
       <Box sx={{ p: 2 }}>
+        {data.projectStatus && data.projectStatus === "finished" && (
+          <Chip variant="filled" label="Sudah selesai" size="small" />
+        )}
         <Tooltip title={data.title || "title here"} placement="right-end">
           <Stack sx={{ minWidth: 0, mb: 1 }}>
             <Typography
@@ -86,13 +67,6 @@ function MediaCard({ data = {} }) {
               href={`/project/details/${data.creatorSlug}/${data.projectSlug}`}
               target="_blank"
               noWrap
-              // sx={{
-              //   mb: 1,
-              //   display: "-webkit-box", // Enables the use of line-clamp
-              //   WebkitBoxOrient: "vertical", // Required for multi-line truncation
-              //   overflow: "hidden", // Prevents overflow
-              //   WebkitLineClamp: 1, // Limits the text to 3 lines
-              // }}
             >
               {data.title || "Proyek tanpa nama"}
             </Typography>
@@ -112,7 +86,7 @@ function MediaCard({ data = {} }) {
               color="textSecondary"
               component={Link}
               underline="hover"
-              href="#"
+              href={`/profile/${data.creatorSlug}`}
               sx={{
                 display: "-webkit-box", // Enables the use of line-clamp
                 WebkitBoxOrient: "vertical", // Required for multi-line truncation
