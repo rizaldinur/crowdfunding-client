@@ -189,7 +189,7 @@ function BasicPage() {
 
     if (
       subtitle.length > 0 &&
-      !validator.matches(subtitle, /^[a-zA-Z0-9 .'-,]+$/)
+      !validator.matches(subtitle, /^[a-zA-Z0-9 .'-]+$/)
     ) {
       error.push({
         body: "subtitle",
