@@ -151,8 +151,11 @@ function FeatureCard({ data }) {
         <CardActions sx={{ padding: 0 }}>
           <Chip
             label={data.location || "Lokasi"}
-            component="a"
-            href="#"
+            component={RouterLink}
+            to={{
+              pathname: "/discover",
+              search: `?location=${data.location}`,
+            }}
             size="medium"
             variant="outlined"
             clickable
@@ -160,8 +163,11 @@ function FeatureCard({ data }) {
           />
           <Chip
             label={data.category || "Kategori"}
-            component="a"
-            href="#"
+            component={RouterLink}
+            to={{
+              pathname: "/discover",
+              search: `?category=${data.category}`,
+            }}
             size="medium"
             variant="outlined"
             clickable
