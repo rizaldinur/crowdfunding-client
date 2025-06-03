@@ -26,6 +26,7 @@ function FilterTab() {
   const handleReset = (e) => {
     setLocationValue("");
     setCategory("");
+    setSearch({});
   };
 
   const handleClick = (e) => {
