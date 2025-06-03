@@ -32,7 +32,7 @@ function ProjectHead({ data = {} }) {
       <Container maxWidth="xl">
         <Box sx={{ py: 5 }}>
           <Typography
-            sx={{ placeSelf: "center" }}
+            sx={{ textAlign: { xs: "start", sm: "center" } }}
             variant="h3"
             color="textPrimary"
             fontWeight="700"
@@ -118,7 +118,7 @@ function ProjectHead({ data = {} }) {
                     : "0%"}
                 </Typography>
                 <Typography variant="h4" color="textPrimary" sx={{ mt: 3 }}>
-                  {data.countSupporters || "100"}
+                  {data.countSupporters >= 0 ? data.countSupporters : "100"}
                 </Typography>
                 <Typography variant="subtitle1" color="textSecondary">
                   pendukung
