@@ -21,15 +21,17 @@ function RecommendedSection({ data = [] }) {
           >
             REKOMENDASI
           </Typography>
-          {data.length > 0 ? (
-            data.map((project, index) => {
-              return <MediaCard key={index} data={project} />;
-            })
-          ) : (
-            <Typography color="textSecondary" sx={{ placeSelf: "center" }}>
-              Tidak ada data.
-            </Typography>
-          )}
+          <Box sx={{ display: "flex", gap: 3 }}>
+            {data.length > 0 ? (
+              data.map((project, index) => {
+                return <MediaCard key={index} data={project} />;
+              })
+            ) : (
+              <Typography color="textSecondary" sx={{ mx: "auto" }}>
+                Tidak ada data.
+              </Typography>
+            )}
+          </Box>
         </Box>
       </Container>
     </Box>
