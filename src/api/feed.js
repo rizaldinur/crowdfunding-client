@@ -21,3 +21,15 @@ export const getProjectDetails = async (path) => {
   const data = await response.json();
   return data;
 };
+
+export const getDiscoverProjects = async (filter) => {
+  let baseurl = "http://localhost:8000";
+  let url = baseurl + "/discover" + filter;
+
+  const response = await fetch(url, {
+    method: "get",
+  });
+
+  const data = await response.json();
+  return data;
+};

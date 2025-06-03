@@ -10,47 +10,46 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import { useFetcher } from "react-router";
+import { useFetcher, useSearchParams } from "react-router";
+import CategoryAutocomplete from "../input/CategoryAutoComplete";
+import LocationAutocomplete from "../input/LocationAutocomplete";
 
 function FilterTab() {
   const options = ["Surabaya", "Jakarta"];
-  const [locations, setLocations] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [locationValue, setLocationValue] = useState([]);
 
-  const handleOpen = () => {
-    setOpen(true);
-    (async () => {
-      if (locations.length > 0) {
-        return;
-      }
-      setLoading(true);
-      const response = await fetch(
-        "https://www.emsifa.com/api-wilayah-indonesia/api/regencies/35.json"
-      );
-      const data = await response.json();
-      console.log(data);
+  // const [open, setOpen] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useSearchParams();
+  const [locationValue, setLocationValue] = useState("");
+  const [category, setCategory] = useState("");
 
-      setLoading(false);
-
-      setLocations([...data]);
-    })();
+  const handleReset = (e) => {
+    setLocationValue("");
+    setCategory("");
   };
 
-  const handleClose = () => {
-    setOpen(false);
-    if (locations.length > 0) {
-      return;
-    }
-    setLocations([]);
+  const handleClick = (e) => {
+    console.log("click");
+    setSearch((search) => {
+      search.delete("category");
+      search.delete("location");
+
+      if (category) {
+        search.set("category", category);
+      }
+      if (locationValue) {
+        search.set("location", locationValue);
+      }
+
+      return search;
+    });
   };
   return (
     <Box
       component="nav"
       sx={{ borderBottom: "1px solid", borderBottomColor: "divider" }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Grid
           container
           sx={{
@@ -60,54 +59,21 @@ function FilterTab() {
           spacing={3}
         >
           <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-            <Autocomplete
-              multiple
-              id="tags-outlined"
-              options={options}
-              getOptionLabel={(option) => option}
-              filterSelectedOptions
-              renderInput={(params) => (
-                <TextField {...params} label="Kategori" />
-              )}
-              sx={{ flexGrow: 1 }}
+            <CategoryAutocomplete
+              label="Kategori"
+              value={category}
+              onChange={(e, value) => {
+                setCategory(value);
+              }}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-            <Autocomplete
-              multiple
-              disableCloseOnSelect
-              open={open}
+            <LocationAutocomplete
+              label="Lokasi"
               value={locationValue}
               onChange={(e, value) => {
-                setLocationValue([...value]);
-                console.log(value);
+                setLocationValue(value);
               }}
-              onOpen={handleOpen}
-              onClose={handleClose}
-              id="tags-outlined"
-              options={locations}
-              loading={loading}
-              getOptionLabel={(option) => option.name}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Lokasi"
-                  slotProps={{
-                    input: {
-                      ...params.InputProps,
-                      endAdornment: (
-                        <>
-                          {loading ? (
-                            <CircularProgress color="inherit" size={20} />
-                          ) : null}
-                          {params.InputProps.endAdornment}
-                        </>
-                      ),
-                    },
-                  }}
-                />
-              )}
-              sx={{ flexGrow: 1 }}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
@@ -123,21 +89,33 @@ function FilterTab() {
               sx={{ flexGrow: 1 }}
             />
           </Grid>
-          <Grid color="text.primary" size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+          <Grid
+            color="text.primary"
+            size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+            sx={{ alignSelf: "stretch" }}
+          >
             <ButtonGroup
               variant="outlined"
-              sx={{ width: 1 }}
+              sx={{ width: 1, height: 1 }}
               size="medium"
               color="inherit"
             >
-              <Button startIcon={<FilterAlt />} sx={{ flexGrow: 1 }}>
-                apply
+              <Button
+                onClick={handleClick}
+                startIcon={<FilterAlt />}
+                sx={{ flexGrow: 1 }}
+              >
+                terapkan
               </Button>
-              <Button startIcon={<RestartAlt />} sx={{ flexGrow: 1 }}>
+              <Button
+                onClick={handleReset}
+                startIcon={<RestartAlt />}
+                sx={{ flexGrow: 1 }}
+              >
                 reset
               </Button>
               <Button startIcon={<ExpandMore />} sx={{ flexGrow: 1 }}>
-                expand
+                perluas
               </Button>
             </ButtonGroup>
           </Grid>

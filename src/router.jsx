@@ -4,7 +4,9 @@ import ErrorBoundary from "./routes/ErrorBoundary.jsx";
 import Login, { loginAction, loginLoader } from "./routes/Login.jsx";
 import Signup, { signupLoader, signupAction } from "./routes/Signup.jsx";
 import Index, { indexLoader } from "./routes/Index.jsx";
-import DiscoverProjects from "./routes/DiscoverProjects.jsx";
+import DiscoverProjects, {
+  discoverProjectsLoader,
+} from "./routes/DiscoverProjects.jsx";
 import MainLayout, { mainLayoutLoader } from "./routes/layouts/MainLayout.jsx";
 import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
 import Cookies from "js-cookie";
@@ -97,6 +99,7 @@ const router = createBrowserRouter([
           {
             path: "discover",
             element: <DiscoverProjects />,
+            loader: discoverProjectsLoader,
           },
           {
             path: "project/details/:profileId/:projectId",
