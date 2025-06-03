@@ -4,8 +4,6 @@ import {
   Outlet,
   useLoaderData,
   useLocation,
-  useMatches,
-  useNavigate,
   useRevalidator,
   useSearchParams,
 } from "react-router";
@@ -16,8 +14,6 @@ import SettingsHead from "../../components/settings-account/SettingsHead";
 import { getSettingTabData } from "../../api/account";
 import BasicSectionLoading from "../../components/fallback-component/BasicSectionLoading";
 import LoadingPage from "../../components/fallback-component/LoadingPage";
-import { authenticateJWT } from "../../api/auth";
-import { getToken } from "../../utils/utils";
 import isEqual from "lodash.isequal";
 
 export const SettingsLayoutContext = createContext();
@@ -27,7 +23,6 @@ function SettingsLayout() {
   const revalidator = useRevalidator();
   const [profileTabData, setProfileTabData] = useState(null);
   const [accountTabData, setAccountTabData] = useState(null);
-  const navigate = useNavigate();
   let [search, setSearch] = useSearchParams();
 
   const [alertOpen, setAlertOpen] = useState(false);
@@ -114,17 +109,20 @@ function SettingsLayout() {
             }
 
             return (
-              <Box sx={{ borderBottom: "1px solid", borderColor: "divider" }}>
-                <Outlet
-                  context={{
-                    profileTabData,
-                    accountTabData,
-                    setAlertMsg,
-                    setAlertOpen,
-                    setAlertStatus,
-                  }}
-                />
-                ;
+              <Box>
+                {profileTabData || accountTabData ? (
+                  <Outlet
+                    context={{
+                      profileTabData,
+                      accountTabData,
+                      setAlertMsg,
+                      setAlertOpen,
+                      setAlertStatus,
+                    }}
+                  />
+                ) : (
+                  <BasicSectionLoading />
+                )}
               </Box>
             );
           }}
