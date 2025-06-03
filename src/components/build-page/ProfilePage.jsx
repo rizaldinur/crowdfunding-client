@@ -190,8 +190,8 @@ function ProfilePage() {
                   color="inherit"
                   startIcon={<OpenInNew />}
                   sx={{ placeSelf: "end" }}
-                  // component={RouterLink}
-                  // to={`/settings/${profileId}`}
+                  component={RouterLink}
+                  to={`/settings/${profileId}`}
                 >
                   Edit Profil
                 </Button>
