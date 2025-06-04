@@ -11,18 +11,20 @@ export const ProjectDetailsLayoutContext = createContext();
 function ProjectDetailsLayout() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const [role, setRole] = useState("");
   const { headerData } = useLoaderData();
 
   return (
-    <ProjectDetailsLayoutContext.Provider value={{ open, setOpen }}>
+    <ProjectDetailsLayoutContext.Provider value={{ open, setOpen, role }}>
       <Suspense fallback={<BasicSectionLoading sx={{ height: 400 }} />}>
         <Await resolve={headerData}>
           {(headerData) => {
             useEffect(() => {
               if (headerData && !headerData.error) {
                 document.title = `${headerData.data.title} ` || "Detail Proyek";
+                setRole(headerData.data?.role || "guest");
               }
-            }, []);
+            }, [headerData]);
 
             return <ProjectHead data={headerData.data} />;
           }}
