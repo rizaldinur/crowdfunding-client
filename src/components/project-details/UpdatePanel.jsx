@@ -13,17 +13,25 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { createContext, useContext, useState } from "react";
-import { Link as RouterLink } from "react-router";
+import {
+  createContext,
+  Suspense,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { Await, Link as RouterLink, useLoaderData } from "react-router";
 import { ProjectDetailsLayoutContext } from "../../routes/layouts/ProjectDetailsLayout";
 import UpdateContentCard from "./UpdatePanel/UpdateContentCard";
 import UpdateFormPost from "./UpdatePanel/UpdateFormPost";
-import { postUpdateProject } from "../../api/feed";
+import { getProjectDetails, postUpdateProject } from "../../api/feed";
+import BasicSectionLoading from "../fallback-component/BasicSectionLoading";
 
 export const UpdatePanelContext = createContext();
 
 function UpdatePanel() {
   const { role } = useContext(ProjectDetailsLayoutContext);
+  const { updateData } = useLoaderData();
   const [open, setOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMsg, setAlertMsg] = useState("Sukses.");
@@ -65,13 +73,66 @@ function UpdatePanel() {
           </Button>
         )}
         {role === "creator" && open && <UpdateFormPost />}
-        <Stack gap={3} sx={{ mt: role === "creator" ? 0 : 5, mb: 5 }}>
-          <UpdateContentCard />
+        <Stack
+          gap={3}
+          sx={{ mt: role === "creator" ? 0 : 5, mb: 5, color: "text.primary" }}
+        >
+          <Suspense fallback={<BasicSectionLoading />}>
+            <Await resolve={updateData}>
+              {(updateData) => {
+                useEffect(() => {
+                  console.log(updateData);
+                }, [updateData]);
+
+                if (updateData) {
+                  if (!updateData.error) {
+                    if (updateData.data?.updates.length > 0) {
+                      const {
+                        updates = [],
+                        creatorName,
+                        avatar,
+                      } = updateData.data;
+
+                      return updates.map((update, index, arr) => {
+                        return (
+                          <UpdateContentCard
+                            key={`update-${index}`}
+                            data={update}
+                            creator={{ creatorName, avatar }}
+                            index={arr.length - index}
+                          />
+                        );
+                      });
+                    } else {
+                      return (
+                        <Typography color="textSecondary" textAlign="center">
+                          Belum ada update.
+                        </Typography>
+                      );
+                    }
+                  } else {
+                    return (
+                      <Typography color="textSecondary" textAlign="center">
+                        Terjadi kesalahan.
+                      </Typography>
+                    );
+                  }
+                }
+              }}
+            </Await>
+          </Suspense>
         </Stack>
       </Container>
     </UpdatePanelContext.Provider>
   );
 }
+
+export const updatePanelLoader = async ({ request, params }) => {
+  const { profileId, projectId } = params;
+  const path = `/project/details/${profileId}/${projectId}/updates`;
+
+  return { updateData: getProjectDetails(path) };
+};
 
 export const updatePanelAction = async ({ request, params }) => {
   const { profileId, projectId } = params;

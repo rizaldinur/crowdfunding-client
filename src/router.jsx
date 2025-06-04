@@ -20,6 +20,7 @@ import StoryPanel, {
 import { Typography } from "@mui/material";
 import UpdatePanel, {
   updatePanelAction,
+  updatePanelLoader,
 } from "./components/project-details/UpdatePanel.jsx";
 import FaqsPanel, {
   faqsPanelLoader,
@@ -117,6 +118,7 @@ const router = createBrowserRouter([
                 path: "updates",
                 element: <UpdatePanel />,
                 action: updatePanelAction,
+                loader: updatePanelLoader,
               },
               {
                 path: "updates/:updatesId",

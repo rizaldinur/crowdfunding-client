@@ -1,9 +1,8 @@
-import { ChevronRight, ExpandLess, ExpandMore } from "@mui/icons-material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Avatar, Box, Button, Divider, Stack, Typography } from "@mui/material";
 import { useState } from "react";
-import { Link as RouterLink } from "react-router";
 
-function UpdateContentCard({ data = {}, index }) {
+function UpdateContentCard({ data = {}, creator = {}, index }) {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => setExpanded((prev) => !prev);
@@ -24,13 +23,33 @@ function UpdateContentCard({ data = {}, index }) {
         {data.title || "Title of update of project's progress"}
       </Typography>
       <Stack gap={2} direction="row" sx={{ mt: 2 }}>
-        <Avatar sx={{ width: 60, height: 60 }} src={data.avatar} />
+        <Avatar sx={{ width: 60, height: 60 }} src={creator.avatar} />
         <Stack justifyContent="center">
           <Typography variant="body1">
-            {data.creatorName || "Creator Name"}
+            {creator.creatorName || "Creator Name"}{" "}
+            <Box
+              component="span"
+              sx={{
+                py: 0.2,
+                px: 0.4,
+                bgcolor: "secondary.main",
+                color: "secondary.contrastText",
+              }}
+            >
+              Kreator
+            </Box>
           </Typography>
           <Typography variant="body1" color="textSecondary">
-            {data.createdAt || "Date of creation"}
+            {data.createdAt
+              ? new Date(data.createdAt).toLocaleString("id-ID", {
+                  weekday: "long",
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              : "Date of creation"}
           </Typography>
         </Stack>
       </Stack>
