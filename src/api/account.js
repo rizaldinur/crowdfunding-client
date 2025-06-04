@@ -1,7 +1,6 @@
 import { getToken } from "../utils/utils";
 
 export const getProfileHeader = async (profileId) => {
-  await new Promise((resolve, reject) => setTimeout(() => resolve(), 2000));
   let baseUrl = "http://localhost:8000";
   let endpoint = `${baseUrl}/${profileId}/profile-header`;
   let token = getToken();
