@@ -14,6 +14,7 @@ import {
 import {
   Box,
   Button,
+  Chip,
   Container,
   Divider,
   Grid,
@@ -71,7 +72,7 @@ function ProjectHead({ data = {} }) {
                   color="textPrimary"
                   underline="none"
                   variant="body2"
-                  href="#"
+                  href={`/discover?category=${data.category}`}
                   sx={{ display: "flex", gap: 1, alignItems: "center" }}
                 >
                   <Category />
@@ -81,7 +82,7 @@ function ProjectHead({ data = {} }) {
                   color="textPrimary"
                   underline="none"
                   variant="body2"
-                  href="#"
+                  href={`/discover?location=${data.location}`}
                   sx={{ display: "flex", gap: 1, alignItems: "center" }}
                 >
                   <LocationOn />
@@ -124,7 +125,7 @@ function ProjectHead({ data = {} }) {
                   pendukung
                 </Typography>
                 <Typography variant="h4" color="textPrimary" sx={{ mt: 3 }}>
-                  {data.timeLeft || "5"}
+                  {data.timeLeft >= 0 ? data.timeLeft : "5"}
                 </Typography>
                 <Typography variant="subtitle1" color="textSecondary">
                   {data.timeFormat || "hari"}
