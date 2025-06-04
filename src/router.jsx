@@ -18,7 +18,9 @@ import StoryPanel, {
   storyPanelLoader,
 } from "./components/project-details/StoryPanel.jsx";
 import { Typography } from "@mui/material";
-import UpdatePanel from "./components/project-details/UpdatePanel.jsx";
+import UpdatePanel, {
+  updatePanelAction,
+} from "./components/project-details/UpdatePanel.jsx";
 import FaqsPanel, {
   faqsPanelLoader,
 } from "./components/project-details/FaqsPanel.jsx";
@@ -114,6 +116,7 @@ const router = createBrowserRouter([
               {
                 path: "updates",
                 element: <UpdatePanel />,
+                action: updatePanelAction,
               },
               {
                 path: "updates/:updatesId",

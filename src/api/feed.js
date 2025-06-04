@@ -1,9 +1,14 @@
+import { getToken } from "../utils/utils";
+
 export const getProjectHeader = async (path) => {
   let baseurl = "http://localhost:8000";
   let url = baseurl + path;
-
+  const token = getToken();
   const response = await fetch(url, {
     method: "get",
+    headers: {
+      Authorization: "Basic " + token,
+    },
   });
 
   const data = await response.json();
@@ -48,6 +53,27 @@ export const getDiscoverProjects = async (filter) => {
 
   const response = await fetch(url, {
     method: "get",
+  });
+
+  const data = await response.json();
+  return data;
+};
+
+export const postUpdateProject = async (
+  postData,
+  profileId = "",
+  projectId = ""
+) => {
+  let baseurl = "http://localhost:8000";
+  let url = baseurl + `/project/details/${profileId}/${projectId}/update`;
+  const token = getToken();
+  const response = await fetch(url, {
+    method: "post",
+    body: JSON.stringify(postData),
+    headers: {
+      Authorization: "Basic " + token,
+      "Content-Type": "application/json",
+    },
   });
 
   const data = await response.json();
