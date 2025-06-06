@@ -28,10 +28,6 @@ function CommentForm() {
     }
 
     if (fetcher.data.error) {
-      // setData("alertOpen", true);
-      // setData("alertMsg", fetcher.data?.message);
-      // setData("alertStatus", "error");
-
       setAlertOpen(true);
       setAlertMsg(fetcher.data?.message);
       setAlertStatus("error");
@@ -45,9 +41,6 @@ function CommentForm() {
     setAlertOpen(true);
     setAlertMsg(fetcher.data?.message);
     setAlertStatus("success");
-    // setData("alertOpen", true);
-    // setData("alertMsg", fetcher.data?.message);
-    // setData("alertStatus", "success");
   }, [fetcher.data]);
 
   const handleChange = (e) => {
