@@ -7,37 +7,106 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useFetcher } from "react-router";
+import { useCacheStore } from "../../../data/store";
+import { useContext, useEffect, useState } from "react";
+import { ProjectDetailsLayoutContext } from "../../../routes/layouts/ProjectDetailsLayout";
 
 function CommentForm() {
+  const { setAlertOpen, setAlertMsg, setAlertStatus } = useContext(
+    ProjectDetailsLayoutContext
+  );
+  const { getData, setData } = useCacheStore.getState();
+  const user = getData("user") || {};
+  const fetcher = useFetcher();
+  let busy = fetcher.state !== "idle";
+  const [content, setContent] = useState("");
+
+  useEffect(() => {
+    if (!fetcher.data) {
+      return;
+    }
+
+    if (fetcher.data.error) {
+      // setData("alertOpen", true);
+      // setData("alertMsg", fetcher.data?.message);
+      // setData("alertStatus", "error");
+
+      setAlertOpen(true);
+      setAlertMsg(fetcher.data?.message);
+      setAlertStatus("error");
+      return;
+    }
+
+    if (!fetcher.data.data) {
+      return;
+    }
+
+    setAlertOpen(true);
+    setAlertMsg(fetcher.data?.message);
+    setAlertStatus("success");
+    // setData("alertOpen", true);
+    // setData("alertMsg", fetcher.data?.message);
+    // setData("alertStatus", "success");
+  }, [fetcher.data]);
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setContent(value);
+  };
   return (
-    <Box
-      sx={{
-        color: "text.primary",
-        bgcolor: "background.default",
-        border: "1px solid",
-        borderColor: "divider",
-        p: 4,
-        mt: 5,
-      }}
-    >
-      <Stack gap={2} direction="row">
-        <Avatar sx={{ width: 60, height: 60 }} />
-        <Stack justifyContent="center" alignItems="start">
-          <Typography variant="body1">Username</Typography>
+    <fetcher.Form method="post" onChange={handleChange}>
+      <Box
+        sx={{
+          color: "text.primary",
+          bgcolor: "background.paper",
+          border: "1px solid",
+          borderColor: "divider",
+          p: 4,
+          mt: 5,
+        }}
+      >
+        <Stack gap={2} direction="row">
+          <Avatar sx={{ width: 60, height: 60 }} src={user.avatarUrl} />
+          <Stack justifyContent="center" alignItems="start">
+            <Typography variant="body1">
+              {user.name || "Username"}{" "}
+              {user.role === "creator" && (
+                <Box
+                  component="span"
+                  sx={{
+                    p: 0.5,
+                    bgcolor: "secondary.main",
+                    color: "secondary.contrastText",
+                  }}
+                >
+                  Kreator
+                </Box>
+              )}
+            </Typography>
+          </Stack>
         </Stack>
-      </Stack>
-      <Divider sx={{ mt: 2 }} />
-      <TextField
-        sx={{ mt: 3 }}
-        placeholder="Tulis komentarmu"
-        multiline
-        fullWidth
-        rows={4}
-      />
-      <Button sx={{ mt: 3 }} variant="outlined" color="inherit">
-        Kirim Komentar
-      </Button>
-    </Box>
+        <Divider sx={{ mt: 2 }} />
+        <TextField
+          sx={{ mt: 3 }}
+          placeholder="Tulis komentarmu, minimal 2 karakter"
+          multiline
+          fullWidth
+          rows={4}
+          name="content"
+          value={content}
+        />
+        <Button
+          loading={busy}
+          type="submit"
+          sx={{ mt: 3 }}
+          variant="outlined"
+          color="inherit"
+        >
+          Kirim Komentar
+        </Button>
+      </Box>
+    </fetcher.Form>
   );
 }
 

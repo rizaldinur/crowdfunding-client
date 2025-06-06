@@ -1,4 +1,12 @@
-import { Box, Container, Link, Stack, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Container,
+  Link,
+  Snackbar,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Suspense, useContext, useEffect, useState } from "react";
 import {
   Await,
@@ -10,21 +18,60 @@ import {
 import CommentForm from "./CommentsPanel/CommentForm";
 import CommentWithReplies from "./CommentsPanel/CommentsBox";
 import { ProjectDetailsLayoutContext } from "../../routes/layouts/ProjectDetailsLayout";
-import { getProjectDetails } from "../../api/feed";
+import { getProjectDetails, postComment } from "../../api/feed";
 import BasicSectionLoading from "../fallback-component/BasicSectionLoading";
 import { useCacheStore } from "../../data/store";
 
 function CommentsPanel() {
-  const { isAuth, role } = useContext(ProjectDetailsLayoutContext);
+  const { isAuth, role, alertOpen, setAlertOpen, alertMsg, alertStatus } =
+    useContext(ProjectDetailsLayoutContext);
+  const { getData, setData } = useCacheStore.getState();
+
+  // setData("alertOpen", false);
+  // setData("alertMsg", "Sukses.");
+  // setData("alertStatus", "success");
   const { commentData } = useLoaderData();
 
-  // // const [comments, setComments] = useState([{ replies: [1] }]);
-  // const [comments, setComments] = useState([]);
-
+  const handleClose = () => {
+    setAlertOpen(false);
+  };
+  // const handleClose = () => {
+  //   setData("alertOpen", false);
+  // };
   return (
     <Container maxWidth="md">
-      {isAuth === "true" ? (
-        role === "backer" ? (
+      <Snackbar
+        open={alertOpen}
+        onClose={handleClose}
+        autoHideDuration={5000}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert
+          open={alertOpen}
+          onClose={handleClose}
+          variant="filled"
+          severity={alertStatus}
+        >
+          {alertMsg}
+        </Alert>
+      </Snackbar>
+      {/* <Snackbar
+        open={getData("alertOpen") || false}
+        onClose={handleClose}
+        autoHideDuration={5000}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert
+          open={getData("alertOpen") || false}
+          onClose={handleClose}
+          variant="filled"
+          severity={getData("alertStatus") || "success"}
+        >
+          {getData("alertMsg") || "Sukses."}
+        </Alert>
+      </Snackbar> */}
+      {isAuth ? (
+        role === "backer" || role === "creator" ? (
           <CommentForm />
         ) : (
           <Box
@@ -70,6 +117,7 @@ function CommentsPanel() {
         <Await resolve={commentData}>
           {(commentData) => {
             const { getData, setData } = useCacheStore.getState();
+            const [commentWithReplies, setCommentWithReplies] = useState([]);
 
             useEffect(() => {
               if (commentData.error) {
@@ -78,8 +126,11 @@ function CommentsPanel() {
 
               const cached = getData("commentData");
               if (!cached) {
-                setData("commentData", commentData);
+                setData("commentData", commentData.data?.commentWithReplies);
+                setCommentWithReplies(commentData.data?.commentWithReplies);
+                return;
               }
+              setCommentWithReplies(cached);
             }, [commentData]);
 
             if (commentData.error) {
@@ -93,7 +144,7 @@ function CommentsPanel() {
               );
             }
 
-            if (commentData.data?.commentWithReplies.length === 0) {
+            if (commentWithReplies.length === 0) {
               return (
                 <Typography
                   color="textPrimary"
@@ -119,11 +170,14 @@ function CommentsPanel() {
                   gap: 3,
                 }}
               >
-                {commentData.data?.commentWithReplies.map(
-                  (commentReplies, i) => {
-                    return <CommentWithReplies key={`comment-${index}`} />;
-                  }
-                )}
+                {commentWithReplies.map((commentReplies, i) => {
+                  return (
+                    <CommentWithReplies
+                      key={`comment-${i}`}
+                      comment={commentReplies}
+                    />
+                  );
+                })}
               </Stack>
             );
           }}
@@ -133,9 +187,34 @@ function CommentsPanel() {
   );
 }
 
+export const commentsPanelAction = async ({ request, params }) => {
+  const { getData, setData } = useCacheStore.getState();
+
+  const { projectId } = params;
+  const formData = await request.formData();
+  const postData = Object.fromEntries(formData);
+
+  const data = await postComment(postData, projectId);
+
+  if (data.error) {
+    return data;
+  }
+
+  const commentData = getData("commentData");
+  if (!commentData) {
+    return data;
+  }
+
+  let newComments = [data.data?.newComment, ...(commentData || [])];
+  setData("commentData", newComments);
+
+  return data;
+};
+
 export const commentsPanelLoader = ({ request, params }) => {
   const path = new URL(request.url).pathname;
-  const { getData, setData } = useCacheStore.getState();
+
+  const { getData } = useCacheStore.getState();
 
   const cached = getData("commentData");
   if (cached) return { commentData: cached };

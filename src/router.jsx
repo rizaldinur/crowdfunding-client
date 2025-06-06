@@ -26,6 +26,7 @@ import FaqsPanel, {
   faqsPanelLoader,
 } from "./components/project-details/FaqsPanel.jsx";
 import CommentsPanel, {
+  commentsPanelAction,
   commentsPanelLoader,
 } from "./components/project-details/CommentsPanel.jsx";
 import AboutPanel, {
@@ -132,6 +133,7 @@ const router = createBrowserRouter([
                 path: "comments",
                 element: <CommentsPanel />,
                 loader: commentsPanelLoader,
+                action: commentsPanelAction,
               },
               { path: "faqs", element: <FaqsPanel />, loader: faqsPanelLoader },
             ],
