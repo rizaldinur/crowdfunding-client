@@ -25,7 +25,9 @@ import UpdatePanel, {
 import FaqsPanel, {
   faqsPanelLoader,
 } from "./components/project-details/FaqsPanel.jsx";
-import CommentsPanel from "./components/project-details/CommentsPanel.jsx";
+import CommentsPanel, {
+  commentsPanelLoader,
+} from "./components/project-details/CommentsPanel.jsx";
 import AboutPanel, {
   profileAboutLoader,
 } from "./components/profile/AboutPanel.jsx";
@@ -126,7 +128,11 @@ const router = createBrowserRouter([
                   <Typography color="textPrimary">Hello skibidi</Typography>
                 ),
               },
-              { path: "comments", element: <CommentsPanel /> },
+              {
+                path: "comments",
+                element: <CommentsPanel />,
+                loader: commentsPanelLoader,
+              },
               { path: "faqs", element: <FaqsPanel />, loader: faqsPanelLoader },
             ],
           },
