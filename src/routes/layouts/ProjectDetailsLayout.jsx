@@ -6,6 +6,7 @@ import { createContext, Suspense, useEffect, useState } from "react";
 import BasicSectionLoading from "../../components/fallback-component/BasicSectionLoading";
 import { getProjectHeader } from "../../api/feed";
 import { setToken } from "../../utils/utils";
+import { useCacheStore } from "../../data/store";
 
 export const ProjectDetailsLayoutContext = createContext();
 
@@ -23,11 +24,19 @@ function ProjectDetailsLayout() {
       <Suspense fallback={<BasicSectionLoading sx={{ height: 400 }} />}>
         <Await resolve={headerData}>
           {(headerData) => {
+            const { getData, setData } = useCacheStore.getState();
+
             useEffect(() => {
               if (headerData && !headerData.error) {
                 document.title = `${headerData.data.title} ` || "Detail Proyek";
                 setRole(headerData.data?.role || "guest");
-                setIsAuth(headerData.data?.isAuth || false);
+                if (headerData.data?.isAuth) {
+                  setIsAuth(headerData.data?.isAuth);
+                  setData("user", {
+                    ...headerData.data?.user,
+                    role: headerData.data?.role,
+                  });
+                }
                 if (headerData.data?.refreshToken) {
                   setToken(headerData.data?.refreshToken);
                 }
