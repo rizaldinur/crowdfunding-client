@@ -5,6 +5,7 @@ import { Box } from "@mui/material";
 import { createContext, Suspense, useEffect, useState } from "react";
 import BasicSectionLoading from "../../components/fallback-component/BasicSectionLoading";
 import { getProjectHeader } from "../../api/feed";
+import { setToken } from "../../utils/utils";
 
 export const ProjectDetailsLayoutContext = createContext();
 
@@ -27,6 +28,9 @@ function ProjectDetailsLayout() {
                 document.title = `${headerData.data.title} ` || "Detail Proyek";
                 setRole(headerData.data?.role || "guest");
                 setIsAuth(headerData.data?.isAuth || false);
+                if (headerData.data?.refreshToken) {
+                  setToken(headerData.data?.refreshToken);
+                }
               }
             }, [headerData]);
 
