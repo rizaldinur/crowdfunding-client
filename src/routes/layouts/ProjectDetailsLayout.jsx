@@ -12,10 +12,13 @@ function ProjectDetailsLayout() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [role, setRole] = useState("");
+  const [isAuth, setIsAuth] = useState(false);
   const { headerData } = useLoaderData();
 
   return (
-    <ProjectDetailsLayoutContext.Provider value={{ open, setOpen, role }}>
+    <ProjectDetailsLayoutContext.Provider
+      value={{ open, setOpen, role, isAuth }}
+    >
       <Suspense fallback={<BasicSectionLoading sx={{ height: 400 }} />}>
         <Await resolve={headerData}>
           {(headerData) => {
@@ -23,6 +26,7 @@ function ProjectDetailsLayout() {
               if (headerData && !headerData.error) {
                 document.title = `${headerData.data.title} ` || "Detail Proyek";
                 setRole(headerData.data?.role || "guest");
+                setIsAuth(headerData.data?.isAuth || false);
               }
             }, [headerData]);
 
