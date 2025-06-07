@@ -8,13 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Suspense, useContext, useEffect, useState } from "react";
-import {
-  Await,
-  Link as RouterLink,
-  useFetcher,
-  useLoaderData,
-  useParams,
-} from "react-router";
+import { Await, Link as RouterLink, useLoaderData } from "react-router";
 import CommentForm from "./CommentsPanel/CommentForm";
 import CommentWithReplies from "./CommentsPanel/CommentsBox";
 import { ProjectDetailsLayoutContext } from "../../routes/layouts/ProjectDetailsLayout";
@@ -25,19 +19,11 @@ import { useCacheStore } from "../../data/store";
 function CommentsPanel() {
   const { isAuth, role, alertOpen, setAlertOpen, alertMsg, alertStatus } =
     useContext(ProjectDetailsLayoutContext);
-  const { getData, setData } = useCacheStore.getState();
-
-  // setData("alertOpen", false);
-  // setData("alertMsg", "Sukses.");
-  // setData("alertStatus", "success");
   const { commentData } = useLoaderData();
 
   const handleClose = () => {
     setAlertOpen(false);
   };
-  // const handleClose = () => {
-  //   setData("alertOpen", false);
-  // };
   return (
     <Container maxWidth="md">
       <Snackbar
@@ -55,21 +41,6 @@ function CommentsPanel() {
           {alertMsg}
         </Alert>
       </Snackbar>
-      {/* <Snackbar
-        open={getData("alertOpen") || false}
-        onClose={handleClose}
-        autoHideDuration={5000}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      >
-        <Alert
-          open={getData("alertOpen") || false}
-          onClose={handleClose}
-          variant="filled"
-          severity={getData("alertStatus") || "success"}
-        >
-          {getData("alertMsg") || "Sukses."}
-        </Alert>
-      </Snackbar> */}
       {isAuth ? (
         role === "backer" || role === "creator" ? (
           <CommentForm />
