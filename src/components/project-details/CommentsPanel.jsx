@@ -148,9 +148,7 @@ function CommentsPanel() {
             useEffect(() => {
               if (commentData && !commentData.error) {
                 const cached = getData("commentData");
-
                 const cachedTotalComments = getData("totalComments");
-                console.log(cachedTotalComments);
 
                 if (!cached) {
                   setData("commentData", commentData.data?.commentWithReplies);
@@ -158,24 +156,11 @@ function CommentsPanel() {
                   setOffset(commentData.data?.commentWithReplies.length);
                   return;
                 }
-                console.log(cached.length);
                 if (cachedTotalComments == null) {
                   setData("totalComments", commentData.data?.totalComments);
                   setTotalComments(commentData.data?.totalComments);
-                  // if (
-                  //   commentData.data?.commentWithReplies.length >=
-                  //   commentData.data?.totalComments
-                  // ) {
-                  //   setHasMore(false);
-                  // }
                   return;
                 }
-                // if (cached.length < 3) {
-                //   setHasMore(false);
-                // }
-                // if (cached.length >= cachedTotalComments) {
-                //   setHasMore(false);
-                // }
 
                 setOffset(cached.length);
                 setTotalComments(cachedTotalComments);
@@ -270,11 +255,7 @@ export const commentsPanelAction = async ({ request, params }) => {
   }
 
   const commentData = getData("commentData");
-  console.log(commentData.length);
-
   let newComments = [data.data?.newComment, ...(commentData || [])];
-  console.log(newComments.length);
-
   const totalComments =
     getData("totalComments") >= 0
       ? getData("totalComments")
