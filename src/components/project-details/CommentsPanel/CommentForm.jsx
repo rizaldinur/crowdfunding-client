@@ -37,7 +37,7 @@ function CommentForm() {
     if (!fetcher.data.data) {
       return;
     }
-
+    setContent("");
     setAlertOpen(true);
     setAlertMsg(fetcher.data?.message);
     setAlertStatus("success");
