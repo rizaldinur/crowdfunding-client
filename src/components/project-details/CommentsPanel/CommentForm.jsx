@@ -16,7 +16,7 @@ function CommentForm() {
   const { setAlertOpen, setAlertMsg, setAlertStatus } = useContext(
     ProjectDetailsLayoutContext
   );
-  const { getData, setData } = useCacheStore.getState();
+  const { getData } = useCacheStore.getState();
   const user = getData("user") || {};
   const fetcher = useFetcher();
   let busy = fetcher.state !== "idle";

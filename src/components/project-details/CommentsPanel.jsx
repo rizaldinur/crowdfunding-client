@@ -1,28 +1,86 @@
 import {
   Alert,
   Box,
+  Button,
   Container,
   Link,
   Snackbar,
   Stack,
   Typography,
 } from "@mui/material";
-import { Suspense, useContext, useEffect, useState } from "react";
-import { Await, Link as RouterLink, useLoaderData } from "react-router";
+import {
+  createContext,
+  Suspense,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import {
+  Await,
+  Link as RouterLink,
+  useLoaderData,
+  useParams,
+} from "react-router";
 import CommentForm from "./CommentsPanel/CommentForm";
 import CommentWithReplies from "./CommentsPanel/CommentsBox";
 import { ProjectDetailsLayoutContext } from "../../routes/layouts/ProjectDetailsLayout";
-import { getProjectDetails, postComment } from "../../api/feed";
+import { getComments, postComment } from "../../api/feed";
 import BasicSectionLoading from "../fallback-component/BasicSectionLoading";
 import { useCacheStore } from "../../data/store";
 
+export const CommentPanelContext = createContext();
+
 function CommentsPanel() {
-  const { isAuth, role, alertOpen, setAlertOpen, alertMsg, alertStatus } =
-    useContext(ProjectDetailsLayoutContext);
   const { commentData } = useLoaderData();
+  const params = useParams();
+  const { getData, setData } = useCacheStore.getState();
+  const {
+    isAuth,
+    role,
+    alertOpen,
+    setAlertOpen,
+    alertMsg,
+    setAlertMsg,
+    alertStatus,
+    setAlertStatus,
+  } = useContext(ProjectDetailsLayoutContext);
+  const [commentWithReplies, setCommentWithReplies] = useState([]);
+  const [totalComments, setTotalComments] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  useEffect(() => {
+    if (commentWithReplies.length >= totalComments) {
+      setHasMore(false);
+    } else {
+      setHasMore(true);
+    }
+  }, [totalComments, commentWithReplies]);
 
   const handleClose = () => {
     setAlertOpen(false);
+  };
+
+  const handleLoadMore = () => {
+    (async () => {
+      setLoadingMore(true);
+      const data = await getComments(params.projectId, `?offset=${offset}`);
+      setLoadingMore(false);
+      if (!data || data.error) {
+        setAlertOpen(true);
+        setAlertMsg(data.message || "Terjadi kesalahan.");
+        setAlertStatus("error");
+        return;
+      }
+      const newComments = data.data?.commentWithReplies;
+      const commentData = getData("commentData");
+      const newCommentData = [...commentData, ...newComments];
+      setData("commentData", newCommentData);
+      setCommentWithReplies(newCommentData);
+      setOffset((prev) => prev + newComments.length);
+      if (newComments.length < 3) setHasMore(false);
+    })();
   };
   return (
     <Container maxWidth="md">
@@ -87,21 +145,42 @@ function CommentsPanel() {
       <Suspense fallback={<BasicSectionLoading />}>
         <Await resolve={commentData}>
           {(commentData) => {
-            const { getData, setData } = useCacheStore.getState();
-            const [commentWithReplies, setCommentWithReplies] = useState([]);
-
             useEffect(() => {
-              if (commentData.error) {
-                return;
-              }
+              if (commentData && !commentData.error) {
+                const cached = getData("commentData");
 
-              const cached = getData("commentData");
-              if (!cached) {
-                setData("commentData", commentData.data?.commentWithReplies);
-                setCommentWithReplies(commentData.data?.commentWithReplies);
-                return;
+                const cachedTotalComments = getData("totalComments");
+                console.log(cachedTotalComments);
+
+                if (!cached) {
+                  setData("commentData", commentData.data?.commentWithReplies);
+                  setCommentWithReplies(commentData.data?.commentWithReplies);
+                  setOffset(commentData.data?.commentWithReplies.length);
+                  return;
+                }
+                console.log(cached.length);
+                if (cachedTotalComments == null) {
+                  setData("totalComments", commentData.data?.totalComments);
+                  setTotalComments(commentData.data?.totalComments);
+                  // if (
+                  //   commentData.data?.commentWithReplies.length >=
+                  //   commentData.data?.totalComments
+                  // ) {
+                  //   setHasMore(false);
+                  // }
+                  return;
+                }
+                // if (cached.length < 3) {
+                //   setHasMore(false);
+                // }
+                // if (cached.length >= cachedTotalComments) {
+                //   setHasMore(false);
+                // }
+
+                setOffset(cached.length);
+                setTotalComments(cachedTotalComments);
+                setCommentWithReplies(cached);
               }
-              setCommentWithReplies(cached);
             }, [commentData]);
 
             if (commentData.error) {
@@ -149,6 +228,25 @@ function CommentsPanel() {
                     />
                   );
                 })}
+                <Typography
+                  textAlign="center"
+                  variant="body2"
+                  color="textDisabled"
+                >
+                  MENAMPILKAN {commentWithReplies.length} DARI{" "}
+                  {totalComments || "X"} KOMENTAR{" "}
+                </Typography>
+                {hasMore && (
+                  <Button
+                    variant="outlined"
+                    loading={loadingMore}
+                    color="inherit"
+                    sx={{ placeSelf: "center" }}
+                    onClick={handleLoadMore}
+                  >
+                    Tampilkan komentar lain
+                  </Button>
+                )}
               </Stack>
             );
           }}
@@ -172,25 +270,28 @@ export const commentsPanelAction = async ({ request, params }) => {
   }
 
   const commentData = getData("commentData");
-  if (!commentData) {
-    return data;
-  }
+  console.log(commentData.length);
 
   let newComments = [data.data?.newComment, ...(commentData || [])];
+  console.log(newComments.length);
+
+  const totalComments =
+    getData("totalComments") >= 0
+      ? getData("totalComments")
+      : newComments.length;
+  setData("totalComments", totalComments + 1);
   setData("commentData", newComments);
 
   return data;
 };
 
 export const commentsPanelLoader = ({ request, params }) => {
-  const path = new URL(request.url).pathname;
-
   const { getData } = useCacheStore.getState();
 
   const cached = getData("commentData");
   if (cached) return { commentData: cached };
 
-  return { commentData: getProjectDetails(path) };
+  return { commentData: getComments(params.projectId) };
 };
 
 export default CommentsPanel;

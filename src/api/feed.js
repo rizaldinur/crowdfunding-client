@@ -59,6 +59,18 @@ export const getDiscoverProjects = async (filter) => {
   return data;
 };
 
+export const getComments = async (projectId = "", filter = "") => {
+  let baseurl = "http://localhost:8000";
+  let url = baseurl + `/comments/${projectId}` + filter;
+
+  const response = await fetch(url, {
+    method: "get",
+  });
+
+  const data = await response.json();
+  return data;
+};
+
 export const postUpdateProject = async (
   postData,
   profileId = "",
