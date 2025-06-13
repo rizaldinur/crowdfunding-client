@@ -108,3 +108,20 @@ export const postComment = async (postData, projectId = "") => {
   const data = await response.json();
   return data;
 };
+
+export const postReply = async (postData, commentId = "") => {
+  let baseurl = "http://localhost:8000";
+  let url = baseurl + `/reply/${commentId}`;
+  const token = getToken();
+  const response = await fetch(url, {
+    method: "post",
+    body: JSON.stringify(postData),
+    headers: {
+      Authorization: "Basic " + token,
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data = await response.json();
+  return data;
+};

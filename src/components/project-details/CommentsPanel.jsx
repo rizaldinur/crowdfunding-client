@@ -24,7 +24,7 @@ import {
 import CommentForm from "./CommentsPanel/CommentForm";
 import CommentWithReplies from "./CommentsPanel/CommentsBox";
 import { ProjectDetailsLayoutContext } from "../../routes/layouts/ProjectDetailsLayout";
-import { getComments, postComment } from "../../api/feed";
+import { getComments, postComment, postReply } from "../../api/feed";
 import BasicSectionLoading from "../fallback-component/BasicSectionLoading";
 import { useCacheStore } from "../../data/store";
 
@@ -247,6 +247,14 @@ export const commentsPanelAction = async ({ request, params }) => {
   const { projectId } = params;
   const formData = await request.formData();
   const postData = Object.fromEntries(formData);
+
+  if (postData._action === "post-reply") {
+    const { commentId, reply } = postData;
+    console.log(reply);
+
+    const data = await postReply({ reply }, commentId);
+    return data;
+  }
 
   const data = await postComment(postData, projectId);
 

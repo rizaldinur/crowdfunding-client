@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ProjectDetailsLayoutContext } from "../../../routes/layouts/ProjectDetailsLayout";
 import { useCacheStore } from "../../../data/store";
 import { useFetcher } from "react-router";
@@ -16,14 +16,37 @@ import ReplyBox from "./ReplyBox";
 import ReplyForm from "./ReplyForm";
 
 function CommentWithReplies({ comment = {} }) {
-  const { getData } = useCacheStore.getState();
+  const { getData, setData } = useCacheStore.getState();
   const { isAuth, role } = useContext(ProjectDetailsLayoutContext);
   const [openReply, setOpenReply] = useState(false);
   const user = getData("user") || {};
   const [replies, setReplies] = useState(comment.replies || []);
+  const [totalReplies, setTotalReplies] = useState(comment.totalReplies || 0);
 
+  useEffect(() => {
+    //add first 3 replies to commenData cache
+    const oldCommentData = getData("commentData");
+    const newCommentData = oldCommentData.map((oldComment) => {
+      if (oldComment._id === comment._id) {
+        const newReplies = replies.slice(0, 3);
+        return {
+          ...oldComment,
+          totalReplies: totalReplies,
+          replies: newReplies,
+        };
+      }
+      return oldComment;
+    });
+    setData("commentData", newCommentData);
+  }, [replies]);
+
+  const handleSuccessPostReply = (newReply) => {
+    const newReplies = [newReply, ...replies];
+    setReplies(newReplies);
+    setTotalReplies((prev) => prev + 1);
+  };
   return (
-    <Box>
+    <Stack gap={3}>
       <Box
         sx={{
           color: "text.primary",
@@ -69,16 +92,30 @@ function CommentWithReplies({ comment = {} }) {
           </Button>
         )}
       </Box>
-      <Box component="section" sx={{ pl: 4 }}>
+      <Stack
+        component="section"
+        gap={3}
+        sx={{ mb: replies.length > 0 && 3, pl: 4 }}
+      >
         <ReplyForm
           user={user}
           open={openReply}
+          commentId={comment._id}
           onClose={() => setOpenReply(false)}
+          onSuccess={handleSuccessPostReply}
           noValidate
         />
-        {replies.length > 0 && replies.map((reply, indexReply) => <ReplyBox />)}
-      </Box>
-    </Box>
+        {replies.length > 0 &&
+          replies.map((reply, indexReply) => (
+            <ReplyBox key={`reply-${indexReply}`} data={reply} />
+          ))}
+        {replies.length > 0 && (
+          <Typography textAlign="center" variant="body2" color="textDisabled">
+            MENAMPILKAN {replies.length} DARI {totalReplies || "X"} BALASAN{" "}
+          </Typography>
+        )}
+      </Stack>
+    </Stack>
   );
 }
 
