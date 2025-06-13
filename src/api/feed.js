@@ -61,7 +61,7 @@ export const getDiscoverProjects = async (filter) => {
 
 export const getComments = async (projectId = "", filter = "") => {
   let baseurl = "http://localhost:8000";
-  let url = baseurl + `/comments/${projectId}` + filter;
+  let url = baseurl + `/comment/${projectId}` + filter;
 
   const response = await fetch(url, {
     method: "get",
