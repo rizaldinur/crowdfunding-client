@@ -14,6 +14,7 @@ import { useCacheStore } from "../../../data/store";
 import { useFetcher } from "react-router";
 import ReplyBox from "./ReplyBox";
 import ReplyForm from "./ReplyForm";
+import { getReplies } from "../../../api/feed";
 
 function CommentWithReplies({ comment = {} }) {
   const { getData, setData } = useCacheStore.getState();
@@ -22,29 +23,62 @@ function CommentWithReplies({ comment = {} }) {
   const user = getData("user") || {};
   const [replies, setReplies] = useState(comment.replies || []);
   const [totalReplies, setTotalReplies] = useState(comment.totalReplies || 0);
+  const [hasMore, setHasMore] = useState(false);
+  const [offset, setOffset] = useState(comment.replies.length || 3);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   useEffect(() => {
-    //add first 3 replies to commenData cache
+    if (replies.length > 0) {
+      console.log(replies);
+    }
+    if (replies.length < totalReplies) {
+      setHasMore(true);
+    } else {
+      setHasMore(false);
+    }
+
+    setOffset(replies.length);
+  }, [replies, totalReplies]);
+
+  const handleSuccessPostReply = (newReply) => {
+    const newReplies = [newReply, ...replies];
     const oldCommentData = getData("commentData");
     const newCommentData = oldCommentData.map((oldComment) => {
       if (oldComment._id === comment._id) {
-        const newReplies = replies.slice(0, 3);
         return {
           ...oldComment,
-          totalReplies: totalReplies,
-          replies: newReplies,
+          totalReplies: oldComment.totalReplies + 1,
+          replies: newReplies.slice(0, 3),
         };
       }
       return oldComment;
     });
-    setData("commentData", newCommentData);
-  }, [replies]);
 
-  const handleSuccessPostReply = (newReply) => {
-    const newReplies = [newReply, ...replies];
+    setData("commentData", newCommentData);
     setReplies(newReplies);
     setTotalReplies((prev) => prev + 1);
   };
+
+  const handleLoadMore = () => {
+    (async () => {
+      setLoadingMore(true);
+      const data = await getReplies(comment._id, `?offset=${offset}`);
+      setLoadingMore(false);
+      if (!data || data.error) {
+        setAlertOpen(true);
+        setAlertMsg(data.message || "Terjadi kesalahan.");
+        setAlertStatus("error");
+        return;
+      }
+
+      const newReplies = data.data?.replies;
+
+      setReplies((prev) => {
+        return [...prev, ...newReplies];
+      });
+    })();
+  };
+
   return (
     <Stack gap={3}>
       <Box
@@ -95,7 +129,7 @@ function CommentWithReplies({ comment = {} }) {
       <Stack
         component="section"
         gap={3}
-        sx={{ mb: replies.length > 0 && 3, pl: 4 }}
+        sx={{ mb: replies.length > 0 ? 3 : 0, pl: 4 }}
       >
         <ReplyForm
           user={user}
@@ -107,12 +141,23 @@ function CommentWithReplies({ comment = {} }) {
         />
         {replies.length > 0 &&
           replies.map((reply, indexReply) => (
-            <ReplyBox key={`reply-${indexReply}`} data={reply} />
+            <ReplyBox key={`reply-${reply._id}`} data={reply} />
           ))}
         {replies.length > 0 && (
-          <Typography textAlign="center" variant="body2" color="textDisabled">
+          <Typography variant="body2" color="textDisabled">
             MENAMPILKAN {replies.length} DARI {totalReplies || "X"} BALASAN{" "}
           </Typography>
+        )}
+        {hasMore && (
+          <Button
+            variant="outlined"
+            loading={loadingMore}
+            color="inherit"
+            sx={{ placeSelf: "start" }}
+            onClick={handleLoadMore}
+          >
+            Tampilkan balasan lain
+          </Button>
         )}
       </Stack>
     </Stack>

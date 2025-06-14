@@ -208,7 +208,7 @@ function CommentsPanel() {
                 {commentWithReplies.map((commentReplies, i) => {
                   return (
                     <CommentWithReplies
-                      key={`comment-${i}`}
+                      key={`comment-${commentReplies._id}`}
                       comment={commentReplies}
                     />
                   );
