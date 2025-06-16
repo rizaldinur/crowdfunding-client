@@ -150,18 +150,20 @@ function CommentsPanel() {
                 const cached = getData("commentData");
                 const cachedTotalComments = getData("totalComments");
 
-                if (!cached) {
+                if (!cached || cachedTotalComments == null) {
                   setData("commentData", commentData.data?.commentWithReplies);
                   setCommentWithReplies(commentData.data?.commentWithReplies);
                   setOffset(commentData.data?.commentWithReplies.length);
-                  return;
-                }
-                if (cachedTotalComments == null) {
                   setData("totalComments", commentData.data?.totalComments);
                   setTotalComments(commentData.data?.totalComments);
                   return;
                 }
 
+                // if (cachedTotalComments == null) {
+                //   setData("totalComments", commentData.data?.totalComments);
+                //   setTotalComments(commentData.data?.totalComments);
+                //   return;
+                // }
                 setOffset(cached.length);
                 setTotalComments(cachedTotalComments);
                 setCommentWithReplies(cached);
@@ -275,10 +277,10 @@ export const commentsPanelAction = async ({ request, params }) => {
 };
 
 export const commentsPanelLoader = ({ request, params }) => {
-  const { getData } = useCacheStore.getState();
+  // const { getData } = useCacheStore.getState();
 
-  const cached = getData("commentData");
-  if (cached) return { commentData: cached };
+  // const cached = getData("commentData");
+  // if (cached) return { commentData: cached };
 
   return { commentData: getComments(params.projectId) };
 };
