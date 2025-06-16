@@ -60,10 +60,7 @@ export const postStartProject = async (formData) => {
     redirect: "follow",
   };
 
-  const response = await fetch(
-    "http://localhost:8000/start-project",
-    requestOptions
-  );
+  const response = await fetch(apiBaseUrl + "/start-project", requestOptions);
 
   const data = await response.json();
   return data;
