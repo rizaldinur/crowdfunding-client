@@ -1,7 +1,8 @@
 import { getToken } from "../utils/utils";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 export const getBuildOverviewData = async (path) => {
-  const baseUrl = "http://localhost:8000";
+  const baseUrl = apiBaseUrl;
   const url = baseUrl + path;
 
   let token = getToken();
@@ -17,7 +18,7 @@ export const getBuildOverviewData = async (path) => {
 };
 
 export const getFilledForm = async (path) => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + path;
   let token = getToken();
 
@@ -33,7 +34,7 @@ export const getFilledForm = async (path) => {
 };
 
 export const getPreviewData = async (path) => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + path;
   let token = getToken();
 
@@ -69,7 +70,7 @@ export const postStartProject = async (formData) => {
 };
 
 export async function putBuildForm(postData, pathname) {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + pathname;
 
   let token = getToken();
@@ -87,7 +88,7 @@ export async function putBuildForm(postData, pathname) {
 }
 
 export const putReviewProject = async (path) => {
-  const baseUrl = "http://localhost:8000";
+  const baseUrl = apiBaseUrl;
   const url = baseUrl + path;
 
   const token = getToken();
@@ -103,7 +104,7 @@ export const putReviewProject = async (path) => {
 };
 
 export const putLaunchProject = async (path, postData) => {
-  const baseUrl = "http://localhost:8000";
+  const baseUrl = apiBaseUrl;
   const url = baseUrl + path;
 
   const token = getToken();
@@ -121,7 +122,7 @@ export const putLaunchProject = async (path, postData) => {
 };
 
 export const deleteProject = async (path) => {
-  const baseUrl = "http://localhost:8000";
+  const baseUrl = apiBaseUrl;
   const url = baseUrl + path;
 
   const token = getToken();

@@ -1,7 +1,8 @@
 import { getToken } from "../utils/utils";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 export const getProjectHeader = async (path) => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + path;
   const token = getToken();
   const response = await fetch(url, {
@@ -16,7 +17,7 @@ export const getProjectHeader = async (path) => {
 };
 
 export const getProjectDetails = async (path) => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + path;
 
   const response = await fetch(url, {
@@ -28,7 +29,7 @@ export const getProjectDetails = async (path) => {
 };
 
 export const getFeaturedProject = async () => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + "/index/featured-project";
 
   const response = await fetch(url);
@@ -38,7 +39,7 @@ export const getFeaturedProject = async () => {
 };
 
 export const getRecommendedProjects = async () => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + "/index/recommended-projects";
 
   const response = await fetch(url);
@@ -48,7 +49,7 @@ export const getRecommendedProjects = async () => {
 };
 
 export const getDiscoverProjects = async (filter) => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + "/discover" + filter;
 
   const response = await fetch(url, {
@@ -60,7 +61,7 @@ export const getDiscoverProjects = async (filter) => {
 };
 
 export const getComments = async (projectId = "", filter = "") => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + `/comment/${projectId}` + filter;
 
   const response = await fetch(url, {
@@ -72,7 +73,7 @@ export const getComments = async (projectId = "", filter = "") => {
 };
 
 export const getReplies = async (commentId = "", filter = "") => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + `/reply/${commentId}` + filter;
 
   const response = await fetch(url, {
@@ -88,7 +89,7 @@ export const postUpdateProject = async (
   profileId = "",
   projectId = ""
 ) => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + `/project/details/${profileId}/${projectId}/update`;
   const token = getToken();
   const response = await fetch(url, {
@@ -105,7 +106,7 @@ export const postUpdateProject = async (
 };
 
 export const postComment = async (postData, projectId = "") => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + `/comment/${projectId}`;
   const token = getToken();
   const response = await fetch(url, {
@@ -122,7 +123,7 @@ export const postComment = async (postData, projectId = "") => {
 };
 
 export const postReply = async (postData, commentId = "") => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + `/reply/${commentId}`;
   const token = getToken();
   const response = await fetch(url, {

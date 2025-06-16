@@ -1,7 +1,8 @@
 import { getToken } from "../utils/utils";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 export const getSupportOverviewData = async (path) => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + path;
 
   const token = getToken();
@@ -17,7 +18,7 @@ export const getSupportOverviewData = async (path) => {
 };
 
 export const getSupportStatus = async (path) => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + path;
 
   const token = getToken();
@@ -33,7 +34,7 @@ export const getSupportStatus = async (path) => {
 };
 
 export const postSupportProject = async (postData, path) => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + path;
 
   const token = getToken();
@@ -51,7 +52,7 @@ export const postSupportProject = async (postData, path) => {
 };
 
 export const deleteSupport = async (id) => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + "/support/delete";
 
   const token = getToken();
@@ -66,7 +67,7 @@ export const deleteSupport = async (id) => {
 };
 
 export const updateSupportStatus = async (id) => {
-  let baseurl = "http://localhost:8000";
+  let baseurl = apiBaseUrl;
   let url = baseurl + "/support/update-status";
 
   const token = getToken();

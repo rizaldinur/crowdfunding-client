@@ -1,7 +1,9 @@
 import { getToken } from "../utils/utils";
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
 export const getProfileHeader = async (profileId) => {
-  let baseUrl = "http://localhost:8000";
+  let baseUrl = apiBaseUrl;
   let endpoint = `${baseUrl}/${profileId}/profile-header`;
   let token = getToken();
   const response = await fetch(endpoint, {
@@ -16,7 +18,7 @@ export const getProfileHeader = async (profileId) => {
 };
 
 export const getProfileAbout = async (path) => {
-  let baseUrl = "http://localhost:8000";
+  let baseUrl = apiBaseUrl;
   let url = `${baseUrl}${path}`;
 
   const response = await fetch(url);
@@ -31,7 +33,7 @@ export const getProfileAbout = async (path) => {
 };
 
 export const getProfileCreatedProjects = async (path) => {
-  let baseUrl = "http://localhost:8000";
+  let baseUrl = apiBaseUrl;
   let url = `${baseUrl}${path}`;
   let token = getToken();
   const response = await fetch(url, {
@@ -43,7 +45,7 @@ export const getProfileCreatedProjects = async (path) => {
 };
 
 export const getProfileBackedProjects = async (path) => {
-  let baseUrl = "http://localhost:8000";
+  let baseUrl = apiBaseUrl;
   let url = `${baseUrl}${path}`;
   let token = getToken();
   const response = await fetch(url, {
@@ -55,7 +57,7 @@ export const getProfileBackedProjects = async (path) => {
 };
 
 export const getSettingTabData = async (path) => {
-  let baseUrl = "http://localhost:8000";
+  let baseUrl = apiBaseUrl;
   let url = `${baseUrl}${path}`;
   let token = getToken();
   const response = await fetch(url, {
@@ -67,7 +69,7 @@ export const getSettingTabData = async (path) => {
 };
 
 export const putUpdateProfile = async (profileId, postData) => {
-  let baseUrl = "http://localhost:8000";
+  let baseUrl = apiBaseUrl;
   let url = `${baseUrl}/settings/${profileId}/profile`;
   let token = getToken();
   const response = await fetch(url, {
@@ -84,7 +86,7 @@ export const putUpdateProfile = async (profileId, postData) => {
 };
 
 export const putUpdateAccount = async (profileId, postData) => {
-  let baseUrl = "http://localhost:8000";
+  let baseUrl = apiBaseUrl;
   let url = `${baseUrl}/settings/${profileId}/account`;
   let token = getToken();
   const response = await fetch(url, {

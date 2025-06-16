@@ -1,5 +1,7 @@
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
 export const authenticateJWT = async (token) => {
-  const response = await fetch("http://localhost:8000/authenticate", {
+  const response = await fetch(apiBaseUrl + "/authenticate", {
     method: "POST",
     headers: {
       Authorization: "Bearer " + token,
@@ -11,7 +13,7 @@ export const authenticateJWT = async (token) => {
 };
 
 export async function postSignup(postData) {
-  const response = await fetch("http://localhost:8000/signup", {
+  const response = await fetch(apiBaseUrl + "/signup", {
     method: "POST",
     body: JSON.stringify(postData),
     headers: {
@@ -23,7 +25,7 @@ export async function postSignup(postData) {
 }
 
 export async function postLogin(postData) {
-  const response = await fetch("http://localhost:8000/login", {
+  const response = await fetch(apiBaseUrl + "/login", {
     method: "POST",
     body: JSON.stringify(postData),
     headers: {
