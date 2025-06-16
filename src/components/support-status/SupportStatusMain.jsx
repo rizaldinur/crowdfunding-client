@@ -12,23 +12,36 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { numericFormatter } from "react-number-format";
-import { Link as RouterLink, useSearchParams } from "react-router";
+import { Link as RouterLink, useNavigate, useSearchParams } from "react-router";
 import { updateSupportStatus } from "../../api/support";
 
 function SupportStatusMain({ data = {} }) {
   const [imgError, setImgError] = useState(false);
   const [search, setSearch] = useSearchParams();
+  const navigate = useNavigate();
   const [transactionStatus, setTransactionStatus] = useState(
     search.get("transaction_status") || search.get("status")
   );
 
   const handleClick = (e) => {
-    if (data.transactionToken) {
+    if (data && data.transactionToken) {
       window.snap.pay(data.transactionToken, {
-        onSuccess: function () {
+        onSuccess: function (result) {
+          navigate(
+            `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
+          );
           updateSupportStatus(data.supportId);
         },
-        onError: function () {
+        onPending: function (result) {
+          navigate(
+            `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
+          );
+          updateSupportStatus(data.supportId);
+        },
+        onError: function (result) {
+          navigate(
+            `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
+          );
           updateSupportStatus(data.supportId);
         },
       });

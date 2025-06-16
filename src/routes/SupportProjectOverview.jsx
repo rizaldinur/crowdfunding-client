@@ -5,6 +5,7 @@ import {
   useFetcher,
   useLoaderData,
   useLocation,
+  useNavigate,
   useParams,
   useSearchParams,
 } from "react-router";
@@ -30,6 +31,7 @@ function SupportProjectOverview() {
   const params = useParams();
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState(location.state?.amount);
+  const navigate = useNavigate();
   const backLink = `/support/${params.profileId}/${params.projectId}`;
 
   useEffect(() => {
@@ -58,12 +60,21 @@ function SupportProjectOverview() {
       if (!fetcher.data?.error) {
         window.snap.pay(fetcher.data?.data?.transaction?.token, {
           onSuccess: function (result) {
+            navigate(
+              `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
+            );
             updateSupportStatus(fetcher.data?.data?.supportId);
           },
           onPending: function (result) {
+            navigate(
+              `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
+            );
             updateSupportStatus(fetcher.data?.data?.supportId);
           },
           onError: function (result) {
+            navigate(
+              `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
+            );
             updateSupportStatus(fetcher.data?.data?.supportId);
           },
           onClose: function () {

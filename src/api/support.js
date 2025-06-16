@@ -72,7 +72,7 @@ export const updateSupportStatus = async (id) => {
 
   const token = getToken();
   const response = await fetch(url, {
-    method: "put",
+    method: "post",
     body: JSON.stringify({ id }),
     headers: {
       Authorization: "Bearer " + token,
