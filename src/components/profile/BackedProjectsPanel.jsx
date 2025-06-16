@@ -14,6 +14,10 @@ function BackedProjectsPanel() {
           const backedArray = backedProjects.data?.mappedBacked || [];
           console.log(backedArray);
 
+          if (backedProjects.error || !backedProjects.data?.authorized) {
+            return <Navigate to=".." />;
+          }
+
           return (
             <Container maxWidth="md">
               <Stack sx={{ py: 4 }} gap={4}>
