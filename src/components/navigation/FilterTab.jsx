@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useFetcher, useSearchParams } from "react-router";
-import CategoryAutocomplete from "../input/CategoryAutoComplete";
+import CategoryAutocomplete from "../input/CategoryAutocomplete";
 import LocationAutocomplete from "../input/LocationAutocomplete";
 
 function FilterTab() {

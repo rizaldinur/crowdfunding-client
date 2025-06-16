@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import LocationAutocomplete from "../input/LocationAutocomplete";
-import CategoryAutocomplete from "../input/CategoryAutoComplete";
+import CategoryAutocomplete from "../input/CategoryAutocomplete";
 import { Close, Link } from "@mui/icons-material";
 import { NumericFormat } from "react-number-format";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
