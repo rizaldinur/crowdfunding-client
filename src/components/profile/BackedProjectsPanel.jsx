@@ -1,6 +1,6 @@
 import { Container, Stack, Typography } from "@mui/material";
 import MinimalCard from "../card/MinimalCard";
-import { Await, useLoaderData } from "react-router";
+import { Await, Navigate, useLoaderData } from "react-router";
 import { Suspense } from "react";
 import BasicSectionLoading from "../fallback-component/BasicSectionLoading";
 import { getProfileBackedProjects } from "../../api/account";
