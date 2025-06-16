@@ -26,24 +26,18 @@ function SupportStatusMain({ data = {} }) {
   const handleClick = (e) => {
     if (data && data.transactionToken) {
       window.snap.pay(data.transactionToken, {
-        onSuccess: function (result) {
-          navigate(
-            `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
-          );
-          updateSupportStatus(data.supportId);
-        },
-        onPending: function (result) {
-          navigate(
-            `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
-          );
-          updateSupportStatus(data.supportId);
-        },
-        onError: function (result) {
-          navigate(
-            `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
-          );
-          updateSupportStatus(data.supportId);
-        },
+        // onSuccess: function (result) {
+        //   window.location.href = `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`;
+        //   updateSupportStatus(data.supportId);
+        // },
+        // onPending: function (result) {
+        //   window.location.href = `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`;
+        //   updateSupportStatus(data.supportId);
+        // },
+        // onError: function (result) {
+        //   window.location.href = `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`;
+        //   updateSupportStatus(data.supportId);
+        // },
       });
     }
   };
@@ -119,7 +113,7 @@ function SupportStatusMain({ data = {} }) {
           <Alert severity="warning" variant="outlined">
             Selesaikan pembayaran sebelum{" "}
             {data.expiryTime
-              ? new Date(data.expiryTime).toLocaleDateString("id-ID", {
+              ? new Date(data.expiryTime).toLocaleString("id-ID", {
                   hour: "numeric",
                   minute: "numeric",
                   second: "numeric",

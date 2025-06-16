@@ -59,24 +59,30 @@ function SupportProjectOverview() {
       console.log(fetcher.data);
       if (!fetcher.data?.error) {
         window.snap.pay(fetcher.data?.data?.transaction?.token, {
-          onSuccess: function (result) {
-            navigate(
-              `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
-            );
-            updateSupportStatus(fetcher.data?.data?.supportId);
-          },
-          onPending: function (result) {
-            navigate(
-              `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
-            );
-            updateSupportStatus(fetcher.data?.data?.supportId);
-          },
-          onError: function (result) {
-            navigate(
-              `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
-            );
-            updateSupportStatus(fetcher.data?.data?.supportId);
-          },
+          // onSuccess: function (result) {
+          //   // navigate(
+          //   //   `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
+          //   // );
+          //   window.location.href = `/support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`;
+
+          //   updateSupportStatus(fetcher.data?.data?.supportId);
+          // },
+          // onPending: function (result) {
+          //   // navigate(
+          //   //   `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
+          //   // );
+          //   window.location.href = `/support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`;
+
+          //   updateSupportStatus(fetcher.data?.data?.supportId);
+          // },
+          // onError: function (result) {
+          //   // navigate(
+          //   //   `../support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`
+          //   // );
+          //   window.location.href = `/support/status?order_id=${result.order_id}&status_code=${result.status_code}&transaction_status=${result.transaction_status}`;
+
+          //   updateSupportStatus(fetcher.data?.data?.supportId);
+          // },
           onClose: function () {
             deleteSupport(fetcher.data?.data?.supportId);
             alert("Pembayaran tidak selesai.");

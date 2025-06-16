@@ -9,7 +9,7 @@ import {
   useLocation,
   useSearchParams,
 } from "react-router";
-import { getSupportStatus } from "../api/support";
+import { getSupportStatus, updateSupportStatus } from "../api/support";
 import LoadingPage from "../components/fallback-component/LoadingPage";
 import { setToken } from "../utils/utils";
 
@@ -82,6 +82,12 @@ export const supportStatusLoader = ({ request, params }) => {
   const url = new URL(request.url);
   const completePath = url.pathname + url.search;
 
-  return { supportStatus: getSupportStatus(completePath) };
+  return {
+    supportStatus: (async () => {
+      await updateSupportStatus(url.searchParams.get("order_id"));
+      const data = await getSupportStatus(completePath);
+      return data;
+    })(),
+  };
 };
 export default SupportStatus;

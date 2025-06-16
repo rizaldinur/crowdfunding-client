@@ -72,7 +72,15 @@ function MinimalCard({ variant = "basic", data = {} }) {
             {variant === "created"
               ? `Dibuat pada ${data.createdAt}`
               : variant === "backed"
-              ? `Didukung pada ${data.createdAt}`
+              ? `Didukung pada ${
+                  data.createdAt &&
+                  new Date(data.createdAt).toLocaleString("id-ID", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    second: "numeric",
+                    timeZoneName: "short",
+                  })
+                }`
               : variant === "saved"
               ? `Disimpan pada ${data.createdAt}`
               : null}
