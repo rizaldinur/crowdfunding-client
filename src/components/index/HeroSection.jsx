@@ -31,7 +31,12 @@ function HeroSection() {
             }}
           >
             <Box id="heroBody" sx={{ mb: 3 }}>
-              <Typography variant="h2" fontWeight={700} color="textPrimary">
+              <Typography
+                variant="h2"
+                fontWeight={700}
+                color="textPrimary"
+                sx={{ wordBreak: { xs: "break-word", sm: "normal" } }}
+              >
                 Bantu Wujudkan Impian Wirausahawan Muda
               </Typography>
               <Typography variant="h5" color="textPrimary">
