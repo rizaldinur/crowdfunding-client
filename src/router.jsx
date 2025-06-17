@@ -154,7 +154,18 @@ const router = createBrowserRouter([
                 element: <BackedProjectsPanel />,
                 loader: backedProjectsLoader,
               },
-              // { path: "saved", element: <SavedProjects /> },
+              {
+                path: "saved",
+                element: (
+                  <Typography
+                    textAlign="center"
+                    color="textSecondary"
+                    sx={{ py: 4 }}
+                  >
+                    Nothing to see here.
+                  </Typography>
+                ),
+              },
               {
                 path: "projects",
                 element: <CreatedProjectsPanel />,

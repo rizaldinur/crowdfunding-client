@@ -52,6 +52,7 @@ function ProfileTabs({ authorized }) {
         top: "0",
         zIndex: 10,
         bgcolor: "inherit",
+        overflow: "hidden",
       }}
     >
       <Container maxWidth="md">
@@ -59,6 +60,8 @@ function ProfileTabs({ authorized }) {
           value={tabValue && authorized ? tabValue : 0}
           aria-label="nav tabs"
           role="navigation"
+          variant="scrollable"
+          allowScrollButtonsMobile
           sx={{ placeSelf: "center" }}
         >
           <Tab

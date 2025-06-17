@@ -23,7 +23,6 @@ function ProfileLayout() {
   let message = search.get("message");
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Profil";
   }, [location]);
 
   const { profileHeader } = useLoaderData();

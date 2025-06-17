@@ -96,7 +96,7 @@ function FeatureCard({ data }) {
               color="textSecondary"
               component={Link}
               underline="hover"
-              href="#"
+              href={`/profile/${data.creatorSlug}`}
               sx={{
                 display: "-webkit-box", // Enables the use of line-clamp
                 WebkitBoxOrient: "vertical", // Required for multi-line truncation
