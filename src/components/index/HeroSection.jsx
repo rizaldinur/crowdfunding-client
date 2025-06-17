@@ -54,12 +54,18 @@ function HeroSection() {
                 width: { xs: 1, sm: "initial" },
               }}
             >
-              <Button variant="contained" color="primary" size="large">
+              <Button
+                component={RouterLink}
+                to="/discover"
+                variant="contained"
+                color="primary"
+                size="large"
+              >
                 dukung sekarang
               </Button>
               <Button
                 component={RouterLink}
-                to="#"
+                to="/start-project"
                 size="large"
                 color="inherit"
               >
