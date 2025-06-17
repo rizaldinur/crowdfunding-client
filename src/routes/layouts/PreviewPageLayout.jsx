@@ -18,7 +18,6 @@ function PreviewPageLayout() {
         {(previewData) => {
           useEffect(() => {
             if (previewData) {
-              console.log(previewData);
               if (!previewData.data?.error) {
                 if (previewData.data?.refreshToken) {
                   setToken(previewData.data?.refreshToken);

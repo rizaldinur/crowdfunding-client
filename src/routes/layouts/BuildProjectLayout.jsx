@@ -32,7 +32,6 @@ function BuildProjectLayout() {
 
   useEffect(() => {
     if (filledData) {
-      console.log(filledData);
       if (filledData.data?.refreshToken) {
         setToken(filledData.data?.refreshToken);
       }

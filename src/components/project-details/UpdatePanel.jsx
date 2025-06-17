@@ -80,9 +80,7 @@ function UpdatePanel() {
           <Suspense fallback={<BasicSectionLoading />}>
             <Await resolve={updateData}>
               {(updateData) => {
-                useEffect(() => {
-                  console.log(updateData);
-                }, [updateData]);
+                useEffect(() => {}, [updateData]);
 
                 if (updateData) {
                   if (!updateData.error) {

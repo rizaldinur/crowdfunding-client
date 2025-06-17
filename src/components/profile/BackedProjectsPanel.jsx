@@ -12,7 +12,6 @@ function BackedProjectsPanel() {
       <Await resolve={backedProjects}>
         {(backedProjects) => {
           const backedArray = backedProjects.data?.mappedBacked || [];
-          console.log(backedArray);
 
           if (backedProjects.error || !backedProjects.data?.authorized) {
             return <Navigate to=".." />;

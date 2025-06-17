@@ -19,7 +19,6 @@ import { Link as RouterLink } from "react-router";
 
 function FeatureCard({ data }) {
   const { currentTheme } = useContext(ThemeContext);
-  console.log(typeof currentTheme);
 
   return (
     <Card

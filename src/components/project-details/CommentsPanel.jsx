@@ -252,7 +252,6 @@ export const commentsPanelAction = async ({ request, params }) => {
 
   if (postData._action === "post-reply") {
     const { commentId, reply } = postData;
-    console.log(reply);
 
     const data = await postReply({ reply }, commentId);
     return data;

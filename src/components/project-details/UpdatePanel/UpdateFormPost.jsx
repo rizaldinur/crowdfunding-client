@@ -26,7 +26,6 @@ function UpdateFormPost() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
 
     setForm((form) => {
       return { ...form, [name]: value };

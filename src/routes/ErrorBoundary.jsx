@@ -17,14 +17,12 @@ function ErrorBoundary() {
   const activeTheme = useMemo(() => themes[currentTheme], [currentTheme]);
 
   const error = useRouteError();
-  console.log(error);
 
   useEffect(() => {
     document.title = "Terjadi kesalahan.";
   }, []);
 
   let errorContent;
-  console.log(isRouteErrorResponse(error), error instanceof Error);
 
   if (isRouteErrorResponse(error)) {
     let errorMessage =

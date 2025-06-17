@@ -52,7 +52,6 @@ function ProfilePage() {
 
   useEffect(() => {
     if (fetcher.data && fetcher.state === "idle") {
-      console.log(fetcher.data);
       if (fetcher.data?.data?.refreshToken) {
         setToken(fetcher.data?.data?.refreshToken);
       }
@@ -90,7 +89,6 @@ function ProfilePage() {
   }, [fetcher.state]);
 
   const handleSubmit = () => {
-    console.log("Form submitted!");
     const formData = new FormData();
     formData.append("slug", uniqueUrl);
 
@@ -250,9 +248,7 @@ function ProfilePage() {
 }
 
 export const profileBuildAction = async ({ request, params }) => {
-  await new Promise((resolve, reject) => setTimeout(() => resolve(), 2000));
   const pathname = window.location.pathname;
-  console.log(pathname);
 
   const formData = await request.formData();
   const postData = Object.fromEntries(formData);

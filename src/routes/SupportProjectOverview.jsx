@@ -56,7 +56,6 @@ function SupportProjectOverview() {
 
   useEffect(() => {
     if (fetcher.data) {
-      console.log(fetcher.data);
       if (!fetcher.data?.error) {
         window.snap.pay(fetcher.data?.data?.transaction?.token, {
           // onSuccess: function (result) {
@@ -158,7 +157,6 @@ export const supportOverviewAction = async ({ request, params }) => {
   const pathname = `/support/${params.profileId}/${params.projectId}/checkout`;
   const formData = await request.formData();
   const postData = Object.fromEntries(formData);
-  console.log(postData);
 
   const data = await postSupportProject(postData, pathname);
   return data;

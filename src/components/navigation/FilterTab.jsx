@@ -30,7 +30,6 @@ function FilterTab() {
   };
 
   const handleClick = (e) => {
-    console.log("click");
     setSearch((search) => {
       search.delete("category");
       search.delete("location");

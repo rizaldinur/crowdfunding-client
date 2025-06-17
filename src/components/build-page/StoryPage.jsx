@@ -68,7 +68,6 @@ function StoryPage() {
 
   useEffect(() => {
     if (fetcher.data && fetcher.state === "idle") {
-      console.log(fetcher.data);
       if (fetcher.data?.data?.refreshToken) {
         setToken(fetcher.data?.data?.refreshToken);
       }
@@ -104,7 +103,6 @@ function StoryPage() {
   }, [fetcher.state]);
 
   const handleSubmit = () => {
-    console.log("Form submitted!");
     const formData = new FormData();
     formData.append("detail", detail);
     formData.append("benefits", benefits);
@@ -391,9 +389,7 @@ function StoryPage() {
 }
 
 export const storyBuildAction = async ({ request, params }) => {
-  await new Promise((resolve, reject) => setTimeout(() => resolve(), 2000));
   const pathname = window.location.pathname;
-  console.log(pathname);
 
   const formData = await request.formData();
   const postData = Object.fromEntries(formData);

@@ -39,7 +39,6 @@ function StartProjectMain() {
 
   useEffect(() => {
     if (fetcher.data) {
-      console.log(fetcher.data);
       setAlertOpen(true);
       if (!fetcher.data.error) {
         setFile(null);
@@ -61,7 +60,6 @@ function StartProjectMain() {
     let project_name = projectName;
     let school = schoolValue?.sekolah || "";
     let fileImg = file;
-    console.log(project_name, school);
 
     // validate name
     project_name = project_name.trim();
@@ -235,7 +233,6 @@ function StartProjectMain() {
               openOnFocus
               value={locationValue}
               onChange={(e, value) => {
-                console.log(value);
                 setLocationValue(value);
               }}
             />
@@ -322,7 +319,6 @@ function StartProjectMain() {
                     const file = event.target.files[0];
                     event.target.value = "";
 
-                    console.log(file);
                     if (file) {
                       setFile(file);
                     } else {

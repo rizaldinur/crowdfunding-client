@@ -52,7 +52,6 @@ function Signup() {
   useEffect(() => {
     if (fetcher.data) {
       if (fetcher.data.error) {
-        console.log(fetcher.data.error);
         setAlertErrorOpen(true);
         setFormErrorData(fetcher.data.data);
         return;
@@ -71,7 +70,6 @@ function Signup() {
   });
 
   const handleChange = (e) => {
-    console.log(e.target.value);
     const name = e.target.name;
     const value = e.target.value;
     setForm((prevForm) => {

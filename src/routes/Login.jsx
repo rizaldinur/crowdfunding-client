@@ -34,10 +34,8 @@ import { authenticateJWT, postLogin } from "../api/auth";
 
 function Login() {
   const location = useLocation();
-  console.log(location);
 
   const from = location.state?.from?.pathname || "/";
-  console.log(from);
 
   useEffect(() => {
     document.title = "Masuk";
@@ -70,7 +68,6 @@ function Login() {
   });
 
   const handleChange = (e) => {
-    console.log(e.target.value);
     const name = e.target.name;
     const value = e.target.value;
 
@@ -110,7 +107,6 @@ function Login() {
         message: "Harus diisi.",
       });
     }
-    console.log(error);
 
     setForm((prevForm) => {
       return { ...prevForm, email: email, password: password };
@@ -279,8 +275,6 @@ export const loginLoader = () => {
 };
 
 export const loginAction = async ({ request }) => {
-  console.log(request);
-
   const formData = await request.formData();
   const postData = Object.fromEntries(formData);
 

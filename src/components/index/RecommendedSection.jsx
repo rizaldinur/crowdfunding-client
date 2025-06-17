@@ -99,8 +99,6 @@ function RecommendedSection({ data = [] }) {
                 sx={{ border: "1px solid" }}
                 disabled={!canScrollRight}
                 onClick={() => {
-                  console.log(boxRef.current);
-                  console.log(boxContainerRef.current);
                   boxContainerRef.current.scrollLeft += boxScrollWidth;
                 }}
               >

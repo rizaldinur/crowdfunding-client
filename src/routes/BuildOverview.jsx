@@ -130,7 +130,7 @@ export const buildOverviewAction = async ({ request, params }) => {
       `/profile/${params.profileId}/projects?success=1&message=${data.message}`
     );
   } else if (_action === "review") {
-    // console.log(reviewPath);
+    //
     const data = await putReviewProject(reviewPath);
     return data;
   } else if (_action === "launch") {

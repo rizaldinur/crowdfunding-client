@@ -82,7 +82,6 @@ function BasicPage() {
 
   useEffect(() => {
     if (fetcher.data && fetcher.state === "idle") {
-      console.log(fetcher.data);
       if (fetcher.data?.data?.refreshToken) {
         setToken(fetcher.data?.data?.refreshToken);
       }
@@ -148,7 +147,6 @@ function BasicPage() {
     const isValidated = validateForm() && Boolean(formErrorData.length === 0);
 
     if (isValidated) {
-      console.log("Form submitted!");
       const formData = new FormData();
       formData.append("title", form.title);
       formData.append("subtitle", form.subtitle);
@@ -721,9 +719,7 @@ function BasicPage() {
 }
 
 export const basicBuildAction = async ({ request, params }) => {
-  await new Promise((resolve, reject) => setTimeout(() => resolve(), 2000));
   const pathname = window.location.pathname;
-  console.log(pathname);
 
   const formData = await request.formData();
   const postData = Object.fromEntries(formData);

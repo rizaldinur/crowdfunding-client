@@ -69,7 +69,6 @@ function PaymentPage() {
 
   useEffect(() => {
     if (fetcher.data && fetcher.state === "idle") {
-      console.log(fetcher.data);
       if (!fetcher.data.error) {
         if (fetcher.data?.data?.refreshToken) {
           setToken(fetcher.data?.data?.refreshToken);
@@ -103,7 +102,6 @@ function PaymentPage() {
   }, [fetcher.state]);
 
   const handleSubmit = () => {
-    console.log("Form submitted!");
     const formData = new FormData();
     formData.append("businessType", form.businessType);
     formData.append("bankName", form.bankName);
@@ -302,9 +300,7 @@ function PaymentPage() {
 }
 
 export const paymentBuildAction = async ({ request, params }) => {
-  await new Promise((resolve, reject) => setTimeout(() => resolve(), 2000));
   const pathname = window.location.pathname;
-  console.log(pathname);
 
   const formData = await request.formData();
   const postData = Object.fromEntries(formData);

@@ -17,7 +17,7 @@ function LocationAutocomplete({ onChange, label, name, ...props }) {
         "https://www.emsifa.com/api-wilayah-indonesia/api/regencies/35.json"
       );
       const data = await response.json();
-      console.log(data);
+
       setLoading(false);
       setLocations([...data]);
     })();
@@ -41,7 +41,6 @@ function LocationAutocomplete({ onChange, label, name, ...props }) {
       onOpen={handleLocationsOpen}
       onClose={handleLocationsClose}
       onChange={(e, value) => {
-        console.log(value);
         onChange(e, value);
       }}
       renderInput={(params) => (

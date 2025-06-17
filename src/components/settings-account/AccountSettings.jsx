@@ -160,8 +160,6 @@ export const accountSettingsAction = async ({ request, params }) => {
     return data;
   }
 
-  console.log(data);
-
   if (data && data.data?.refreshToken) {
     setToken(data.data?.refreshToken);
   }

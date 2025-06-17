@@ -43,7 +43,7 @@ function SchoolAutocomplete({
       const filtered = data.filter((item) =>
         item.sekolah.toLowerCase().includes(query.toLowerCase())
       );
-      console.log(filtered);
+
       setSchools([...filtered]);
       setLoadingSchool(false);
       setOnDebounce(false);

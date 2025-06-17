@@ -29,7 +29,6 @@ function CommentWithReplies({ comment = {} }) {
 
   useEffect(() => {
     if (replies.length > 0) {
-      console.log(replies);
     }
     if (replies.length < totalReplies) {
       setHasMore(true);

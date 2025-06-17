@@ -14,7 +14,6 @@ import { getProfileAbout } from "../../api/account";
 function AboutPanel() {
   const { authorized } = useOutletContext();
   const { profileId } = useParams();
-  console.log(authorized);
 
   const { aboutData } = useLoaderData();
 

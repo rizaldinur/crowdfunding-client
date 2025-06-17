@@ -28,7 +28,6 @@ function RootLayout({ children }) {
   useEffect(() => {
     const handleStorageChange = (e) => {
       if (e.key === "theme" && e.newValue !== null) {
-        console.log("localStorage changed!", e.newValue);
         setCurrentTheme(e.newValue);
       } else if (e.key === "theme" && e.newValue === null)
         setCurrentTheme(getPreferredTheme());
@@ -55,7 +54,7 @@ function RootLayout({ children }) {
 
   function handleThemeChange() {
     const nextTheme = currentTheme === "light" ? "dark" : "light";
-    console.log(nextTheme);
+
     localStorage.setItem("theme", nextTheme);
     setCurrentTheme(nextTheme);
   }
